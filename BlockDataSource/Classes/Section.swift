@@ -1,5 +1,5 @@
 //
-//  BlockDataSourceSection.swift
+//  Section.swift
 //  bestroute
 //
 //  Created by Adam Cumiskey on 6/16/15.
@@ -8,20 +8,20 @@
 
 import UIKit
 
-struct BlockDataSourceSection {
+struct Section {
     
-    var rows: [BlockDataSourceRow] = []
+    var rows: [Row] = []
     var title: String?
     var detailText: String?
     var headerHeight: CGFloat = 30
     var footerHeight: CGFloat = 50
     
-    init(title: String? = nil, rows: [BlockDataSourceRow] = []) {
+    init(title: String? = nil, rows: [Row] = []) {
         self.title = title
         self.rows = rows
     }
     
-    mutating func addRow(row: BlockDataSourceRow) {
+    mutating func addRow(row: Row) {
         rows.append(row)
     }
     

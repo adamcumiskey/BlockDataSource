@@ -1,5 +1,5 @@
 //
-//  BlockDataSource.swift
+//  DataSource.swift
 //  bestroute
 //
 //  Created by Adam Cumiskey on 6/16/15.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
+class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    var sections: [BlockDataSourceSection] = []
+    var sections: [Section] = []
     var reorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
     var scrollHandler: ((scrollView: UIScrollView) -> Void)?
     
-    func addSection(section: BlockDataSourceSection) {
+    func addSection(section: Section) {
         sections.append(section)
     }
     
@@ -144,7 +144,7 @@ class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Helpers
     
-    private func rowForIndexPath(indexPath: NSIndexPath) -> BlockDataSourceRow {
+    private func rowForIndexPath(indexPath: NSIndexPath) -> Row {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
     }
