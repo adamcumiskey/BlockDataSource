@@ -1,0 +1,6 @@
+framework module BlockDataSource {
+  umbrella header "BlockDataSource-umbrella.h"
+
+  export *
+  module * { export * }
+}

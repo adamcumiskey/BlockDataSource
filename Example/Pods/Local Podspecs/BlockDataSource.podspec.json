@@ -1,0 +1,22 @@
+{
+  "name": "BlockDataSource",
+  "version": "0.1.0",
+  "summary": "A short description of BlockDataSource.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/BlockDataSource",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Adam Cumiskey": "adam.cumiskey@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/BlockDataSource.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "BlockDataSource/Classes/**/*"
+}
