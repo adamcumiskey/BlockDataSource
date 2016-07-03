@@ -8,25 +8,26 @@
 
 import UIKit
 
+
 struct Section {
     
-    var rows: [Row] = []
-    var title: String?
-    var detailText: String?
-    var headerHeight: CGFloat = 30
-    var footerHeight: CGFloat = 50
+    struct HeaderFooter {
+        var title: String?
+        var height: CGFloat
+        
+        init(title: String? = nil, height: CGFloat) {
+            self.title = title
+            self.height = height
+        }
+    }
     
-    init(title: String? = nil, rows: [Row] = []) {
-        self.title = title
+    var header: HeaderFooter
+    var rows: [Row]
+    var footer: HeaderFooter
+    
+    init(header: HeaderFooter = HeaderFooter(height: 30), rows: [Row], footer: HeaderFooter = HeaderFooter(height: 50)) {
+        self.header = header
         self.rows = rows
+        self.footer = footer
     }
-    
-    mutating func addRow(row: Row) {
-        rows.append(row)
-    }
-    
-    mutating func removeRowAtIndex(index: Int) {
-        rows.removeAtIndex(index)
-    }
-    
 }

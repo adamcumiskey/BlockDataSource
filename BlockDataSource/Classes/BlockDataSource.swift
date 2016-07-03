@@ -8,14 +8,16 @@
 
 import UIKit
 
-class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
+class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    var sections: [Section] = []
-    var reorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
-    var scrollHandler: ((scrollView: UIScrollView) -> Void)?
+    var sections: [Section]
+    var onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
+    var onScroll: ((scrollView: UIScrollView) -> Void)?
     
-    func addSection(section: Section) {
-        sections.append(section)
+    init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
+        self.sections = sections
+        self.onReorder = onReorder
+        self.onScroll = onScroll
     }
     
     func registerResuseIdentifiersToTableView(tableView: UITableView) {
@@ -53,8 +55,8 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = rowForIndexPath(indexPath)
-        if let select = row.select {
-            select(indexPath: indexPath)
+        if let onSelect = row.onSelect {
+            onSelect(indexPath: indexPath)
         }
     }
     
@@ -63,7 +65,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             return nil
         }
         
-        return sections[section].title
+        return sections[section].header.title
     }
     
     func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
@@ -71,7 +73,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             return nil
         }
         
-        return sections[section].detailText
+        return sections[section].footer.title
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -80,7 +82,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         }
         
         if self.tableView(tableView, titleForHeaderInSection: section) != nil {
-            return sections[section].headerHeight
+            return sections[section].header.height
         } else {
             return 0.0
         }
@@ -92,7 +94,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         }
         
         if self.tableView(tableView, titleForFooterInSection: section) != nil {
-            return sections[section].footerHeight
+            return sections[section].footer.height
         } else {
             return 0
         }
@@ -108,7 +110,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             let row = rowForIndexPath(indexPath)
             if let onDelete = row.onDelete {
                 onDelete(indexPath: indexPath)
-                sections[indexPath.section].removeRowAtIndex(indexPath.row)
+                sections[indexPath.section].rows.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             }
         }
@@ -129,7 +131,7 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-        if let reorder = self.reorder {
+        if let reorder = onReorder {
             reorder(firstIndex: sourceIndexPath.row, secondIndex: destinationIndexPath.row)
         }
     }
@@ -137,8 +139,8 @@ class DataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let scrollHandler = self.scrollHandler {
-            scrollHandler(scrollView: scrollView)
+        if let onScroll = onScroll {
+            onScroll(scrollView: scrollView)
         }
     }
     
