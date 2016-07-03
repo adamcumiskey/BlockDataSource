@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol BlockConfigurableDataSource {
+public protocol BlockConfigurableDataSource {
     func reloadUI()
     func configure(datasource: BlockDataSource)
 }
 
-class BlockTableViewController: UITableViewController, BlockConfigurableDataSource {
+public class BlockTableViewController: UITableViewController, BlockConfigurableDataSource {
     
     private var dataSource: BlockDataSource?
     
@@ -21,23 +21,23 @@ class BlockTableViewController: UITableViewController, BlockConfigurableDataSour
         super.init(style: style)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 50.0
         self.tableView.separatorInset = UIEdgeInsetsZero
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.reloadUI()
     }
     
-    func reloadUI() {
+    public func reloadUI() {
         let dataSource = BlockDataSource()
         configure(dataSource)
         dataSource.registerResuseIdentifiersToTableView(self.tableView)
@@ -48,7 +48,7 @@ class BlockTableViewController: UITableViewController, BlockConfigurableDataSour
         self.tableView.reloadData()
     }
 
-    func configure(datasource: BlockDataSource) {
+    public func configure(datasource: BlockDataSource) {
         fatalError("This method must be subclassed")
     }
 }
