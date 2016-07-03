@@ -21,7 +21,7 @@ public struct Row {
     var selectionStyle = UITableViewCellSelectionStyle.None
     var reorderable = false
     
-    init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+    public init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
         self.identifier = identifier
         self.configure = configure
         self.onSelect = onSelect
@@ -38,17 +38,17 @@ public struct Section {
         var title: String?
         var height: CGFloat
         
-        init(title: String? = nil, height: CGFloat) {
+        public init(title: String? = nil, height: CGFloat) {
             self.title = title
             self.height = height
         }
     }
     
-    var header: HeaderFooter
-    var rows: [Row]
-    var footer: HeaderFooter
+    var header: HeaderFooter?
+    public var rows: [Row]
+    var footer: HeaderFooter?
     
-    init(header: HeaderFooter = HeaderFooter(height: 30), rows: [Row], footer: HeaderFooter = HeaderFooter(height: 50)) {
+    public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
         self.header = header
         self.rows = rows
         self.footer = footer
@@ -58,7 +58,7 @@ public struct Section {
 
 public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    var sections: [Section]
+    public var sections: [Section]
     var onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
     var onScroll: ((scrollView: UIScrollView) -> Void)?
     
@@ -113,7 +113,7 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
             return nil
         }
         
-        return sections[section].header.title
+        return sections[section].header?.title
     }
     
     public func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
@@ -121,7 +121,7 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
             return nil
         }
         
-        return sections[section].footer.title
+        return sections[section].footer?.title
     }
     
     public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -129,8 +129,8 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
             return 0.0
         }
         
-        if self.tableView(tableView, titleForHeaderInSection: section) != nil {
-            return sections[section].header.height
+        if let header = sections[section].header {
+            return header.height
         } else {
             return 0.0
         }
@@ -141,8 +141,8 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
             return 0.0
         }
         
-        if self.tableView(tableView, titleForFooterInSection: section) != nil {
-            return sections[section].footer.height
+        if let footer = sections[section].footer {
+            return footer.height
         } else {
             return 0
         }
