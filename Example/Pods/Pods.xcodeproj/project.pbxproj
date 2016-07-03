@@ -46,7 +46,7 @@
 		63BBD83995BA60FA7D2E6AD4138C0D71 /* Functional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354B5315AD30C24D1172D4F1524B068D /* Functional.swift */; };
 		6407CFDB22B5B328C5B2D9301E23D75A /* QuickSpec.h in Headers */ = {isa = PBXBuildFile; fileRef = 3973F89F7C13EAD4855CFC68BCC8511E /* QuickSpec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		64539BE196D1741570018FFF86F14133 /* MatcherFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971FBD63640E42D5B13E199D80A38E44 /* MatcherFunc.swift */; };
-		6681A9E71D23E7BF00A7C2C7 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6681A9E21D23E7BF00A7C2C7 /* DataSource.swift */; };
+		6681A9E71D23E7BF00A7C2C7 /* BlockDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6681A9E21D23E7BF00A7C2C7 /* BlockDataSource.swift */; };
 		6681A9E81D23E7BF00A7C2C7 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6681A9E31D23E7BF00A7C2C7 /* Row.swift */; };
 		6681A9E91D23E7BF00A7C2C7 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6681A9E41D23E7BF00A7C2C7 /* Section.swift */; };
 		6681A9EA1D23E7BF00A7C2C7 /* BlockTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6681A9E51D23E7BF00A7C2C7 /* BlockTableViewController.swift */; };
@@ -183,7 +183,7 @@
 		62C9EA115D167F4132613835B0AA5585 /* BeLessThan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeLessThan.swift; path = Sources/Nimble/Matchers/BeLessThan.swift; sourceTree = "<group>"; };
 		62DB1ADF114A602F5FFA365BE18625AE /* Pods-BlockDataSource_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Tests-resources.sh"; sourceTree = "<group>"; };
 		65A8A44B627591CA4606B44952EE5AF8 /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6681A9E21D23E7BF00A7C2C7 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DataSource.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		6681A9E21D23E7BF00A7C2C7 /* BlockDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BlockDataSource.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6681A9E31D23E7BF00A7C2C7 /* Row.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		6681A9E41D23E7BF00A7C2C7 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		6681A9E51D23E7BF00A7C2C7 /* BlockTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BlockTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -503,7 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				6681A9E51D23E7BF00A7C2C7 /* BlockTableViewController.swift */,
-				6681A9E21D23E7BF00A7C2C7 /* DataSource.swift */,
+				6681A9E21D23E7BF00A7C2C7 /* BlockDataSource.swift */,
 				6681A9E41D23E7BF00A7C2C7 /* Section.swift */,
 				6681A9E31D23E7BF00A7C2C7 /* Row.swift */,
 				6681A9E61D23E7BF00A7C2C7 /* LCS.swift */,
@@ -861,7 +861,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6681A9E71D23E7BF00A7C2C7 /* DataSource.swift in Sources */,
+				6681A9E71D23E7BF00A7C2C7 /* BlockDataSource.swift in Sources */,
 				6681A9EA1D23E7BF00A7C2C7 /* BlockTableViewController.swift in Sources */,
 				6681A9E81D23E7BF00A7C2C7 /* Row.swift in Sources */,
 				6681A9E91D23E7BF00A7C2C7 /* Section.swift in Sources */,

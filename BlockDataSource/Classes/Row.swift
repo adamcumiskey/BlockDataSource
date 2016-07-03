@@ -8,42 +8,24 @@
 
 import UIKit
 
-let DefaultCellIdentifier = "Cell"
-
-typealias TableViewCellConfigBlock = (cell: UITableViewCell) -> Void
-typealias CollectionViewCellConfigBlock = (cell: UICollectionViewCell) -> Void
-typealias RowActionBlock = (indexPath: NSIndexPath) -> Void
+typealias ConfigBlock = (cell: UITableViewCell) -> Void
+typealias ActionBlock = (indexPath: NSIndexPath) -> Void
 
 struct Row {
     
     var identifier: String
-    var configure: TableViewCellConfigBlock
-    var select: RowActionBlock?
-    var onDelete: RowActionBlock?
-    var canMove = true
+    var configure: ConfigBlock
+    var onSelect: ActionBlock?
+    var onDelete: ActionBlock?
     var selectionStyle = UITableViewCellSelectionStyle.None
     var reorderable = false
     
-    init(identifier: String, configure: TableViewCellConfigBlock, select: RowActionBlock?) {
+    init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
         self.identifier = identifier
         self.configure = configure
-        self.select = select
-    }
-    
-    init(identifier: String, configure: TableViewCellConfigBlock, select: RowActionBlock?, onDelete: RowActionBlock?) {
-        self.init(identifier: identifier, configure: configure, select: select)
+        self.onSelect = onSelect
         self.onDelete = onDelete
-    }
-    
-    init(identifier: String, configure: TableViewCellConfigBlock) {
-        self.init(identifier: identifier, configure: configure, select: nil)
-    }
-    
-    init(configure: TableViewCellConfigBlock, select: RowActionBlock?) {
-        self.init(identifier: DefaultCellIdentifier, configure: configure, select: select)
-    }
-    
-    init(configure: TableViewCellConfigBlock) {
-        self.init(identifier: DefaultCellIdentifier, configure: configure, select: nil)
+        self.selectionStyle = selectionStyle
+        self.reorderable = reorderable
     }
 }

@@ -10,12 +10,12 @@ import UIKit
 
 protocol BlockConfigurableDataSource {
     func reloadUI()
-    func configure(datasource: DataSource)
+    func configure(datasource: BlockDataSource)
 }
 
 class BlockTableViewController: UITableViewController, BlockConfigurableDataSource {
     
-    private var dataSource: DataSource?
+    private var dataSource: BlockDataSource?
     
     override init(style: UITableViewStyle = .Grouped) {
         super.init(style: style)
@@ -38,7 +38,7 @@ class BlockTableViewController: UITableViewController, BlockConfigurableDataSour
     }
     
     func reloadUI() {
-        let dataSource = DataSource()
+        let dataSource = BlockDataSource()
         configure(dataSource)
         dataSource.registerResuseIdentifiersToTableView(self.tableView)
         
@@ -48,7 +48,7 @@ class BlockTableViewController: UITableViewController, BlockConfigurableDataSour
         self.tableView.reloadData()
     }
 
-    func configure(datasource: DataSource) {
+    func configure(datasource: BlockDataSource) {
         fatalError("This method must be subclassed")
     }
 }
