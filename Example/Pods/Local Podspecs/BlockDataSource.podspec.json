@@ -1,9 +1,9 @@
 {
   "name": "BlockDataSource",
   "version": "0.1.0",
-  "summary": "A short description of BlockDataSource.",
+  "summary": "A block configurable datasource for static table views",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/BlockDataSource",
+  "homepage": "https://github.com/GITHUB_USERNAME>/BlockDataSource",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
