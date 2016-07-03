@@ -47,7 +47,8 @@ class ExampleTableViewController: BlockTableViewController {
                                 )
                             )
                             cell.accessoryView = `switch`
-                    })
+                        }
+                    )
                 ]
             )
         )
