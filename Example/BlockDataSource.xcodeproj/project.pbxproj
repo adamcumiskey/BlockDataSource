@@ -14,6 +14,10 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		66D2593E1D2C7B2F0063C58A /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D2593A1D2C7B2F0063C58A /* ButtonTableViewCell.swift */; };
+		66D2593F1D2C7B2F0063C58A /* ButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66D2593B1D2C7B2F0063C58A /* ButtonTableViewCell.xib */; };
+		66D259401D2C7B2F0063C58A /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D2593C1D2C7B2F0063C58A /* TextFieldCell.swift */; };
+		66D259411D2C7B2F0063C58A /* TextFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66D2593D1D2C7B2F0063C58A /* TextFieldCell.xib */; };
 		66EB7A971D28936C004F78F9 /* ExampleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EB7A961D28936C004F78F9 /* ExampleTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +43,10 @@
 		607FACE51AFB9204008FA782 /* BlockDataSource_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockDataSource_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		66D2593A1D2C7B2F0063C58A /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
+		66D2593B1D2C7B2F0063C58A /* ButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonTableViewCell.xib; sourceTree = "<group>"; };
+		66D2593C1D2C7B2F0063C58A /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
+		66D2593D1D2C7B2F0063C58A /* TextFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldCell.xib; sourceTree = "<group>"; };
 		66EB7A961D28936C004F78F9 /* ExampleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleTableViewController.swift; sourceTree = "<group>"; };
 		845312344886411B746B011C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +114,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				66EB7A961D28936C004F78F9 /* ExampleTableViewController.swift */,
+				66D259421D2C7B380063C58A /* Custom Cells */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -148,6 +157,17 @@
 				845312344886411B746B011C /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		66D259421D2C7B380063C58A /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				66D2593A1D2C7B2F0063C58A /* ButtonTableViewCell.swift */,
+				66D2593B1D2C7B2F0063C58A /* ButtonTableViewCell.xib */,
+				66D2593C1D2C7B2F0063C58A /* TextFieldCell.swift */,
+				66D2593D1D2C7B2F0063C58A /* TextFieldCell.xib */,
+			);
+			name = "Custom Cells";
 			sourceTree = "<group>";
 		};
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
@@ -248,7 +268,9 @@
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				66D259411D2C7B2F0063C58A /* TextFieldCell.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				66D2593F1D2C7B2F0063C58A /* ButtonTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,8 +381,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66D2593E1D2C7B2F0063C58A /* ButtonTableViewCell.swift in Sources */,
 				66EB7A971D28936C004F78F9 /* ExampleTableViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				66D259401D2C7B2F0063C58A /* TextFieldCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

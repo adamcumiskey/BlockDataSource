@@ -31,48 +31,73 @@
 import BlockDataSource
 
 class ExampleTableViewController: BlockTableViewController {
-
+    
     override func configure(datasource: BlockDataSource) {
-        datasource.sections.append(
-            Section(
-                header: Section.HeaderFooter(
-                    title: "Examples",
-                    height: 30
-                ),
-                rows: [
-                    Row(
-                        identifier: "Basic",
-                        configure: { cell in
-                            cell.textLabel?.text = "Basic Cell"
-                        },
-                        selectionStyle: .Blue
+        datasource.sections.appendContentsOf(
+            [
+                Section(
+                    header: Section.HeaderFooter(
+                        title: "UITableViewCells",
+                        height: 30
                     ),
-                    Row(
-                        identifier: "Subtitle",
-                        configure: { cell in
-                            cell.textLabel?.text = "Subtitle Cell"
-                            cell.detailTextLabel?.text = "This is a subtitle"
-                        }
-                    ),
-                    Row(
-                        identifier: "Basic",
-                        configure: { cell in
-                            cell.textLabel?.text = "Switch"
-                            
-                            let `switch` = UISwitch(
-                                frame: CGRect(
-                                    origin: CGPointZero,
-                                    size: CGSize(
-                                        width: 75,
-                                        height: 30
+                    rows: [
+                        Row(
+                            identifier: "Basic",
+                            configBlock: { cell in
+                                cell.textLabel?.text = "Basic Cell"
+                            },
+                            selectionStyle: .Blue
+                        ),
+                        Row(
+                            identifier: "Subtitle",
+                            configBlock: { cell in
+                                cell.textLabel?.text = "Subtitle Cell"
+                                cell.detailTextLabel?.text = "This is a subtitle"
+                            }
+                        ),
+                        Row(
+                            identifier: "Basic",
+                            configBlock: { cell in
+                                cell.textLabel?.text = "Switch"
+                                
+                                let `switch` = UISwitch(
+                                    frame: CGRect(
+                                        origin: CGPointZero,
+                                        size: CGSize(
+                                            width: 75,
+                                            height: 30
+                                        )
                                     )
                                 )
-                            )
-                            cell.accessoryView = `switch`
-                        }
-                    )
-                ]
-            )
+                                cell.accessoryView = `switch`
+                            }
+                        )
+                    ]
+                ),
+                Section(
+                    header: Section.HeaderFooter(
+                    title: "Custom Cell Classes",
+                        height: 30
+                    ),
+                    rows: [
+                        Row<ButtonTableViewCell>(
+                            identifier: "ButtonTableViewCell",
+                            configBlock: { cell in
+                                cell.button.setTitle(
+                                    "ButtonTableViewCell",
+                                    forState: .Normal
+                                )
+                            }
+                        ),
+                        Row<TextFieldCell>(
+                            identifier: "TextFieldCell",
+                            configBlock: { cell in
+                                cell.textField.placeholder = "TextFieldCell"
+                            }
+                        )
+                    ]
+                )
+            ]
         )
     }
     
