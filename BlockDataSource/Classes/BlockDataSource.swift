@@ -34,18 +34,33 @@ import UIKit
 public typealias ConfigBlock = (cell: UITableViewCell) -> Void
 public typealias ActionBlock = (indexPath: NSIndexPath) -> Void
 
-public struct Row {
+
+public protocol RowInfo {
+    var identifier: String { get set }
+    var configure: ConfigBlock { get }
+    var onSelect: ActionBlock? { get set }
+    var onDelete: ActionBlock? { get set }
+    var selectionStyle: UITableViewCellSelectionStyle { get set }
+    var reorderable: Bool { get set }
+}
+
+
+public struct Row<T: UITableViewCell>: RowInfo {
     
-    var identifier: String
-    var configure: ConfigBlock
-    var onSelect: ActionBlock?
-    var onDelete: ActionBlock?
-    var selectionStyle = UITableViewCellSelectionStyle.None
-    var reorderable = false
+    var configBlock: T -> Void
+    public var configure: ConfigBlock {
+        return configBlock as! ConfigBlock
+    }
     
-    public init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+    public var identifier: String
+    public var onSelect: ActionBlock?
+    public var onDelete: ActionBlock?
+    public var selectionStyle = UITableViewCellSelectionStyle.None
+    public var reorderable = false
+    
+    public init(identifier: String, configBlock: T -> Void, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
         self.identifier = identifier
-        self.configure = configure
+        self.configBlock = configBlock
         self.onSelect = onSelect
         self.onDelete = onDelete
         self.selectionStyle = selectionStyle
@@ -67,10 +82,10 @@ public struct Section {
     }
     
     var header: HeaderFooter?
-    public var rows: [Row]
+    public var rows: [RowInfo]
     var footer: HeaderFooter?
     
-    public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
+    public init(header: HeaderFooter? = nil, rows: [RowInfo], footer: HeaderFooter? = nil) {
         self.header = header
         self.rows = rows
         self.footer = footer
@@ -216,7 +231,7 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
     
     // MARK: - Helpers
     
-    private func rowForIndexPath(indexPath: NSIndexPath) -> Row {
+    private func rowForIndexPath(indexPath: NSIndexPath) -> RowInfo {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
     }
