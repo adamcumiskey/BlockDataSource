@@ -34,37 +34,39 @@ import UIKit
 public typealias ConfigBlock = (cell: UITableViewCell) -> Void
 public typealias ActionBlock = (indexPath: NSIndexPath) -> Void
 
+
 public struct Row {
     
     var identifier: String
     var configure: ConfigBlock
-    var onSelect: ActionBlock?
-    var onDelete: ActionBlock?
     var selectionStyle = UITableViewCellSelectionStyle.None
     var reorderable = false
+    var onDelete: ActionBlock?
+    var onSelect: ActionBlock?
     
-    public init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+    public init(identifier: String, configure: ConfigBlock, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true, onDelete: ActionBlock? = nil, onSelect: ActionBlock? = nil) {
         self.identifier = identifier
         self.configure = configure
-        self.onSelect = onSelect
-        self.onDelete = onDelete
         self.selectionStyle = selectionStyle
         self.reorderable = reorderable
+        self.onDelete = onDelete
+        self.onSelect = onSelect
+    }
+}
+
+
+public struct HeaderFooter {
+    var title: String?
+    var height: CGFloat
+    
+    public init(title: String? = nil, height: CGFloat) {
+        self.title = title
+        self.height = height
     }
 }
 
 
 public struct Section {
-    
-    public struct HeaderFooter {
-        var title: String?
-        var height: CGFloat
-        
-        public init(title: String? = nil, height: CGFloat) {
-            self.title = title
-            self.height = height
-        }
-    }
     
     var header: HeaderFooter?
     public var rows: [Row]
@@ -84,7 +86,7 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
     var onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
     var onScroll: ((scrollView: UIScrollView) -> Void)?
     
-    init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
+    public init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll

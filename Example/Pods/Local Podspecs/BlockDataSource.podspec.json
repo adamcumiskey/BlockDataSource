@@ -2,8 +2,8 @@
   "name": "BlockDataSource",
   "version": "0.1.0",
   "summary": "A block configurable datasource for static table views",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/GITHUB_USERNAME>/BlockDataSource",
+  "description": "A block configurable datasource for table views. Useful for creating menus and displaying staic data.",
+  "homepage": "https://github.com/adamcumiskey/BlockDataSource",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "Adam Cumiskey": "adam.cumiskey@gmail.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/BlockDataSource.git",
+    "git": "https://github.com/adamcumiskey/BlockDataSource.git",
     "tag": "0.1.0"
   },
   "platforms": {
