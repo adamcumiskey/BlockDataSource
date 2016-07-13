@@ -54,17 +54,18 @@ public struct Row {
 }
 
 
-public struct Section {
+public struct HeaderFooter {
+    var title: String?
+    var height: CGFloat
     
-    public struct HeaderFooter {
-        var title: String?
-        var height: CGFloat
-        
-        public init(title: String? = nil, height: CGFloat) {
-            self.title = title
-            self.height = height
-        }
+    public init(title: String? = nil, height: CGFloat) {
+        self.title = title
+        self.height = height
     }
+}
+
+
+public struct Section {
     
     var header: HeaderFooter?
     public var rows: [Row]
@@ -84,7 +85,7 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
     var onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
     var onScroll: ((scrollView: UIScrollView) -> Void)?
     
-    init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
+    public init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll

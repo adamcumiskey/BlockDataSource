@@ -35,7 +35,7 @@ class ExampleTableViewController: BlockTableViewController {
     override func configure(datasource: BlockDataSource) {
         datasource.sections.append(
             Section(
-                header: Section.HeaderFooter(
+                header: HeaderFooter(
                     title: "Examples",
                     height: 30
                 ),
