@@ -6,76 +6,155 @@
 //  Copyright © 2016 CocoaPods. All rights reserved.
 //
 
-import XCTest
-import BlockDataSource
+import Quick
+import Nimble
+@testable import BlockDataSource
 
+func basicRow() -> Row {
+    return Row(
+        identifier: "Basic",
+        configure: { cell in
+            cell.textLabel?.text = "Basic Cell"
+        },
+        selectionStyle: .Blue
+    )
+}
 
-let fullTestCase = BlockDataSource(
-    sections: [
-        Section(
-            header: HeaderFooter(
-                title: "Examples",
-                height: 30
-            ),
-            rows: [
-                Row(
-                    identifier: "Basic",
-                    configure: { cell in
-                        cell.textLabel?.text = "Basic Cell"
-                    },
-                    selectionStyle: .Blue
+func customRow() -> Row {
+    return Row(identifier: "", configure: { cell in
+        
+    })
+}
+
+func header() -> HeaderFooter {
+    return HeaderFooter(title: "Header", height: 50.0)
+}
+
+func section() -> Section {
+    return Section(
+        header: header(),
+        rows: [
+            basicRow(),
+            basicRow(),
+            basicRow()
+        ],
+        footer: header()
+    )
+}
+
+func blockDataSource() -> BlockDataSource {
+    return BlockDataSource(
+        sections: [
+            Section(
+                header: HeaderFooter(
+                    title: "Examples",
+                    height: 30
                 ),
-                Row(
-                    identifier: "Subtitle",
-                    configure: { cell in
-                        cell.textLabel?.text = "Subtitle Cell"
-                        cell.detailTextLabel?.text = "This is a subtitle"
-                    }
-                ),
-                Row(
-                    identifier: "Basic",
-                    configure: { cell in
-                        cell.textLabel?.text = "Switch"
-                        
-                        let `switch` = UISwitch(
-                            frame: CGRect(
-                                origin: CGPointZero,
-                                size: CGSize(
-                                    width: 75,
-                                    height: 30
+                rows: [
+                    Row(
+                        identifier: "Basic",
+                        configure: { cell in
+                            cell.textLabel?.text = "Basic Cell"
+                        },
+                        selectionStyle: .Blue
+                    ),
+                    Row(
+                        identifier: "Subtitle",
+                        configure: { cell in
+                            cell.textLabel?.text = "Subtitle Cell"
+                            cell.detailTextLabel?.text = "This is a subtitle"
+                        }
+                    ),
+                    Row(
+                        identifier: "Basic",
+                        configure: { cell in
+                            cell.textLabel?.text = "Switch"
+                            
+                            let `switch` = UISwitch(
+                                frame: CGRect(
+                                    origin: CGPointZero,
+                                    size: CGSize(
+                                        width: 75,
+                                        height: 30
+                                    )
                                 )
                             )
-                        )
-                        cell.accessoryView = `switch`
-                    }
+                            cell.accessoryView = `switch`
+                        }
+                    )
+                ]
+            ),
+            Section(
+                rows: [
+                    Row(
+                        identifier: "Basic",
+                        configure: { cell in
+                            cell.textLabel?.text = "Basic Cell"
+                        },
+                        selectionStyle: .Blue
+                    ),
+                    Row(
+                        identifier: "Subtitle",
+                        configure: { cell in
+                            cell.textLabel?.text = "Subtitle Cell"
+                            cell.detailTextLabel?.text = "This is a subtitle"
+                        }
+                    )
+                ],
+                footer: HeaderFooter(
+                    title: "Footer",
+                    height: 100.0
                 )
-            ]
-        )
-    ]
-)
+            )
+        ]
+    )
+}
 
-class BlockDataSourceTests: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
+class TableOfContentsSpec: QuickSpec {
+    override func spec() {
+        describe("a data source") {
+            var dataSource: BlockDataSource!
+            var sectionCount: Int!
+            beforeEach {
+                dataSource = blockDataSource()
+                sectionCount = dataSource.sections.count
+            }
+            
+            it("can add a new section") {
+                dataSource.sections.append(section())
+                expect(dataSource.sections.count).to(equal(sectionCount + 1))
+            }
+            
+            it("can add new sections") {
+                dataSource.sections.appendContentsOf([section(), section()])
+                expect(dataSource.sections.count).to(equal(sectionCount + 2))
+            }
+            
+            it("can delete a section") {
+                dataSource.sections.removeLast()
+                expect(dataSource.sections.count).to(equal(sectionCount - 1))
+            }
+            
+            describe("its sections") {
+                var section: Section!
+                var rowCount: Int!
+                beforeEach {
+                    section = dataSource.sections.first
+                    rowCount = section.rows.count
+                }
+                
+                it("can add a row") {
+                    section.rows.append(basicRow())
+                    expect(section.rows.count).to(equal(rowCount + 1))
+                }
+                
+                it("can delete a row") {
+                    section.rows.removeLast()
+                    expect(section.rows.count).to(equal(rowCount - 1))
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+                }
+            }
         }
     }
-
 }

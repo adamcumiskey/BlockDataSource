@@ -34,22 +34,23 @@ import UIKit
 public typealias ConfigBlock = (cell: UITableViewCell) -> Void
 public typealias ActionBlock = (indexPath: NSIndexPath) -> Void
 
+
 public struct Row {
     
     var identifier: String
     var configure: ConfigBlock
-    var onSelect: ActionBlock?
-    var onDelete: ActionBlock?
     var selectionStyle = UITableViewCellSelectionStyle.None
     var reorderable = false
+    var onDelete: ActionBlock?
+    var onSelect: ActionBlock?
     
-    public init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+    public init(identifier: String, configure: ConfigBlock, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true, onDelete: ActionBlock? = nil, onSelect: ActionBlock? = nil) {
         self.identifier = identifier
         self.configure = configure
-        self.onSelect = onSelect
-        self.onDelete = onDelete
         self.selectionStyle = selectionStyle
         self.reorderable = reorderable
+        self.onDelete = onDelete
+        self.onSelect = onSelect
     }
 }
 
