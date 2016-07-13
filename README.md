@@ -1,7 +1,6 @@
 # BlockDataSource
 
 [![Build Status](https://www.bitrise.io/app/03ad9472067fd087.svg?token=-uPn-_hHft3sR34teylZ-w&branch=master)](https://www.bitrise.io/app/03ad9472067fd087)
-[![CI Status](http://img.shields.io/travis/Adam Cumiskey/BlockDataSource.svg?style=flat)](https://travis-ci.org/Adam Cumiskey/BlockDataSource)
 [![Version](https://img.shields.io/cocoapods/v/BlockDataSource.svg?style=flat)](http://cocoapods.org/pods/BlockDataSource)
 [![License](https://img.shields.io/cocoapods/l/BlockDataSource.svg?style=flat)](http://cocoapods.org/pods/BlockDataSource)
 [![Platform](https://img.shields.io/cocoapods/p/BlockDataSource.svg?style=flat)](http://cocoapods.org/pods/BlockDataSource)
