@@ -111,7 +111,7 @@ func blockDataSource() -> BlockDataSource {
 }
 
 
-class TableOfContentsSpec: QuickSpec {
+class BlockDataSourceSpec: QuickSpec {
     override func spec() {
         describe("a data source") {
             var dataSource: BlockDataSource!
