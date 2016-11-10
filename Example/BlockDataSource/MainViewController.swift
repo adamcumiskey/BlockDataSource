@@ -22,6 +22,7 @@ class MainViewController: BlockTableViewController {
                         Row(
                             cellClass: Cell.self,
                             configure: { cell in
+                                guard let cell = cell as? Cell else { return }
                                 cell.textLabel?.text = "Examples"
                             },
                             onSelect: { [unowned self] indexPath in
@@ -33,6 +34,7 @@ class MainViewController: BlockTableViewController {
                         Row(
                             cellClass: Cell.self,
                             configure: { cell in
+                                guard let cell = cell as? Cell else { return }
                                 cell.textLabel?.text = "Editing"
                             },
                             onSelect: { [unowned self] indexPath in

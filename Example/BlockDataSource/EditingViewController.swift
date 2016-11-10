@@ -38,6 +38,7 @@ class EditingViewController: BlockTableViewController {
                     return Row(
                         cellClass: Cell.self,
                         configure: { cell in
+                            guard let cell = cell as? Cell else { return }
                             cell.textLabel?.text = item.title
                         },
                         onDelete: { [unowned self] indexPath in
@@ -48,7 +49,7 @@ class EditingViewController: BlockTableViewController {
                     )
                 },
                 onReorder: { [unowned self] (firstIndex, secondIndex) in
-                    self.data!.moveObjectAtIndex(firstIndex, toIndex: secondIndex)
+                    self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
                     self.createDataSource()
                 }
             )

@@ -22,7 +22,6 @@
 //
 //
 //  BlockTableViewController.swift
-//  bestroute
 //
 //  Created by Adam Cumiskey on 6/17/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -30,14 +29,11 @@
 
 import UIKit
 
-public protocol BlockConfigureable {
-    var dataSource: BlockDataSource? { get set }
-}
 
 extension BlockConfigureable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
-        dataSource?.registerResuseIdentifiers(to: tableView)
+        dataSource?.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         tableView.reloadData()
@@ -47,7 +43,6 @@ extension BlockConfigureable where Self: UITableViewController {
 
 
 public class BlockTableViewController: UITableViewController, BlockConfigureable {
-    
     public var dataSource: BlockDataSource? {
         didSet {
             reloadUI()

@@ -114,13 +114,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				62826F031DD51415009779FB /* MainViewController.swift */,
-				62826F051DD51611009779FB /* CellExamplesViewController.swift */,
-				62826F071DD51630009779FB /* EditingViewController.swift */,
-				62D87CAC1DD5065700AB1756 /* Cells.swift */,
-				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
-				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
-				607FACDC1AFB9204008FA782 /* Images.xcassets */,
-				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				62826F0D1DD52E01009779FB /* Table View */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for BlockDataSource";
@@ -130,6 +124,8 @@
 		607FACD31AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -160,6 +156,18 @@
 				845312344886411B746B011C /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		62826F0D1DD52E01009779FB /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				62826F051DD51611009779FB /* CellExamplesViewController.swift */,
+				62826F071DD51630009779FB /* EditingViewController.swift */,
+				62D87CAC1DD5065700AB1756 /* Cells.swift */,
+				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
+				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
+			);
+			name = "Table View";
 			sourceTree = "<group>";
 		};
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
