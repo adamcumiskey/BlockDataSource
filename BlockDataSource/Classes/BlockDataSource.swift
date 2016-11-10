@@ -33,18 +33,24 @@ import UIKit
 
 public typealias ConfigBlock = (cell: UITableViewCell) -> Void
 public typealias ActionBlock = (indexPath: NSIndexPath) -> Void
+public typealias ReorderBlock = (firstIndex: Int, secondIndex: Int) -> Void
+public typealias ScrollBlock = (scrollView: UIScrollView) -> Void
 
 public struct Row {
     
-    var identifier: String
+    var cellClass: AnyClass
+    var reuseIdentifier: String {
+        return String(cellClass)
+    }
+    
     var configure: ConfigBlock
     var onSelect: ActionBlock?
     var onDelete: ActionBlock?
     var selectionStyle = UITableViewCellSelectionStyle.None
     var reorderable = false
     
-    public init(identifier: String, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
-        self.identifier = identifier
+    public init(cellClass: AnyClass = UITableViewCell.self, configure: ConfigBlock, onSelect: ActionBlock? = nil, onDelete: ActionBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+        self.cellClass = cellClass
         self.configure = configure
         self.onSelect = onSelect
         self.onDelete = onDelete
@@ -75,54 +81,94 @@ public struct Section {
         self.rows = rows
         self.footer = footer
     }
+    
+    public init(header: HeaderFooter? = nil, row: Row, footer: HeaderFooter? = nil) {
+        self.header = header
+        self.rows = [row]
+        self.footer = footer
+    }
 }
 
 
-public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
+public class BlockDataSource: NSObject {
     
     public var sections: [Section]
-    var onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)?
-    var onScroll: ((scrollView: UIScrollView) -> Void)?
+    var onReorder: ReorderBlock?
+    var onScroll: ScrollBlock?
     
-    init(sections: [Section] = [], onReorder: ((firstIndex: Int, secondIndex: Int) -> Void)? = nil, onScroll: ((scrollView: UIScrollView) -> Void)? = nil) {
+    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
     
-    func registerResuseIdentifiersToTableView(tableView: UITableView) {
+    public init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+        self.sections = [section]
+        self.onReorder = onReorder
+        self.onScroll = onScroll
+    }
+    
+    public init(rows: [Row], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+        self.sections = [Section(rows: rows)]
+        self.onReorder = onReorder
+        self.onScroll = onScroll
+    }
+    
+    func registerResuseIdentifiers(to tableView: UITableView) {
         for section in sections {
             for row in section.rows {
-                if (NSBundle.mainBundle().pathForResource(row.identifier, ofType: "nib") != nil) {
-                    let nib = UINib(nibName: row.identifier, bundle: NSBundle.mainBundle())
-                    tableView.registerNib(nib, forCellReuseIdentifier: row.identifier)
+                if (NSBundle.mainBundle().pathForResource(row.reuseIdentifier, ofType: "nib") != nil) {
+                    let nib = UINib(nibName: row.reuseIdentifier, bundle: NSBundle.mainBundle())
+                    tableView.registerNib(nib, forCellReuseIdentifier: row.reuseIdentifier)
+                } else {
+                    tableView.registerClass(row.cellClass, forCellReuseIdentifier: row.reuseIdentifier)
                 }
             }
         }
     }
     
-    //MARK: - UITableViewDataSource
+    // MARK: - UIScrollViewDelegate
     
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
+        if let onScroll = onScroll {
+            onScroll(scrollView: scrollView)
+        }
+    }
+    
+    // MARK: - Helpers
+    
+    private func rowForIndexPath(indexPath: NSIndexPath) -> Row {
+        let section = sections[indexPath.section]
+        return section.rows[indexPath.row]
+    }
+}
+
+
+//MARK: - UITableViewDataSource
+
+extension BlockDataSource: UITableViewDataSource {
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sections.count
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard sections.count > 0 else {
-            return 0
-        }
-        
+        guard sections.count > 0 else { return 0 }
         return sections[section].rows.count
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row = rowForIndexPath(indexPath)
-        let cell = tableView.dequeueReusableCellWithIdentifier(row.identifier, forIndexPath: indexPath) 
+        let cell = tableView.dequeueReusableCellWithIdentifier(row.reuseIdentifier, forIndexPath: indexPath)
         cell.selectionStyle = row.selectionStyle
         row.configure(cell: cell)
         return cell
     }
-    
+}
+
+
+// MARK: - UITableViewDelegate
+
+extension BlockDataSource: UITableViewDelegate {
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = rowForIndexPath(indexPath)
         if let onSelect = row.onSelect {
@@ -131,48 +177,36 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
     }
     
     public func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard sections.count > 0 else {
-            return nil
-        }
-        
+        guard sections.count > 0 else { return nil }
         return sections[section].header?.title
     }
     
     public func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        guard sections.count > 0 else {
-            return nil
-        }
-        
+        guard sections.count > 0 else { return nil }
         return sections[section].footer?.title
     }
     
     public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard sections.count > 0 else {
-            return 0.0
-        }
-        
-        if let header = sections[section].header {
-            return header.height
-        } else {
-            return 0.0
-        }
+        guard sections.count > 0 else { return UITableViewAutomaticDimension }
+        guard let header = sections[section].header else { return UITableViewAutomaticDimension }
+        return header.height
     }
     
     public func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard sections.count > 0 else {
-            return 0.0
-        }
-        
-        if let footer = sections[section].footer {
-            return footer.height
-        } else {
-            return 0
-        }
+        guard sections.count > 0 else { return UITableViewAutomaticDimension }
+        guard let footer = sections[section].footer else { return UITableViewAutomaticDimension }
+        return footer.height
     }
     
     public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let row = rowForIndexPath(indexPath)
-        return row.onDelete != nil
+        return row.onDelete != nil || row.reorderable == true
+    }
+    
+    public func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        let row = rowForIndexPath(indexPath)
+        guard let _ = row.onDelete else { return .None }
+        return .Delete
     }
     
     public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -204,20 +238,5 @@ public class BlockDataSource: NSObject, UITableViewDataSource, UITableViewDelega
         if let reorder = onReorder {
             reorder(firstIndex: sourceIndexPath.row, secondIndex: destinationIndexPath.row)
         }
-    }
-    
-    // MARK: - UIScrollViewDelegate
-    
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let onScroll = onScroll {
-            onScroll(scrollView: scrollView)
-        }
-    }
-    
-    // MARK: - Helpers
-    
-    private func rowForIndexPath(indexPath: NSIndexPath) -> Row {
-        let section = sections[indexPath.section]
-        return section.rows[indexPath.row]
     }
 }

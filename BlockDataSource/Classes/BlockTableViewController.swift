@@ -30,39 +30,39 @@
 
 import UIKit
 
-public protocol BlockConfigurableDataSource {
-    func reloadUI()
-    func configure(datasource: BlockDataSource)
+public protocol BlockConfigureable {
+    var dataSource: BlockDataSource? { get set }
 }
 
-public class BlockTableViewController: UITableViewController, BlockConfigurableDataSource {
+extension BlockConfigureable where Self: UITableViewController {
+    public func reloadUI() {
+        guard let tableView = tableView else { return }
+        dataSource?.registerResuseIdentifiers(to: tableView)
+        tableView.dataSource = dataSource
+        tableView.delegate = dataSource
+        tableView.reloadData()
     
-    private var dataSource: BlockDataSource?
+    }
+}
+
+
+public class BlockTableViewController: UITableViewController, BlockConfigureable {
+    
+    public var dataSource: BlockDataSource? {
+        didSet {
+            reloadUI()
+        }
+    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 50.0
-        self.tableView.separatorInset = UIEdgeInsetsZero
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 50.0
+        tableView.separatorInset = UIEdgeInsetsZero
     }
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.reloadUI()
-    }
-    
-    public func reloadUI() {
-        let dataSource = BlockDataSource()
-        configure(dataSource)
-        dataSource.registerResuseIdentifiersToTableView(self.tableView)
-        
-        self.tableView.dataSource = dataSource
-        self.tableView.delegate = dataSource
-        self.dataSource = dataSource
-        self.tableView.reloadData()
-    }
-
-    public func configure(datasource: BlockDataSource) {
-        fatalError("This method must be subclassed")
+        reloadUI()
     }
 }

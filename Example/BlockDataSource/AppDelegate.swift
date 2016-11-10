@@ -29,15 +29,30 @@
 //
 
 import UIKit
+import BlockDataSource
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if window == nil {
+            window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            
+            let mainVC = MainViewController(style: .Grouped)
+            mainVC.title = "Menu"
+            
+            let navVC = UINavigationController(rootViewController: mainVC)
+            navVC.view.frame = window!.bounds
+            
+            window!.rootViewController = navVC
+            window!.makeKeyAndVisible()
+        }
+        
         return true
     }
 
@@ -65,4 +80,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
