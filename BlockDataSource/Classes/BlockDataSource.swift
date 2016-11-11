@@ -242,7 +242,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let header = sections[section].header else { return 0.0 }
         if let view = header.view {
-            return CGRectGetHeight(view.frame)
+            return UITableViewAutomaticDimension
         } else if let height = header.height {
             return height
         } else {
@@ -251,10 +251,9 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard sections.count > 0 else { return 0.0 }
-        guard let footer = sections[section].footer else { return UITableViewAutomaticDimension }
+        guard let footer = sections[section].footer else { return 0.0 }
         if let view = footer.view {
-            return CGRectGetHeight(view.frame)
+            return UITableViewAutomaticDimension
         } else if let height = footer.height {
             return height
         } else {

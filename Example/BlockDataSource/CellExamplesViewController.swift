@@ -14,6 +14,12 @@ class CellExamplesViewController: BlockTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let burger = UIImageView(image: UIImage(named: "lego_burger"))
+        let label = UILabel()
+        label.text = "🍌"
+        label.textAlignment = .Center
+        
+        burger.contentMode = .ScaleAspectFit
         self.dataSource = BlockDataSource(
             sections: [
                 Section(
@@ -57,9 +63,11 @@ class CellExamplesViewController: BlockTableViewController {
                                 cell.accessoryView = `switch`
                             }
                         )
-                    ]
+                    ],
+                    footer: Section.HeaderFooter(view: burger)
                 ),
                 Section(
+                    header: Section.HeaderFooter(view: label),
                     rows: [
                         Row(
                             cellClass: ImageCell.self,
@@ -68,8 +76,7 @@ class CellExamplesViewController: BlockTableViewController {
                                 cell.bigImageView.image = UIImage(named: "lego_burger")
                             }
                         )
-                    ],
-                    footer: Section.HeaderFooter(title: "yummy", height: 30)
+                    ]
                 )
             ]
         )
