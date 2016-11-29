@@ -31,9 +31,9 @@ import UIKit
 
 
 public typealias ConfigBlock = (AnyObject) -> Void
-public typealias IndexPathBlock = (indexPath: NSIndexPath) -> Void
-public typealias ReorderBlock = (sourceIndex: NSIndexPath, destinationIndex: NSIndexPath) -> Void
-public typealias ScrollBlock = (scrollView: UIScrollView) -> Void
+public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
+public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
+public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 public protocol BlockConfigureable {
     var dataSource: BlockDataSource? { get set }
@@ -46,16 +46,16 @@ public struct Row {
     
     var cellClass: AnyClass
     var reuseIdentifier: String {
-        return String(cellClass)
+        return String(describing: cellClass)
     }
     
     var configure: ConfigBlock
     var onSelect: IndexPathBlock?
     var onDelete: IndexPathBlock?
-    var selectionStyle = UITableViewCellSelectionStyle.None
+    var selectionStyle = UITableViewCellSelectionStyle.none
     var reorderable = false
     
-    public init(cellClass: AnyClass = UITableViewCell.self, configure: ConfigBlock, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .None, reorderable: Bool = true) {
+    public init(cellClass: AnyClass = UITableViewCell.self, configure: @escaping ConfigBlock, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
         self.cellClass = cellClass
         self.configure = configure
         self.onSelect = onSelect
@@ -88,7 +88,7 @@ public struct Section {
         // Reusable view for collection view
         var reusableViewClass: AnyClass?
         var configure: ConfigBlock?
-        public init(reusableViewClass: AnyClass, configure: ConfigBlock) {
+        public init(reusableViewClass: AnyClass, configure: @escaping ConfigBlock) {
             self.reusableViewClass = reusableViewClass
             self.configure = configure
         }
@@ -114,8 +114,8 @@ public struct Section {
 
 // MARK: - BlockDataSource
 
-public class BlockDataSource: NSObject {
-    public var sections: [Section]
+open class BlockDataSource: NSObject {
+    open var sections: [Section]
     var onReorder: ReorderBlock?
     var onScroll: ScrollBlock?
     
@@ -146,11 +146,11 @@ extension BlockDataSource {
     func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
             for row in section.rows {
-                if let _ = NSBundle.mainBundle().pathForResource(row.reuseIdentifier, ofType: "nib") {
-                    let nib = UINib(nibName: row.reuseIdentifier, bundle: NSBundle.mainBundle())
-                    tableView.registerNib(nib, forCellReuseIdentifier: row.reuseIdentifier)
+                if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {
+                    let nib = UINib(nibName: row.reuseIdentifier, bundle: Bundle.main)
+                    tableView.register(nib, forCellReuseIdentifier: row.reuseIdentifier)
                 } else {
-                    tableView.registerClass(row.cellClass, forCellReuseIdentifier: row.reuseIdentifier)
+                    tableView.register(row.cellClass, forCellReuseIdentifier: row.reuseIdentifier)
                 }
             }
         }
@@ -159,30 +159,30 @@ extension BlockDataSource {
     @objc(registerReuseIdentifiersToCollectionView:)
     func registerReuseIdentifiers(to collectionView: UICollectionView) {
         for section in sections {
-            if let header = section.header, headerViewClass = header.reusableViewClass {
-                let reuseIdentifier = String(headerViewClass)
-                if let _ = NSBundle.mainBundle().pathForResource(reuseIdentifier, ofType: "nib") {
+            if let header = section.header, let headerViewClass = header.reusableViewClass {
+                let reuseIdentifier = String(describing: headerViewClass)
+                if let _ = Bundle.main.path(forResource: reuseIdentifier, ofType: "nib") {
                     let nib = UINib(nibName: reuseIdentifier, bundle: nil)
-                    collectionView.registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
+                    collectionView.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
                 } else {
-                    collectionView.registerClass(headerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
+                    collectionView.register(headerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
                 }
             }
             for row in section.rows {
-                if let _ = NSBundle.mainBundle().pathForResource(row.reuseIdentifier, ofType: "nib") {
-                    let nib = UINib(nibName: row.reuseIdentifier, bundle: NSBundle.mainBundle())
-                    collectionView.registerNib(nib, forCellWithReuseIdentifier: row.reuseIdentifier)
+                if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {
+                    let nib = UINib(nibName: row.reuseIdentifier, bundle: Bundle.main)
+                    collectionView.register(nib, forCellWithReuseIdentifier: row.reuseIdentifier)
                 } else {
-                    collectionView.registerClass(row.cellClass, forCellWithReuseIdentifier: row.reuseIdentifier)
+                    collectionView.register(row.cellClass, forCellWithReuseIdentifier: row.reuseIdentifier)
                 }
             }
-            if let footer = section.footer, footerViewClass = footer.reusableViewClass {
-                let reuseIdentifier = String(footerViewClass)
-                if let _ = NSBundle.mainBundle().pathForResource(reuseIdentifier, ofType: "nib") {
+            if let footer = section.footer, let footerViewClass = footer.reusableViewClass {
+                let reuseIdentifier = String(describing: footerViewClass)
+                if let _ = Bundle.main.path(forResource: reuseIdentifier, ofType: "nib") {
                     let nib = UINib(nibName: reuseIdentifier, bundle: nil)
-                    collectionView.registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
+                    collectionView.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
                 } else {
-                    collectionView.registerClass(footerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
+                    collectionView.register(footerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
                 }
             }
         }
@@ -193,17 +193,17 @@ extension BlockDataSource {
 //MARK: - UITableViewDataSource
 
 extension BlockDataSource: UITableViewDataSource {
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
     
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].rows.count
     }
     
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = rowForIndexPath(indexPath)
-        let cell = tableView.dequeueReusableCellWithIdentifier(row.reuseIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         cell.selectionStyle = row.selectionStyle
         row.configure(cell)
         return cell
@@ -214,32 +214,32 @@ extension BlockDataSource: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension BlockDataSource: UITableViewDelegate {
-    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = rowForIndexPath(indexPath)
         if let onSelect = row.onSelect {
-            onSelect(indexPath: indexPath)
+            onSelect(indexPath)
         }
     }
     
-    public func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].header?.title
     }
     
-    public func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = sections[section].header, headerView = header.view else { return nil }
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = sections[section].header, let headerView = header.view else { return nil }
         return headerView
     }
     
-    public func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return sections[section].footer?.title
     }
     
-    public func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footer = sections[section].header, footerView = footer.view else { return nil }
+    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let footer = sections[section].header, let footerView = footer.view else { return nil }
         return footerView
     }
     
-    public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let header = sections[section].header else { return 0.0 }
         if let view = header.view {
             return UITableViewAutomaticDimension
@@ -250,7 +250,7 @@ extension BlockDataSource: UITableViewDelegate {
         }
     }
     
-    public func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard let footer = sections[section].footer else { return 0.0 }
         if let view = footer.view {
             return UITableViewAutomaticDimension
@@ -261,34 +261,34 @@ extension BlockDataSource: UITableViewDelegate {
         }
     }
     
-    public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let row = rowForIndexPath(indexPath)
         return row.onDelete != nil || row.reorderable == true
     }
     
-    public func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         let row = rowForIndexPath(indexPath)
-        guard let _ = row.onDelete else { return .None }
-        return .Delete
+        guard let _ = row.onDelete else { return .none }
+        return .delete
     }
     
-    public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             let row = rowForIndexPath(indexPath)
             if let onDelete = row.onDelete {
-                onDelete(indexPath: indexPath)
-                sections[indexPath.section].rows.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                onDelete(indexPath)
+                sections[indexPath.section].rows.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
             }
         }
     }
     
-    public func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let row = rowForIndexPath(indexPath)
         return row.reorderable
     }
     
-    public func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         let destination = rowForIndexPath(proposedDestinationIndexPath)
         if destination.reorderable {
             return proposedDestinationIndexPath
@@ -297,9 +297,9 @@ extension BlockDataSource: UITableViewDelegate {
         }
     }
     
-    public func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
-            reorder(sourceIndex: sourceIndexPath, destinationIndex: destinationIndexPath)
+            reorder(sourceIndexPath, destinationIndexPath)
         }
     }
 }
@@ -308,32 +308,32 @@ extension BlockDataSource: UITableViewDelegate {
 // MARK: - UICollectionViewDataSource
 
 extension BlockDataSource: UICollectionViewDataSource {
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
     
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].rows.count
     }
     
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = rowForIndexPath(indexPath)
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(row.reuseIdentifier, forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: row.reuseIdentifier, for: indexPath)
         row.configure(cell)
         return cell
     }
     
-    public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let section = sections[indexPath.section]
         if kind == UICollectionElementKindSectionHeader {
-            if let header = section.header, headerViewClass = header.reusableViewClass {
-                let view = collectionView.dequeueReusableCellWithReuseIdentifier(String(headerViewClass), forIndexPath: indexPath)
+            if let header = section.header, let headerViewClass = header.reusableViewClass {
+                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: headerViewClass), for: indexPath)
                 header.configure?(view)
                 return view
             }
         } else if kind == UICollectionElementKindSectionFooter {
-            if let footer = section.footer, footerViewClass = footer.reusableViewClass {
-                let view = collectionView.dequeueReusableCellWithReuseIdentifier(String(footerViewClass), forIndexPath: indexPath)
+            if let footer = section.footer, let footerViewClass = footer.reusableViewClass {
+                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: footerViewClass), for: indexPath)
                 footer.configure?(view)
                 return view
             }
@@ -341,13 +341,13 @@ extension BlockDataSource: UICollectionViewDataSource {
         return UICollectionReusableView()
     }
     
-    public func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return rowForIndexPath(indexPath).reorderable
     }
     
-    public func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
-            reorder(sourceIndex: sourceIndexPath, destinationIndex: destinationIndexPath)
+            reorder(sourceIndexPath, destinationIndexPath)
         }
     }
 }
@@ -356,13 +356,13 @@ extension BlockDataSource: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension BlockDataSource: UICollectionViewDelegate {
-    public func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return rowForIndexPath(indexPath).onSelect != nil
     }
     
-    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let onSelect = rowForIndexPath(indexPath).onSelect {
-            onSelect(indexPath: indexPath)
+            onSelect(indexPath)
         }
     }
 }
@@ -371,9 +371,9 @@ extension BlockDataSource: UICollectionViewDelegate {
 // MARK: - UIScrollViewDelegate
 
 extension BlockDataSource {
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let onScroll = onScroll {
-            onScroll(scrollView: scrollView)
+            onScroll(scrollView)
         }
     }
 }
@@ -382,7 +382,7 @@ extension BlockDataSource {
 // MARK: - Helpers
 
 extension BlockDataSource {
-    private func rowForIndexPath(indexPath: NSIndexPath) -> Row {
+    fileprivate func rowForIndexPath(_ indexPath: IndexPath) -> Row {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
     }

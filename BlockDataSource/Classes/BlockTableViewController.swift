@@ -42,21 +42,21 @@ extension BlockConfigureable where Self: UITableViewController {
 }
 
 
-public class BlockTableViewController: UITableViewController, BlockConfigureable {
-    public var dataSource: BlockDataSource? {
+open class BlockTableViewController: UITableViewController, BlockConfigureable {
+    open var dataSource: BlockDataSource? {
         didSet {
             reloadUI()
         }
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 50.0
-        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.separatorInset = UIEdgeInsets.zero
     }
     
-    override public func viewWillAppear(animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadUI()
     }

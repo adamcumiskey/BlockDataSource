@@ -11,7 +11,7 @@ import UIKit
 
 class Cell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .Default, reuseIdentifier: reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -21,7 +21,7 @@ class Cell: UITableViewCell {
 
 class SubtitleCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .Subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,7 +31,7 @@ class SubtitleCell: UITableViewCell {
 
 class LeftAlignedCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .Value1, reuseIdentifier: reuseIdentifier)
+        super.init(style: .value1, reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +41,7 @@ class LeftAlignedCell: UITableViewCell {
 
 class RightAlignedCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .Value2, reuseIdentifier: reuseIdentifier)
+        super.init(style: .value2, reuseIdentifier: reuseIdentifier)
     }
     
     required init?(coder aDecoder: NSCoder) {

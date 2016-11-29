@@ -21,14 +21,14 @@ extension BlockConfigureable where Self: BlockCollectionViewController {
 
 
 
-public class BlockCollectionViewController: UICollectionViewController, BlockConfigureable {
-    public var dataSource: BlockDataSource? {
+open class BlockCollectionViewController: UICollectionViewController, BlockConfigureable {
+    open var dataSource: BlockDataSource? {
         didSet {
             reloadUI()
         }
     }
     
-    override public func viewWillAppear(animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadUI()
     }
