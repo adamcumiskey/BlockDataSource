@@ -34,15 +34,15 @@ extension BlockConfigureable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         
-        let dataSource = self.dataSource ?? BlockDataSource()
+        let dataSource = BlockDataSource()
         configureDataSource(dataSource: dataSource)
-        self.dataSource = dataSource
         
         dataSource.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         tableView.reloadData()
-    
+        
+        self.dataSource = dataSource
     }
 }
 
@@ -63,11 +63,6 @@ open class BlockTableViewController: UITableViewController, BlockConfigureable {
     
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadUI()
-    }
-    
-    override open func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
         reloadUI()
     }
 }

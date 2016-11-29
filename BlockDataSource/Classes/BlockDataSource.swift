@@ -56,15 +56,26 @@ public struct Row {
     var selectionStyle = UITableViewCellSelectionStyle.none
     var reorderable = false
     
-    public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
+    public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+        self.selectionStyle = selectionStyle
+        self.reorderable = reorderable
+        
         self.cellClass = Cell.self
         self.configure = { cell in
             configure(cell as! Cell)
         }
+    }
+    
+    public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
         self.onSelect = onSelect
         self.onDelete = onDelete
         self.selectionStyle = selectionStyle
         self.reorderable = reorderable
+        
+        self.cellClass = Cell.self
+        self.configure = { cell in
+            configure(cell as! Cell)
+        }
     }
 }
 

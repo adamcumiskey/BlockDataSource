@@ -49,12 +49,12 @@ class EditingViewController: BlockTableViewController {
                             }
                         }
                     )
-                },
-                footer: tableView.isEditing ? .label("Press \"Done\" to stop editing") : .label("Press \"Edit\" to reorder")
+                }
             )
         ]
         dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
             self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
+            self.reloadUI()
         }
     }
 }
