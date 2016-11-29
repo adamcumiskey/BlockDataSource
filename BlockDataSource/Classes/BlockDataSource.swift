@@ -72,19 +72,26 @@ public struct Row {
 
 public struct Section {
     
-    public struct HeaderFooter {
-        // Title/Height for basic tableview headers/footers
-        var title: String?
-        var height: CGFloat?
-        public init(title: String, height: CGFloat = 30) {
-            self.title = title
-            self.height = height
+    public enum HeaderFooter {
+        case label(String)
+        case customView(UIView, height: CGFloat)
+        
+        var text: String? {
+            switch self {
+            case let .label(text):
+                return text
+            default:
+                return nil
+            }
         }
         
-        // Custom view for tableview headers/footers
-        var view: UIView?
-        public init(view: UIView) {
-            self.view = view
+        var view: UIView? {
+            switch self {
+            case let .customView(view, _):
+                return view
+            default:
+                return nil
+            }
         }
     }
     
@@ -216,42 +223,38 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].header?.title
+        return sections[section].header?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = sections[section].header, let headerView = header.view else { return nil }
-        return headerView
+        return sections[section].header?.view
     }
     
     public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return sections[section].footer?.title
+        return sections[section].footer?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footer = sections[section].header, let footerView = footer.view else { return nil }
-        return footerView
+        return sections[section].footer?.view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard let header = sections[section].header else { return 0.0 }
-        if let view = header.view {
+        guard let header = sections[section].header else { return UITableViewAutomaticDimension }
+        switch header {
+        case let .label(_):
             return UITableViewAutomaticDimension
-        } else if let height = header.height {
+        case let .customView(_, height):
             return height
-        } else {
-            return UITableViewAutomaticDimension
         }
     }
     
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard let footer = sections[section].footer else { return 0.0 }
-        if let view = footer.view {
+        guard let footer = sections[section].footer else { return UITableViewAutomaticDimension }
+        switch footer {
+        case let .label(_):
             return UITableViewAutomaticDimension
-        } else if let height = footer.height {
+        case let .customView(_, height):
             return height
-        } else {
-            return UITableViewAutomaticDimension
         }
     }
     
@@ -294,6 +297,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
             reorder(sourceIndexPath, destinationIndexPath)
+            tableView.reloadData()
         }
     }
 }
@@ -360,17 +364,17 @@ extension BlockDataSource: UITableViewDelegate {
 //        }
 //    }
 //}
-//
-//
-//// MARK: - UIScrollViewDelegate
-//
-//extension BlockDataSource {
-//    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if let onScroll = onScroll {
-//            onScroll(scrollView)
-//        }
-//    }
-//}
+
+
+// MARK: - UIScrollViewDelegate
+
+extension BlockDataSource {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let onScroll = onScroll {
+            onScroll(scrollView)
+        }
+    }
+}
 
 
 // MARK: - Helpers

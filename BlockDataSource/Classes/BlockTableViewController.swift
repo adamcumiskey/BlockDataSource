@@ -60,4 +60,9 @@ open class BlockTableViewController: UITableViewController, BlockConfigureable {
         super.viewWillAppear(animated)
         reloadUI()
     }
+    
+    override open func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        reloadUI()
+    }
 }
