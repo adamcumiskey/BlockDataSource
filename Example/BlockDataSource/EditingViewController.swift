@@ -36,30 +36,25 @@ class EditingViewController: BlockTableViewController {
         data = (0..<5).map { Item(title: "\($0)") }
     }
     
-    override var dataSource: BlockDataSource? {
-        get {
-            guard let data = data else { return nil }
-            return BlockDataSource(
-                section: Section(
-                    rows: data.map { item in
-                        return Row(
-                            configure: item.configureCell,
-                            onDelete: { [unowned self] indexPath in
-                                if let index = self.data!.index(of: item) {
-                                    self.data?.remove(at: index)
-                                }
+    override func configureDataSource(dataSource: BlockDataSource) {
+        guard let data = data else { return }
+        dataSource.sections = [
+            Section(
+                rows: data.map { item in
+                    return Row(
+                        configure: item.configureCell,
+                        onDelete: { [unowned self] indexPath in
+                            if let index = self.data!.index(of: item) {
+                                self.data?.remove(at: index)
                             }
-                        )
-                    },
-                    footer: tableView.isEditing ? .label("Press \"Done\" to stop editing") : .label("Press \"Edit\" to reorder")
-                ),
-                onReorder: { [unowned self] (firstIndex, secondIndex) in
-                    self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
-                }
+                        }
+                    )
+                },
+                footer: tableView.isEditing ? .label("Press \"Done\" to stop editing") : .label("Press \"Edit\" to reorder")
             )
-        }
-        set {
-            
+        ]
+        dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
+            self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
         }
     }
 }

@@ -35,8 +35,9 @@ public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
 public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
-public protocol BlockConfigureable {
+public protocol BlockConfigureable: class {
     var dataSource: BlockDataSource? { get set }
+    func configureDataSource(dataSource: BlockDataSource)
 }
 
 
@@ -117,8 +118,13 @@ public struct Section {
 
 open class BlockDataSource: NSObject {
     open var sections: [Section]
-    var onReorder: ReorderBlock?
-    var onScroll: ScrollBlock?
+    open var onReorder: ReorderBlock?
+    open var onScroll: ScrollBlock?
+    
+    public override init() {
+        self.sections = [Section]()
+        super.init()
+    }
     
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
@@ -199,7 +205,7 @@ extension BlockDataSource: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].rows.count
+        return sectionAtIndex(section)?.rows.count ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -223,23 +229,23 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].header?.text
+        return sectionAtIndex(section)?.header?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return sections[section].header?.view
+        return sectionAtIndex(section)?.header?.view
     }
     
     public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return sections[section].footer?.text
+        return sectionAtIndex(section)?.footer?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return sections[section].footer?.view
+        return sectionAtIndex(section)?.footer?.view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard let header = sections[section].header else { return UITableViewAutomaticDimension }
+        guard let header = sectionAtIndex(section)?.header else { return UITableViewAutomaticDimension }
         switch header {
         case let .label(_):
             return UITableViewAutomaticDimension
@@ -249,7 +255,7 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard let footer = sections[section].footer else { return UITableViewAutomaticDimension }
+        guard let footer = sectionAtIndex(section)?.footer else { return UITableViewAutomaticDimension }
         switch footer {
         case let .label(_):
             return UITableViewAutomaticDimension
@@ -383,5 +389,10 @@ extension BlockDataSource {
     fileprivate func rowForIndexPath(_ indexPath: IndexPath) -> Row {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
+    }
+    
+    fileprivate func sectionAtIndex(_ index: Int) -> Section? {
+        guard sections.count > index else { return nil }
+        return sections[index]
     }
 }

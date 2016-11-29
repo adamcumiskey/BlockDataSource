@@ -33,7 +33,12 @@ import UIKit
 extension BlockConfigureable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
-        dataSource?.registerReuseIdentifiers(to: tableView)
+        
+        let dataSource = self.dataSource ?? BlockDataSource()
+        configureDataSource(dataSource: dataSource)
+        self.dataSource = dataSource
+        
+        dataSource.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         tableView.reloadData()
@@ -43,10 +48,10 @@ extension BlockConfigureable where Self: UITableViewController {
 
 
 open class BlockTableViewController: UITableViewController, BlockConfigureable {
-    open var dataSource: BlockDataSource? {
-        didSet {
-            reloadUI()
-        }
+    open var dataSource: BlockDataSource?
+    
+    open func configureDataSource(dataSource: BlockDataSource) {
+        // Base class does nothing
     }
     
     override open func viewDidLoad() {
