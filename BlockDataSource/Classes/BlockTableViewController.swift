@@ -22,7 +22,6 @@
 //
 //
 //  BlockTableViewController.swift
-//  bestroute
 //
 //  Created by Adam Cumiskey on 6/17/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -30,39 +29,40 @@
 
 import UIKit
 
-public protocol BlockConfigurableDataSource {
-    func reloadUI()
-    func configure(datasource: BlockDataSource)
+
+extension BlockConfigureable where Self: UITableViewController {
+    public func reloadUI() {
+        guard let tableView = tableView else { return }
+        
+        let dataSource = BlockDataSource()
+        configureDataSource(dataSource: dataSource)
+        
+        dataSource.registerReuseIdentifiers(to: tableView)
+        tableView.dataSource = dataSource
+        tableView.delegate = dataSource
+        tableView.reloadData()
+        
+        self.dataSource = dataSource
+    }
 }
 
-public class BlockTableViewController: UITableViewController, BlockConfigurableDataSource {
-    
-    private var dataSource: BlockDataSource?
-    
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 50.0
-        self.tableView.separatorInset = UIEdgeInsetsZero
-    }
-    
-    override public func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.reloadUI()
-    }
-    
-    public func reloadUI() {
-        let dataSource = BlockDataSource()
-        configure(dataSource)
-        dataSource.registerResuseIdentifiersToTableView(self.tableView)
-        
-        self.tableView.dataSource = dataSource
-        self.tableView.delegate = dataSource
-        self.dataSource = dataSource
-        self.tableView.reloadData()
-    }
 
-    public func configure(datasource: BlockDataSource) {
-        fatalError("This method must be subclassed")
+open class BlockTableViewController: UITableViewController, BlockConfigureable {
+    open var dataSource: BlockDataSource?
+    
+    open func configureDataSource(dataSource: BlockDataSource) {
+        // Base class does nothing
+    }
+    
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 50.0
+        tableView.separatorInset = UIEdgeInsets.zero
+    }
+    
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadUI()
     }
 }
