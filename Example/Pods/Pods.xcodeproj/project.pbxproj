@@ -39,28 +39,28 @@
 		483C572E5681B099E268EEA7372003AC /* BlockDataSource-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BlockDataSource-dummy.m"; sourceTree = "<group>"; };
 		4E267038BEC236938FF5627773DE52A6 /* Pods-BlockDataSource_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BlockDataSource_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		4ECACC2B149A9391EB484B594FC6B446 /* Pods-BlockDataSource_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BlockDataSource_Tests-umbrella.h"; sourceTree = "<group>"; };
-		52A126A75A29AE043B2633B1A06F94F6 /* BlockDataSource.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = BlockDataSource.modulemap; sourceTree = "<group>"; };
-		5A6699D99CFFFA87EDEF6C0A7F46403B /* Pods-BlockDataSource_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-BlockDataSource_Tests.modulemap"; sourceTree = "<group>"; };
+		52A126A75A29AE043B2633B1A06F94F6 /* BlockDataSource.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = BlockDataSource.modulemap; sourceTree = "<group>"; };
+		5A6699D99CFFFA87EDEF6C0A7F46403B /* Pods-BlockDataSource_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BlockDataSource_Tests.modulemap"; sourceTree = "<group>"; };
 		5CD6347E2472FB315B42A38C7002670D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62DB1ADF114A602F5FFA365BE18625AE /* Pods-BlockDataSource_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Tests-resources.sh"; sourceTree = "<group>"; };
 		7A7B3B1E0804ED960E500BA2B4EAE14C /* Pods-BlockDataSource_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BlockDataSource_Example-umbrella.h"; sourceTree = "<group>"; };
 		7AB0697BEBDB4F4D77130DF65DBBFDBC /* BlockDataSource-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlockDataSource-prefix.pch"; sourceTree = "<group>"; };
-		7B08C48AF2581F6A30766543A3155200 /* BlockDataSource.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = BlockDataSource.framework; path = BlockDataSource.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B08C48AF2581F6A30766543A3155200 /* BlockDataSource.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BlockDataSource.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DCE3F061C5462346C315A77CD633AAA /* Pods-BlockDataSource_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BlockDataSource_Tests-dummy.m"; sourceTree = "<group>"; };
 		865B290DEAB0A29A517D2AE6199104D7 /* Pods-BlockDataSource_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BlockDataSource_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		8B4465DE2D2DCBA867ABB65F3812FDBF /* Pods-BlockDataSource_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Example-frameworks.sh"; sourceTree = "<group>"; };
 		8BB96B826EFF0B8837EA4B02F3F744FC /* Pods-BlockDataSource_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Example-resources.sh"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockCollectionViewController.swift; sourceTree = "<group>"; };
 		A9881C0DA25D2AD82B4540022D79DE24 /* BlockDataSource-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlockDataSource-umbrella.h"; sourceTree = "<group>"; };
-		AF4F5959426A53CC37B55A169CDAFB7C /* Pods-BlockDataSource_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-BlockDataSource_Example.modulemap"; sourceTree = "<group>"; };
+		AF4F5959426A53CC37B55A169CDAFB7C /* Pods-BlockDataSource_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BlockDataSource_Example.modulemap"; sourceTree = "<group>"; };
 		B52EA02ED556D3C518070B51AD737CE8 /* BlockDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockDataSource.swift; sourceTree = "<group>"; };
-		C1149C586D5E94EA0DEA3556BBF1D803 /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BlockDataSource_Example.framework; path = "Pods-BlockDataSource_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1149C586D5E94EA0DEA3556BBF1D803 /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C680BC16D547D4607F1C5B9C24A896CF /* Pods-BlockDataSource_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BlockDataSource_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		CC535EB5D572117215DAAAE9764D73D1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB662C53DC56F8A37DE6AFE85AB6D3D5 /* Pods-BlockDataSource_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BlockDataSource_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		EB42CC6221E04609065E3460E3BF57C9 /* Pods_BlockDataSource_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BlockDataSource_Tests.framework; path = "Pods-BlockDataSource_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB42CC6221E04609065E3460E3BF57C9 /* Pods_BlockDataSource_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F10494E70441DB6EA43B1500A7AFC210 /* Pods-BlockDataSource_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BlockDataSource_Example-dummy.m"; sourceTree = "<group>"; };
 		F3923B437EA56E90EF6719006B899CB5 /* BlockDataSource.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BlockDataSource.xcconfig; sourceTree = "<group>"; };
 		F94DEF2089BBCEED536237A2E5CE8A4C /* Pods-BlockDataSource_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BlockDataSource_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -99,11 +99,10 @@
 		0B99B88D268079CC6D912D17A82D17B7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */,
 				B52EA02ED556D3C518070B51AD737CE8 /* BlockDataSource.swift */,
+				9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */,
 				29033E50CD907D2CE773C5F21D7F8A88 /* BlockTableViewController.swift */,
 			);
-			name = Classes;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -112,7 +111,6 @@
 			children = (
 				0B99B88D268079CC6D912D17A82D17B7 /* Classes */,
 			);
-			name = BlockDataSource;
 			path = BlockDataSource;
 			sourceTree = "<group>";
 		};

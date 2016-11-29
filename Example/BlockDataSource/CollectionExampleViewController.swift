@@ -8,10 +8,3 @@
 
 import UIKit
 import BlockDataSource
-
-
-class CollectionExampleViewController: BlockCollectionViewController {
-    override func viewDidLoad() {
-        
-    }
-}

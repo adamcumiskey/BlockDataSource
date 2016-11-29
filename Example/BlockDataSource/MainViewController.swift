@@ -12,58 +12,51 @@ import BlockDataSource
 
 class MainViewController: BlockTableViewController {
     
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        self.dataSource = BlockDataSource(
-//            sections: [
-//                Section(
-//                    rows: [
-//                        Row(
-//                            cellClass: Cell.self,
-//                            configure: { cell in
-//                                guard let cell = cell as? Cell else { return }
-//                                cell.textLabel?.text = "Examples"
-//                            },
-//                            onSelect: { [unowned self] indexPath in
-//                                let testVC = CellExamplesViewController(style: .Grouped)
-//                                testVC.title = "Examples"
-//                                self.navigationController?.pushViewController(testVC, animated: true)
-//                            }
-//                        ),
-//                        Row(
-//                            cellClass: Cell.self,
-//                            configure: { cell in
-//                                guard let cell = cell as? Cell else { return }
-//                                cell.textLabel?.text = "Editing"
-//                            },
-//                            onSelect: { [unowned self] indexPath in
-//                                let reorderVC = EditingViewController(style: .Grouped)
-//                                reorderVC.title = "Editing"
-//                                self.navigationController?.pushViewController(reorderVC, animated: true)
-//                            }
-//                        ),
-//                        Row(
-//                            cellClass: Cell.self,
-//                            configure: { cell in
-//                                
-//                            }
-//                        ),
-//                        Row(
-//                            cellClass: Cell.self,
-//                            configure: { cell in
-//                                
-//                            }
-//                        ),
-//                        Row(
-//                            cellClass: Cell.self,
-//                            configure: { cell in
-//                                
-//                            }
-//                        ),
-//                    ]
-//                )
-//            ]
-//        )
-//    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.dataSource = BlockDataSource(
+            sections: [
+                Section(
+                    rows: [
+                        Row(
+                            configure: { cell in
+                                cell.textLabel?.text = "Examples"
+                            },
+                            onSelect: { [unowned self] indexPath in
+                                let testVC = CellExamplesViewController(style: .grouped)
+                                testVC.title = "Examples"
+                                self.navigationController?.pushViewController(testVC, animated: true)
+                            }
+                        ),
+                        Row(
+                            configure: { cell in
+                                cell.textLabel?.text = "Editing"
+                            },
+                            onSelect: { [unowned self] indexPath in
+                                let reorderVC = EditingViewController(style: .grouped)
+                                reorderVC.title = "Editing"
+                                self.navigationController?.pushViewController(reorderVC, animated: true)
+                            }
+                        ),
+                        Row(
+                            configure: { cell in
+                                
+                            }
+                        ),
+                        Row(
+                            configure: { cell in
+                                
+                            }
+                        ),
+                        Row(
+                            configure: { cell in
+                                
+                            }
+                        ),
+                    ]
+                )
+            ]
+        )
+    }
 }
