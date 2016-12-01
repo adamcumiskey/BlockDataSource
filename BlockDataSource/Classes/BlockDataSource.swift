@@ -44,6 +44,7 @@ public protocol BlockConfigureable: class {
 // MARK: - Row
 
 public struct Row {
+    var rowID: String
     
     var cellClass: UITableViewCell.Type
     var reuseIdentifier: String {
@@ -56,7 +57,8 @@ public struct Row {
     var selectionStyle = UITableViewCellSelectionStyle.none
     var reorderable = false
     
-    public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+    public init<Cell: UITableViewCell>(rowID: String = UUID().uuidString, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+        self.rowID = rowID
         self.selectionStyle = selectionStyle
         self.reorderable = reorderable
         
@@ -66,7 +68,8 @@ public struct Row {
         }
     }
     
-    public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
+    public init<Cell: UITableViewCell>(rowID: String = UUID().uuidString, configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
+        self.rowID = rowID
         self.onSelect = onSelect
         self.onDelete = onDelete
         self.selectionStyle = selectionStyle

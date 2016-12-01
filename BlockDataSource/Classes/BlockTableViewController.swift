@@ -31,7 +31,7 @@ import UIKit
 
 
 extension BlockConfigureable where Self: UITableViewController {
-    public func reloadUI() {
+    public func reloadUI(animated: Bool = false) {
         guard let tableView = tableView else { return }
         
         let dataSource = BlockDataSource()
@@ -40,7 +40,32 @@ extension BlockConfigureable where Self: UITableViewController {
         dataSource.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
-        tableView.reloadData()
+        
+        if animated == false || self.dataSource == nil {
+            tableView.reloadData()
+        } else {
+            var removed = [IndexPath]()
+            var added = [IndexPath]()
+            
+            for (index, section) in self.dataSource!.sections.enumerated() {
+                guard dataSource.sections.count > index else { continue }
+                let sectionIDs = section.rows.map { $0.rowID }
+                let newSectionIDs = dataSource.sections[index].rows.map { $0.rowID }
+                
+                let diff = getDiff(sectionIDs, newSectionIDs)
+                
+                let removedIndexes = diff.removed.map { IndexPath(row: sectionIDs.index(of: $0)!, section: index) }
+                removed.append(contentsOf: removedIndexes)
+                
+                let addedIndexes = diff.added.map { IndexPath(row: newSectionIDs.index(of: $0)!, section: index) }
+                added.append(contentsOf: addedIndexes)
+            }
+            
+            tableView.beginUpdates()
+            tableView.insertRows(at: added, with: .fade)
+            tableView.deleteRows(at: removed, with: .fade)
+            tableView.endUpdates()
+        }
         
         self.dataSource = dataSource
     }
@@ -58,7 +83,7 @@ open class BlockTableViewController: UITableViewController, BlockConfigureable {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 50.0
-        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
     }
     
     override open func viewWillAppear(_ animated: Bool) {

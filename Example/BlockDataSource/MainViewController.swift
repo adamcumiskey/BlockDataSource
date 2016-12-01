@@ -34,6 +34,16 @@ class MainViewController: BlockTableViewController {
                             reorderVC.title = "Editing"
                             self.navigationController?.pushViewController(reorderVC, animated: true)
                         }
+                    ),
+                    Row(
+                        configure: { cell in
+                            cell.textLabel?.text = "Animations"
+                        },
+                        onSelect: { [unowned self] indexPath in
+                            let controller = AnimatedViewController()
+                            controller.title = "Animations"
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
                     )
                 ]
             )

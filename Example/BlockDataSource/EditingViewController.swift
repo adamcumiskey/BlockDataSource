@@ -42,6 +42,7 @@ class EditingViewController: BlockTableViewController {
             Section(
                 rows: data.map { item in
                     return Row(
+                        rowID: item.title,
                         configure: item.configureCell,
                         onDelete: { [unowned self] indexPath in
                             if let index = self.data!.index(of: item) {
