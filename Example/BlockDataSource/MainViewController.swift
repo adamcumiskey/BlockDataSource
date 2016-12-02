@@ -18,6 +18,7 @@ class MainViewController: BlockTableViewController {
                     Row(
                         configure: { cell in
                             cell.textLabel?.text = "Cell Types"
+                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let testVC = CellExamplesViewController(style: .grouped)
@@ -28,6 +29,7 @@ class MainViewController: BlockTableViewController {
                     Row(
                         configure: { cell in
                             cell.textLabel?.text = "Editing"
+                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let reorderVC = EditingViewController(style: .grouped)
@@ -38,6 +40,7 @@ class MainViewController: BlockTableViewController {
                     Row(
                         configure: { cell in
                             cell.textLabel?.text = "Animations"
+                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let controller = AnimatedViewController()

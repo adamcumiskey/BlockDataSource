@@ -61,9 +61,11 @@ extension BlockConfigureable where Self: UITableViewController {
                 added.append(contentsOf: addedIndexes)
             }
             
+            print("added: \(added)")
+            print("removed: \(removed)")
             tableView.beginUpdates()
-            tableView.insertRows(at: added, with: .fade)
             tableView.deleteRows(at: removed, with: .fade)
+            tableView.insertRows(at: added, with: .fade)
             tableView.endUpdates()
         }
         
