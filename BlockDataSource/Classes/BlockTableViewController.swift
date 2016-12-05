@@ -30,7 +30,7 @@
 import UIKit
 
 
-extension BlockConfigureable where Self: UITableViewController {
+public extension BlockConfigureable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         

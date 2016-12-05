@@ -18,7 +18,6 @@
 		CF4958C56B59987A1F599B2925D68FE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		E17D89DA95A01087023BE225E751B2BC /* BlockDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52EA02ED556D3C518070B51AD737CE8 /* BlockDataSource.swift */; };
 		F1B5C6CFA020F821E1FB7A3B8FC2E9AC /* Pods-BlockDataSource_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ECACC2B149A9391EB484B594FC6B446 /* Pods-BlockDataSource_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F2F75B03D8F610120F65D7F7EDCAEDAD /* BlockCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +50,6 @@
 		8B4465DE2D2DCBA867ABB65F3812FDBF /* Pods-BlockDataSource_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Example-frameworks.sh"; sourceTree = "<group>"; };
 		8BB96B826EFF0B8837EA4B02F3F744FC /* Pods-BlockDataSource_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Example-resources.sh"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockCollectionViewController.swift; sourceTree = "<group>"; };
 		A9881C0DA25D2AD82B4540022D79DE24 /* BlockDataSource-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlockDataSource-umbrella.h"; sourceTree = "<group>"; };
 		AF4F5959426A53CC37B55A169CDAFB7C /* Pods-BlockDataSource_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BlockDataSource_Example.modulemap"; sourceTree = "<group>"; };
 		B52EA02ED556D3C518070B51AD737CE8 /* BlockDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BlockDataSource.swift; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				B52EA02ED556D3C518070B51AD737CE8 /* BlockDataSource.swift */,
-				9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */,
 				29033E50CD907D2CE773C5F21D7F8A88 /* BlockTableViewController.swift */,
 			);
 			path = Classes;
@@ -351,7 +348,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2F75B03D8F610120F65D7F7EDCAEDAD /* BlockCollectionViewController.swift in Sources */,
 				124DC07A250EA2C169F5F065810975FC /* BlockDataSource-dummy.m in Sources */,
 				E17D89DA95A01087023BE225E751B2BC /* BlockDataSource.swift in Sources */,
 				AC9C8AA885B5BB664215253C6F9CDD5C /* BlockTableViewController.swift in Sources */,

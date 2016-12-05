@@ -44,17 +44,16 @@ public protocol BlockConfigureable: class {
 // MARK: - Row
 
 public struct Row {
-    
-    var cellClass: UITableViewCell.Type
-    var reuseIdentifier: String {
+    public let cellClass: UITableViewCell.Type
+    public var reuseIdentifier: String {
         return String(describing: cellClass)
     }
     
-    var configure: (UITableViewCell) -> ()
-    var onSelect: IndexPathBlock?
-    var onDelete: IndexPathBlock?
-    var selectionStyle = UITableViewCellSelectionStyle.none
-    var reorderable = false
+    public var configure: (UITableViewCell) -> ()
+    public var onSelect: IndexPathBlock?
+    public var onDelete: IndexPathBlock?
+    public var selectionStyle = UITableViewCellSelectionStyle.none
+    public var reorderable = false
     
     public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
         self.selectionStyle = selectionStyle
@@ -107,9 +106,9 @@ public struct Section {
         }
     }
     
-    var header: HeaderFooter?
+    public var header: HeaderFooter?
     public var rows: [Row]
-    var footer: HeaderFooter?
+    public var footer: HeaderFooter?
     
     public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
         self.header = header
@@ -161,7 +160,7 @@ open class BlockDataSource: NSObject {
 
 extension BlockDataSource {
     @objc(registerReuseIdentifiersToTableView:)
-    func registerReuseIdentifiers(to tableView: UITableView) {
+    public func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
             for row in section.rows {
                 if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {
@@ -173,38 +172,6 @@ extension BlockDataSource {
             }
         }
     }
-    
-//    @objc(registerReuseIdentifiersToCollectionView:)
-//    func registerReuseIdentifiers(to collectionView: UICollectionView) {
-//        for section in sections {
-//            if let header = section.header, let headerViewClass = header.reusableViewClass {
-//                let reuseIdentifier = String(describing: headerViewClass)
-//                if let _ = Bundle.main.path(forResource: reuseIdentifier, ofType: "nib") {
-//                    let nib = UINib(nibName: reuseIdentifier, bundle: nil)
-//                    collectionView.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
-//                } else {
-//                    collectionView.register(headerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
-//                }
-//            }
-//            for row in section.rows {
-//                if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {
-//                    let nib = UINib(nibName: row.reuseIdentifier, bundle: Bundle.main)
-//                    collectionView.register(nib, forCellWithReuseIdentifier: row.reuseIdentifier)
-//                } else {
-//                    collectionView.register(row.cellClass, forCellWithReuseIdentifier: row.reuseIdentifier)
-//                }
-//            }
-//            if let footer = section.footer, let footerViewClass = footer.reusableViewClass {
-//                let reuseIdentifier = String(describing: footerViewClass)
-//                if let _ = Bundle.main.path(forResource: reuseIdentifier, ofType: "nib") {
-//                    let nib = UINib(nibName: reuseIdentifier, bundle: nil)
-//                    collectionView.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
-//                } else {
-//                    collectionView.register(footerViewClass, forCellWithReuseIdentifier: reuseIdentifier)
-//                }
-//            }
-//        }
-//    }
 }
 
 
@@ -258,7 +225,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let header = sectionAtIndex(section)?.header else { return UITableViewAutomaticDimension }
         switch header {
-        case let .label(_):
+        case .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
@@ -268,7 +235,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard let footer = sectionAtIndex(section)?.footer else { return UITableViewAutomaticDimension }
         switch footer {
-        case let .label(_):
+        case .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
@@ -318,70 +285,6 @@ extension BlockDataSource: UITableViewDelegate {
         }
     }
 }
-
-
-//// MARK: - UICollectionViewDataSource
-//
-//extension BlockDataSource: UICollectionViewDataSource {
-//    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return sections.count
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return sections[section].rows.count
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let row = rowForIndexPath(indexPath)
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: row.reuseIdentifier, for: indexPath)
-//        row.configure(cell)
-//        return cell
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let section = sections[indexPath.section]
-//        if kind == UICollectionElementKindSectionHeader {
-//            if let header = section.header, let headerViewClass = header.reusableViewClass {
-//                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: headerViewClass), for: indexPath)
-//                header.configure?(view)
-//                return view
-//            }
-//        } else if kind == UICollectionElementKindSectionFooter {
-//            if let footer = section.footer, let footerViewClass = footer.reusableViewClass {
-//                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: footerViewClass), for: indexPath)
-//                footer.configure?(view)
-//                return view
-//            }
-//        }
-//        return UICollectionReusableView()
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-//        return rowForIndexPath(indexPath).reorderable
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        if let reorder = onReorder {
-//            reorder(sourceIndexPath, destinationIndexPath)
-//        }
-//    }
-//}
-//
-//
-//// MARK: - UICollectionViewDelegate
-//
-//extension BlockDataSource: UICollectionViewDelegate {
-//    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-//        return rowForIndexPath(indexPath).onSelect != nil
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if let onSelect = rowForIndexPath(indexPath).onSelect {
-//            onSelect(indexPath)
-//        }
-//    }
-//}
-
 
 // MARK: - UIScrollViewDelegate
 
