@@ -64,7 +64,9 @@ extension BlockConfigureable where Self: UITableViewController {
             print("added: \(added)")
             print("removed: \(removed)")
             tableView.beginUpdates()
-            tableView.deleteRows(at: removed, with: .fade)
+            if removed.count > 0 {
+                tableView.deleteRows(at: removed, with: .fade)
+            }
             tableView.insertRows(at: added, with: .fade)
             tableView.endUpdates()
         }
