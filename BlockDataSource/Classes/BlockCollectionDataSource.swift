@@ -195,13 +195,13 @@ extension BlockCollectionDataSource: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let section = sectionAtIndex(indexPath.section) else { return UICollectionReusableView() }
         if kind == UICollectionElementKindSectionHeader {
-            guard let headerClass = section.headerClass else { return UICollectionReusableView() }
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: section.headerReuseIdentifier!, for: indexPath)
+            guard let reuseIdentifier = section.headerReuseIdentifier else { return UICollectionReusableView() }
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: reuseIdentifier, for: indexPath)
             section.configureHeader?(view)
             return view
         } else if kind == UICollectionElementKindSectionFooter {
-            guard let footerClass = section.footerClass else { return UICollectionReusableView() }
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: section.footerReuseIdentifier!, for: indexPath)
+            guard let reuseIdentifier = section.footerReuseIdentifier else { return UICollectionReusableView() }
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: reuseIdentifier, for: indexPath)
             section.configureFooter?(view)
             return view
         }

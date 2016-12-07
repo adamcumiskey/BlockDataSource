@@ -199,7 +199,7 @@ extension BlockTableDataSource: UITableViewDelegate {
         }
     }
     
-    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    @nonobjc public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionAtIndex(section)?.header?.text
     }
     
@@ -207,7 +207,7 @@ extension BlockTableDataSource: UITableViewDelegate {
         return sectionAtIndex(section)?.header?.view
     }
     
-    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    @nonobjc public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return sectionAtIndex(section)?.footer?.text
     }
     
@@ -218,7 +218,7 @@ extension BlockTableDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let header = sectionAtIndex(section)?.header else { return UITableViewAutomaticDimension }
         switch header {
-        case let .label(_):
+        case .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
@@ -228,14 +228,14 @@ extension BlockTableDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard let footer = sectionAtIndex(section)?.footer else { return UITableViewAutomaticDimension }
         switch footer {
-        case let .label(_):
+        case .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
         }
     }
     
-    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let row = rowAtIndexPath(indexPath)
         return row.onDelete != nil || row.reorderable == true
     }
@@ -257,7 +257,7 @@ extension BlockTableDataSource: UITableViewDelegate {
         }
     }
     
-    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    @nonobjc public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let row = rowAtIndexPath(indexPath)
         return row.reorderable
     }
