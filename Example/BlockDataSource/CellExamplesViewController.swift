@@ -11,22 +11,22 @@ import BlockDataSource
 
 
 class CellExamplesViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: BlockDataSource) {
+    override func configureDataSource(dataSource: BlockTableDataSource) {
         let burgerView = UIImageView(image: UIImage(named: "king_burger"))
         burgerView.contentMode = .scaleAspectFit
 
         dataSource.sections = [
-            Section(
+            TableSection(
                 header: .label("Examples"),
                 rows: [
-                    Row() { cell in
+                    TableRow() { cell in
                         cell.textLabel?.text = "Basic Cell"
                     },
-                    Row() { (cell: SubtitleCell) in
+                    TableRow() { (cell: SubtitleCell) in
                         cell.textLabel?.text = "Subtitle Cell"
                         cell.detailTextLabel?.text = "This is a subtitle"
                     },
-                    Row() { (cell: RightAlignedCell) in
+                    TableRow() { (cell: RightAlignedCell) in
                         cell.textLabel?.text = "Switch"
                         cell.detailTextLabel?.text = "Switch it up"
                         
@@ -43,10 +43,10 @@ class CellExamplesViewController: BlockTableViewController {
                     }
                 ]
             ),
-            Section(
-                header: .label("🍔"),
+            TableSection(
+                header: .label("Burger Section 🍔"),
                 rows: [
-                    Row() { (cell: ImageCell) in
+                    TableRow() { (cell: ImageCell) in
                         cell.bigImageView.image = UIImage(named: "lego_burger")
                     }
                 ],

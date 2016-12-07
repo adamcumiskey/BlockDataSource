@@ -21,7 +21,7 @@
 //  SOFTWARE.
 //
 //
-//  BlockDataSource.swift
+//  BlockTableDataSource.swift
 //
 //  Created by Adam Cumiskey on 6/16/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -30,26 +30,19 @@
 import UIKit
 
 
-public typealias ConfigBlock = (AnyObject) -> Void
 public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
 public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
-public protocol BlockConfigureable: class {
-    var dataSource: BlockDataSource? { get set }
-    func configureDataSource(dataSource: BlockDataSource)
-}
 
+// MARK: - TableRow
 
-// MARK: - Row
-
-public struct Row {
-    public let cellClass: UITableViewCell.Type
-    public var reuseIdentifier: String {
-        return String(describing: cellClass)
-    }
+public struct TableRow {
     
-    public var configure: (UITableViewCell) -> ()
+    var cellClass: UITableViewCell.Type
+    var reuseIdentifier: String { return String(describing: cellClass) }
+    
+    var configure: (UITableViewCell) -> ()
     public var onSelect: IndexPathBlock?
     public var onDelete: IndexPathBlock?
     public var selectionStyle = UITableViewCellSelectionStyle.none
@@ -79,9 +72,9 @@ public struct Row {
 }
 
 
-// MARK: - Section
+// MARK: - TableSection
 
-public struct Section {
+public struct TableSection {
     
     public enum HeaderFooter {
         case label(String)
@@ -107,16 +100,16 @@ public struct Section {
     }
     
     public var header: HeaderFooter?
-    public var rows: [Row]
+    public var rows: [TableRow]
     public var footer: HeaderFooter?
     
-    public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
+    public init(header: HeaderFooter? = nil, rows: [TableRow], footer: HeaderFooter? = nil) {
         self.header = header
         self.rows = rows
         self.footer = footer
     }
     
-    public init(header: HeaderFooter? = nil, row: Row, footer: HeaderFooter? = nil) {
+    public init(header: HeaderFooter? = nil, row: TableRow, footer: HeaderFooter? = nil) {
         self.header = header
         self.rows = [row]
         self.footer = footer
@@ -124,32 +117,32 @@ public struct Section {
 }
 
 
-// MARK: - BlockDataSource
+// MARK: - BlockTableDataSource
 
-open class BlockDataSource: NSObject {
-    open var sections: [Section]
-    open var onReorder: ReorderBlock?
-    open var onScroll: ScrollBlock?
+public class BlockTableDataSource: NSObject {
+    public var sections: [TableSection]
+    public var onReorder: ReorderBlock?
+    public var onScroll: ScrollBlock?
     
     public override init() {
-        self.sections = [Section]()
+        self.sections = [TableSection]()
         super.init()
     }
     
-    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public init(sections: [TableSection], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
     
-    public init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public init(section: TableSection, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = [section]
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
     
-    public init(rows: [Row], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.sections = [Section(rows: rows)]
+    public init(rows: [TableRow], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+        self.sections = [TableSection(rows: rows)]
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
@@ -158,9 +151,9 @@ open class BlockDataSource: NSObject {
 
 // MARK: - Reusable Registration
 
-extension BlockDataSource {
+extension BlockTableDataSource {
     @objc(registerReuseIdentifiersToTableView:)
-    public func registerReuseIdentifiers(to tableView: UITableView) {
+    func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
             for row in section.rows {
                 if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {
@@ -175,9 +168,9 @@ extension BlockDataSource {
 }
 
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
 
-extension BlockDataSource: UITableViewDataSource {
+extension BlockTableDataSource: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -187,7 +180,7 @@ extension BlockDataSource: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         cell.selectionStyle = row.selectionStyle
         row.configure(cell)
@@ -198,9 +191,9 @@ extension BlockDataSource: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension BlockDataSource: UITableViewDelegate {
+extension BlockTableDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         if let onSelect = row.onSelect {
             onSelect(indexPath)
         }
@@ -225,7 +218,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let header = sectionAtIndex(section)?.header else { return UITableViewAutomaticDimension }
         switch header {
-        case .label(_):
+        case let .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
@@ -235,7 +228,7 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard let footer = sectionAtIndex(section)?.footer else { return UITableViewAutomaticDimension }
         switch footer {
-        case .label(_):
+        case let .label(_):
             return UITableViewAutomaticDimension
         case let .customView(_, height):
             return height
@@ -243,19 +236,19 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         return row.onDelete != nil || row.reorderable == true
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         guard let _ = row.onDelete else { return .none }
         return .delete
     }
     
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let row = rowForIndexPath(indexPath)
+            let row = rowAtIndexPath(indexPath)
             if let onDelete = row.onDelete {
                 onDelete(indexPath)
                 sections[indexPath.section].rows.remove(at: indexPath.row)
@@ -265,12 +258,12 @@ extension BlockDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         return row.reorderable
     }
     
     public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        let destination = rowForIndexPath(proposedDestinationIndexPath)
+        let destination = rowAtIndexPath(proposedDestinationIndexPath)
         if destination.reorderable {
             return proposedDestinationIndexPath
         } else {
@@ -281,14 +274,14 @@ extension BlockDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
             reorder(sourceIndexPath, destinationIndexPath)
-            tableView.reloadData()
         }
     }
 }
 
+
 // MARK: - UIScrollViewDelegate
 
-extension BlockDataSource {
+extension BlockTableDataSource {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let onScroll = onScroll {
             onScroll(scrollView)
@@ -299,13 +292,13 @@ extension BlockDataSource {
 
 // MARK: - Helpers
 
-extension BlockDataSource {
-    fileprivate func rowForIndexPath(_ indexPath: IndexPath) -> Row {
+extension BlockTableDataSource {
+    fileprivate func rowAtIndexPath(_ indexPath: IndexPath) -> TableRow {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
     }
     
-    fileprivate func sectionAtIndex(_ index: Int) -> Section? {
+    fileprivate func sectionAtIndex(_ index: Int) -> TableSection? {
         guard sections.count > index else { return nil }
         return sections[index]
     }

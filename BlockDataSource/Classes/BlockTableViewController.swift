@@ -30,11 +30,17 @@
 import UIKit
 
 
-public extension BlockConfigureable where Self: UITableViewController {
+public protocol ConfigurableTable: class {
+    var dataSource: BlockTableDataSource? { get set }
+    func configureDataSource(dataSource: BlockTableDataSource)
+}
+
+
+public extension ConfigurableTable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         
-        let dataSource = BlockDataSource()
+        let dataSource = BlockTableDataSource()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: tableView)
@@ -47,10 +53,10 @@ public extension BlockConfigureable where Self: UITableViewController {
 }
 
 
-open class BlockTableViewController: UITableViewController, BlockConfigureable {
-    open var dataSource: BlockDataSource?
+open class BlockTableViewController: UITableViewController, ConfigurableTable {
+    public var dataSource: BlockTableDataSource?
     
-    open func configureDataSource(dataSource: BlockDataSource) {
+    open func configureDataSource(dataSource: BlockTableDataSource) {
         // Base class does nothing
     }
     
