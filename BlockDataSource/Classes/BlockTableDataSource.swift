@@ -43,10 +43,10 @@ public struct TableRow {
     var reuseIdentifier: String { return String(describing: cellClass) }
     
     var configure: (UITableViewCell) -> ()
-    var onSelect: IndexPathBlock?
-    var onDelete: IndexPathBlock?
-    var selectionStyle = UITableViewCellSelectionStyle.none
-    var reorderable = false
+    public var onSelect: IndexPathBlock?
+    public var onDelete: IndexPathBlock?
+    public var selectionStyle = UITableViewCellSelectionStyle.none
+    public var reorderable = false
     
     public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
         self.selectionStyle = selectionStyle
@@ -99,9 +99,9 @@ public struct TableSection {
         }
     }
     
-    var header: HeaderFooter?
+    public var header: HeaderFooter?
     public var rows: [TableRow]
-    var footer: HeaderFooter?
+    public var footer: HeaderFooter?
     
     public init(header: HeaderFooter? = nil, rows: [TableRow], footer: HeaderFooter? = nil) {
         self.header = header
@@ -119,10 +119,10 @@ public struct TableSection {
 
 // MARK: - BlockTableDataSource
 
-open class BlockTableDataSource: NSObject {
-    open var sections: [TableSection]
-    open var onReorder: ReorderBlock?
-    open var onScroll: ScrollBlock?
+public class BlockTableDataSource: NSObject {
+    public var sections: [TableSection]
+    public var onReorder: ReorderBlock?
+    public var onScroll: ScrollBlock?
     
     public override init() {
         self.sections = [TableSection]()

@@ -11,6 +11,7 @@
 		41D8CB1974C9F4C6C77B15DB296022A7 /* BlockDataSource-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A9881C0DA25D2AD82B4540022D79DE24 /* BlockDataSource-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		608AFD7AE7ABD02D7CD09937FA14C4E0 /* Pods-BlockDataSource_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F10494E70441DB6EA43B1500A7AFC210 /* Pods-BlockDataSource_Example-dummy.m */; };
 		621A0C2E1DF8A5C30041CF59 /* BlockCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621A0C2D1DF8A5C30041CF59 /* BlockCollectionDataSource.swift */; };
+		62843CC41DF8CAA000E8D98D /* BlockCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */; };
 		72217D854F905EFAC677602EDF1F2DF7 /* Pods-BlockDataSource_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCE3F061C5462346C315A77CD633AAA /* Pods-BlockDataSource_Tests-dummy.m */; };
 		7785E5D570E808D7DBC44F2FD675C342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		AB6B52D13E9BA7D053A93AEBBE698677 /* Pods-BlockDataSource_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7B3B1E0804ED960E500BA2B4EAE14C /* Pods-BlockDataSource_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,7 +20,6 @@
 		CF4958C56B59987A1F599B2925D68FE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		E17D89DA95A01087023BE225E751B2BC /* BlockTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52EA02ED556D3C518070B51AD737CE8 /* BlockTableDataSource.swift */; };
 		F1B5C6CFA020F821E1FB7A3B8FC2E9AC /* Pods-BlockDataSource_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ECACC2B149A9391EB484B594FC6B446 /* Pods-BlockDataSource_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F2F75B03D8F610120F65D7F7EDCAEDAD /* BlockCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -354,7 +354,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2F75B03D8F610120F65D7F7EDCAEDAD /* BlockCollectionViewController.swift in Sources */,
+				62843CC41DF8CAA000E8D98D /* BlockCollectionViewController.swift in Sources */,
 				124DC07A250EA2C169F5F065810975FC /* BlockDataSource-dummy.m in Sources */,
 				E17D89DA95A01087023BE225E751B2BC /* BlockTableDataSource.swift in Sources */,
 				AC9C8AA885B5BB664215253C6F9CDD5C /* BlockTableViewController.swift in Sources */,

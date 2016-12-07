@@ -36,7 +36,7 @@ public protocol ConfigurableTable: class {
 }
 
 
-extension ConfigurableTable where Self: UITableViewController {
+public extension ConfigurableTable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         
@@ -54,7 +54,7 @@ extension ConfigurableTable where Self: UITableViewController {
 
 
 open class BlockTableViewController: UITableViewController, ConfigurableTable {
-    open var dataSource: BlockTableDataSource?
+    public var dataSource: BlockTableDataSource?
     
     open func configureDataSource(dataSource: BlockTableDataSource) {
         // Base class does nothing

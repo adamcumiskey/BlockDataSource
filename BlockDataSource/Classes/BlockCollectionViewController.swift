@@ -14,7 +14,7 @@ public protocol ConfigurableCollection: class {
     func configureDataSource(dataSource: BlockCollectionDataSource)
 }
 
-extension ConfigurableCollection where Self: UICollectionViewController {
+public extension ConfigurableCollection where Self: UICollectionViewController {
     public func reloadUI() {
         guard let collectionView = collectionView else { return }
         
@@ -33,7 +33,7 @@ extension ConfigurableCollection where Self: UICollectionViewController {
 
 
 open class BlockCollectionViewController: UICollectionViewController, ConfigurableCollection {
-    open var dataSource: BlockCollectionDataSource?
+    public var dataSource: BlockCollectionDataSource?
     
     open func configureDataSource(dataSource: BlockCollectionDataSource) {
         // Base class does nothing

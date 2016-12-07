@@ -37,9 +37,9 @@ public struct CollectionItem {
     var reuseIdentifier: String { return String(describing: cellClass) }
     
     var configure: (UICollectionViewCell) -> ()
-    var onSelect: IndexPathBlock?
-    var onDelete: IndexPathBlock?
-    var reorderable = false
+    public var onSelect: IndexPathBlock?
+    public var onDelete: IndexPathBlock?
+    public var reorderable = false
     
     public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
         self.reorderable = reorderable
