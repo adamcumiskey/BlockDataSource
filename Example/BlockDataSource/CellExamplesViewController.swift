@@ -44,7 +44,7 @@ class CellExamplesViewController: BlockTableViewController {
                 ]
             ),
             TableSection(
-                header: .label("🍔"),
+                header: .label("Burger Section 🍔"),
                 rows: [
                     TableRow() { (cell: ImageCell) in
                         cell.bigImageView.image = UIImage(named: "lego_burger")

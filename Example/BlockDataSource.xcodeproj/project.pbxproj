@@ -20,6 +20,8 @@
 		62826F141DD6281B009779FB /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */; };
 		62826F151DD6281B009779FB /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */; };
 		62826F181DD62871009779FB /* CollectionExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62826F171DD62871009779FB /* CollectionExampleViewController.swift */; };
+		62843CC01DF8C01300E8D98D /* ImageReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */; };
+		62843CC21DF8C02000E8D98D /* ImageReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62843CC11DF8C02000E8D98D /* ImageReusableView.xib */; };
 		62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAC1DD5065700AB1756 /* Cells.swift */; };
 		62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAE1DD5096500AB1756 /* ImageCell.swift */; };
 		62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D87CAF1DD5096500AB1756 /* ImageCell.xib */; };
@@ -53,6 +55,8 @@
 		62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		62826F171DD62871009779FB /* CollectionExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CollectionExampleViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageReusableView.swift; sourceTree = "<group>"; };
+		62843CC11DF8C02000E8D98D /* ImageReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageReusableView.xib; sourceTree = "<group>"; };
 		62D87CAC1DD5065700AB1756 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Cells.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAE1DD5096500AB1756 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAF1DD5096500AB1756 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
@@ -122,10 +126,9 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				62826F031DD51415009779FB /* MainViewController.swift */,
-				62826F0E1DD6200B009779FB /* BurgerView.swift */,
-				62826F101DD62014009779FB /* BurgerView.xib */,
 				62826F161DD6281F009779FB /* Collection View */,
 				62826F0D1DD52E01009779FB /* Table View */,
+				62843CBC1DF8BF4500E8D98D /* View */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for BlockDataSource";
@@ -173,9 +176,7 @@
 			children = (
 				62826F051DD51611009779FB /* CellExamplesViewController.swift */,
 				62826F071DD51630009779FB /* EditingViewController.swift */,
-				62D87CAC1DD5065700AB1756 /* Cells.swift */,
-				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
-				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
+				62843CBD1DF8BF5200E8D98D /* Cells */,
 			);
 			name = "Table View";
 			sourceTree = "<group>";
@@ -183,11 +184,48 @@
 		62826F161DD6281F009779FB /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
-				62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */,
-				62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */,
 				62826F171DD62871009779FB /* CollectionExampleViewController.swift */,
+				62843CC31DF8C02500E8D98D /* Reusable Views */,
+				62843CBE1DF8BF5800E8D98D /* Cells */,
 			);
 			name = "Collection View";
+			sourceTree = "<group>";
+		};
+		62843CBC1DF8BF4500E8D98D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				62826F0E1DD6200B009779FB /* BurgerView.swift */,
+				62826F101DD62014009779FB /* BurgerView.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		62843CBD1DF8BF5200E8D98D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				62D87CAC1DD5065700AB1756 /* Cells.swift */,
+				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
+				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		62843CBE1DF8BF5800E8D98D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */,
+				62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		62843CC31DF8C02500E8D98D /* Reusable Views */ = {
+			isa = PBXGroup;
+			children = (
+				62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */,
+				62843CC11DF8C02000E8D98D /* ImageReusableView.xib */,
+			);
+			name = "Reusable Views";
 			sourceTree = "<group>";
 		};
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
@@ -255,10 +293,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = LRNC44UMYU;
 						LastSwiftMigration = 0810;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = LRNC44UMYU;
 						LastSwiftMigration = 0810;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -291,6 +331,7 @@
 				62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */,
 				62826F111DD62014009779FB /* BurgerView.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				62843CC21DF8C02000E8D98D /* ImageReusableView.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				62826F151DD6281B009779FB /* ImageCollectionViewCell.xib in Resources */,
 			);
@@ -408,6 +449,7 @@
 				62826F061DD51611009779FB /* CellExamplesViewController.swift in Sources */,
 				62826F141DD6281B009779FB /* ImageCollectionViewCell.swift in Sources */,
 				62826F081DD51630009779FB /* EditingViewController.swift in Sources */,
+				62843CC01DF8C01300E8D98D /* ImageReusableView.swift in Sources */,
 				62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */,
 				62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
@@ -537,6 +579,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				INFOPLIST_FILE = BlockDataSource/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -552,6 +595,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				INFOPLIST_FILE = BlockDataSource/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -565,6 +609,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -585,6 +630,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA349E33A224EDC70B8908B8 /* Pods-BlockDataSource_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",

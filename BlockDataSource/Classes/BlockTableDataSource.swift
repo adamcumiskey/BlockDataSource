@@ -34,11 +34,6 @@ public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
 public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
-public protocol BlockConfigureable: class {
-    var dataSource: BlockTableDataSource? { get set }
-    func configureDataSource(dataSource: BlockTableDataSource)
-}
-
 
 // MARK: - TableRow
 
@@ -185,7 +180,7 @@ extension BlockTableDataSource: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         cell.selectionStyle = row.selectionStyle
         row.configure(cell)
@@ -198,7 +193,7 @@ extension BlockTableDataSource: UITableViewDataSource {
 
 extension BlockTableDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         if let onSelect = row.onSelect {
             onSelect(indexPath)
         }
@@ -241,19 +236,19 @@ extension BlockTableDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         return row.onDelete != nil || row.reorderable == true
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         guard let _ = row.onDelete else { return .none }
         return .delete
     }
     
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let row = rowForIndexPath(indexPath)
+            let row = rowAtIndexPath(indexPath)
             if let onDelete = row.onDelete {
                 onDelete(indexPath)
                 sections[indexPath.section].rows.remove(at: indexPath.row)
@@ -263,12 +258,12 @@ extension BlockTableDataSource: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        let row = rowForIndexPath(indexPath)
+        let row = rowAtIndexPath(indexPath)
         return row.reorderable
     }
     
     public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        let destination = rowForIndexPath(proposedDestinationIndexPath)
+        let destination = rowAtIndexPath(proposedDestinationIndexPath)
         if destination.reorderable {
             return proposedDestinationIndexPath
         } else {
@@ -279,73 +274,9 @@ extension BlockTableDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
             reorder(sourceIndexPath, destinationIndexPath)
-            tableView.reloadData()
         }
     }
 }
-
-
-//// MARK: - UICollectionViewDataSource
-//
-//extension BlockTableDataSource: UICollectionViewDataSource {
-//    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return sections.count
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return sections[section].rows.count
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let row = rowForIndexPath(indexPath)
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: row.reuseIdentifier, for: indexPath)
-//        row.configure(cell)
-//        return cell
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let section = sections[indexPath.section]
-//        if kind == UICollectionElementKindSectionHeader {
-//            if let header = section.header, let headerViewClass = header.reusableViewClass {
-//                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: headerViewClass), for: indexPath)
-//                header.configure?(view)
-//                return view
-//            }
-//        } else if kind == UICollectionElementKindSectionFooter {
-//            if let footer = section.footer, let footerViewClass = footer.reusableViewClass {
-//                let view = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: footerViewClass), for: indexPath)
-//                footer.configure?(view)
-//                return view
-//            }
-//        }
-//        return UICollectionReusableView()
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-//        return rowForIndexPath(indexPath).reorderable
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        if let reorder = onReorder {
-//            reorder(sourceIndexPath, destinationIndexPath)
-//        }
-//    }
-//}
-//
-//
-//// MARK: - UICollectionViewDelegate
-//
-//extension BlockTableDataSource: UICollectionViewDelegate {
-//    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-//        return rowForIndexPath(indexPath).onSelect != nil
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if let onSelect = rowForIndexPath(indexPath).onSelect {
-//            onSelect(indexPath)
-//        }
-//    }
-//}
 
 
 // MARK: - UIScrollViewDelegate
@@ -362,7 +293,7 @@ extension BlockTableDataSource {
 // MARK: - Helpers
 
 extension BlockTableDataSource {
-    fileprivate func rowForIndexPath(_ indexPath: IndexPath) -> TableRow {
+    fileprivate func rowAtIndexPath(_ indexPath: IndexPath) -> TableRow {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]
     }

@@ -102,9 +102,9 @@
 			isa = PBXGroup;
 			children = (
 				B52EA02ED556D3C518070B51AD737CE8 /* BlockTableDataSource.swift */,
+				29033E50CD907D2CE773C5F21D7F8A88 /* BlockTableViewController.swift */,
 				621A0C2D1DF8A5C30041CF59 /* BlockCollectionDataSource.swift */,
 				9D81D21F197C92409EB679E12E7E257F /* BlockCollectionViewController.swift */,
-				29033E50CD907D2CE773C5F21D7F8A88 /* BlockTableViewController.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
