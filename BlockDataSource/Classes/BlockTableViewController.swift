@@ -34,7 +34,7 @@ extension BlockConfigureable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         
-        let dataSource = BlockDataSource()
+        let dataSource = BlockTableDataSource()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: tableView)
@@ -48,9 +48,9 @@ extension BlockConfigureable where Self: UITableViewController {
 
 
 open class BlockTableViewController: UITableViewController, BlockConfigureable {
-    open var dataSource: BlockDataSource?
+    open var dataSource: BlockTableDataSource?
     
-    open func configureDataSource(dataSource: BlockDataSource) {
+    open func configureDataSource(dataSource: BlockTableDataSource) {
         // Base class does nothing
     }
     

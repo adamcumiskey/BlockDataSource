@@ -30,104 +30,104 @@
 import UIKit
 
 
-public typealias ConfigBlock = (AnyObject) -> Void
 public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
 public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 public protocol BlockConfigureable: class {
-    var dataSource: BlockDataSource? { get set }
-    func configureDataSource(dataSource: BlockDataSource)
-}
-
-
-// MARK: - Row
-
-public struct Row {
-    
-    var cellClass: UITableViewCell.Type
-    var reuseIdentifier: String {
-        return String(describing: cellClass)
-    }
-    
-    var configure: (UITableViewCell) -> ()
-    var onSelect: IndexPathBlock?
-    var onDelete: IndexPathBlock?
-    var selectionStyle = UITableViewCellSelectionStyle.none
-    var reorderable = false
-    
-    public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
-        self.selectionStyle = selectionStyle
-        self.reorderable = reorderable
-        
-        self.cellClass = Cell.self
-        self.configure = { cell in
-            configure(cell as! Cell)
-        }
-    }
-    
-    public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
-        self.onSelect = onSelect
-        self.onDelete = onDelete
-        self.selectionStyle = selectionStyle
-        self.reorderable = reorderable
-        
-        self.cellClass = Cell.self
-        self.configure = { cell in
-            configure(cell as! Cell)
-        }
-    }
-}
-
-
-// MARK: - Section
-
-public struct Section {
-    
-    public enum HeaderFooter {
-        case label(String)
-        case customView(UIView, height: CGFloat)
-        
-        var text: String? {
-            switch self {
-            case let .label(text):
-                return text
-            default:
-                return nil
-            }
-        }
-        
-        var view: UIView? {
-            switch self {
-            case let .customView(view, _):
-                return view
-            default:
-                return nil
-            }
-        }
-    }
-    
-    var header: HeaderFooter?
-    public var rows: [Row]
-    var footer: HeaderFooter?
-    
-    public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
-        self.header = header
-        self.rows = rows
-        self.footer = footer
-    }
-    
-    public init(header: HeaderFooter? = nil, row: Row, footer: HeaderFooter? = nil) {
-        self.header = header
-        self.rows = [row]
-        self.footer = footer
-    }
+    var dataSource: BlockTableViewDataSource? { get set }
+    func configureDataSource(dataSource: BlockTableViewDataSource)
 }
 
 
 // MARK: - BlockDataSource
 
-open class BlockDataSource: NSObject {
+open class BlockTableViewDataSource: NSObject {
+    
+    // MARK: - Row
+    
+    public struct Row {
+        
+        var cellClass: UITableViewCell.Type
+        var reuseIdentifier: String {
+            return String(describing: cellClass)
+        }
+        
+        var configure: (UITableViewCell) -> ()
+        var onSelect: IndexPathBlock?
+        var onDelete: IndexPathBlock?
+        var selectionStyle = UITableViewCellSelectionStyle.none
+        var reorderable = false
+        
+        public init<Cell: UITableViewCell>(selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+            self.selectionStyle = selectionStyle
+            self.reorderable = reorderable
+            
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+        }
+        
+        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, selectionStyle: UITableViewCellSelectionStyle = .none, reorderable: Bool = true) {
+            self.onSelect = onSelect
+            self.onDelete = onDelete
+            self.selectionStyle = selectionStyle
+            self.reorderable = reorderable
+            
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+        }
+    }
+    
+    
+    // MARK: - Section
+    
+    public struct Section {
+        
+        public enum HeaderFooter {
+            case label(String)
+            case customView(UIView, height: CGFloat)
+            
+            var text: String? {
+                switch self {
+                case let .label(text):
+                    return text
+                default:
+                    return nil
+                }
+            }
+            
+            var view: UIView? {
+                switch self {
+                case let .customView(view, _):
+                    return view
+                default:
+                    return nil
+                }
+            }
+        }
+        
+        var header: HeaderFooter?
+        public var rows: [Row]
+        var footer: HeaderFooter?
+        
+        public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
+            self.header = header
+            self.rows = rows
+            self.footer = footer
+        }
+        
+        public init(header: HeaderFooter? = nil, row: Row, footer: HeaderFooter? = nil) {
+            self.header = header
+            self.rows = [row]
+            self.footer = footer
+        }
+    }
+    
+    
     open var sections: [Section]
     open var onReorder: ReorderBlock?
     open var onScroll: ScrollBlock?
@@ -159,7 +159,7 @@ open class BlockDataSource: NSObject {
 
 // MARK: - Reusable Registration
 
-extension BlockDataSource {
+extension BlockTableViewDataSource {
     @objc(registerReuseIdentifiersToTableView:)
     func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
@@ -210,7 +210,7 @@ extension BlockDataSource {
 
 //MARK: - UITableViewDataSource
 
-extension BlockDataSource: UITableViewDataSource {
+extension BlockTableViewDataSource: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -231,7 +231,7 @@ extension BlockDataSource: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension BlockDataSource: UITableViewDelegate {
+extension BlockTableViewDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = rowForIndexPath(indexPath)
         if let onSelect = row.onSelect {
@@ -385,7 +385,7 @@ extension BlockDataSource: UITableViewDelegate {
 
 // MARK: - UIScrollViewDelegate
 
-extension BlockDataSource {
+extension BlockTableViewDataSource {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let onScroll = onScroll {
             onScroll(scrollView)
@@ -396,7 +396,7 @@ extension BlockDataSource {
 
 // MARK: - Helpers
 
-extension BlockDataSource {
+extension BlockTableViewDataSource {
     fileprivate func rowForIndexPath(_ indexPath: IndexPath) -> Row {
         let section = sections[indexPath.section]
         return section.rows[indexPath.row]

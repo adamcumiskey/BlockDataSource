@@ -22,7 +22,7 @@ import Foundation
 //
 //
 //open class BlockCollectionViewController: UICollectionViewController, BlockConfigureable {
-//    open var dataSource: BlockDataSource? {
+//    open var dataSource: BlockTableDataSource? {
 //        didSet {
 //            reloadUI()
 //        }

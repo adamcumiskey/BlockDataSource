@@ -11,11 +11,11 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: BlockDataSource) {
+    override func configureDataSource(dataSource: BlockTableDataSource) {
         dataSource.sections.append(
-            Section(
+            TableSection(
                 rows: [
-                    Row(
+                    TableRow(
                         configure: { cell in
                             cell.textLabel?.text = "Cell Types"
                         },
@@ -25,7 +25,7 @@ class MainViewController: BlockTableViewController {
                             self.navigationController?.pushViewController(testVC, animated: true)
                         }
                     ),
-                    Row(
+                    TableRow(
                         configure: { cell in
                             cell.textLabel?.text = "Editing"
                         },

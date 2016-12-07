@@ -36,12 +36,12 @@ class EditingViewController: BlockTableViewController {
         data = (0..<5).map { Item(title: "\($0)") }
     }
     
-    override func configureDataSource(dataSource: BlockDataSource) {
+    override func configureDataSource(dataSource: BlockTableDataSource) {
         guard let data = data else { return }
         dataSource.sections = [
-            Section(
+            TableSection(
                 rows: data.map { item in
-                    return Row(
+                    return TableRow(
                         configure: item.configureCell,
                         onDelete: { [unowned self] indexPath in
                             if let index = self.data!.index(of: item) {
