@@ -151,9 +151,9 @@ public class BlockTableDataSource: NSObject {
 
 // MARK: - Reusable Registration
 
-extension BlockTableDataSource {
+public extension BlockTableDataSource {
     @objc(registerReuseIdentifiersToTableView:)
-    func registerReuseIdentifiers(to tableView: UITableView) {
+    public func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
             for row in section.rows {
                 if let _ = Bundle.main.path(forResource: row.reuseIdentifier, ofType: "nib") {

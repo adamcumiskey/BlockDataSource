@@ -127,9 +127,9 @@ public class BlockCollectionDataSource: NSObject {
 
 // MARK: - Reusable Registration
 
-extension BlockCollectionDataSource {
+public extension BlockCollectionDataSource {
     @objc(registerReuseIdentifiersToCollectionView:)
-    func registerReuseIdentifiers(to collectionView: UICollectionView) {
+    public func registerReuseIdentifiers(to collectionView: UICollectionView) {
         for section in sections {
             if let headerViewClass = section.headerClass {
                 let reuseIdentifier = String(describing: headerViewClass)
