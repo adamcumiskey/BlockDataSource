@@ -15,6 +15,7 @@ public protocol ConfigurableCollection: class {
 }
 
 public extension ConfigurableCollection where Self: UICollectionViewController {
+    // call it `reloadCollectionView` maybe?
     public func reloadUI() {
         guard let collectionView = collectionView else { return }
         
