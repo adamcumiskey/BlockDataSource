@@ -36,11 +36,13 @@ public struct CollectionItem {
     var cellClass: UICollectionViewCell.Type
     var reuseIdentifier: String { return String(describing: cellClass) }
     
+    // We should standardize all closures as `-> Void`
     var configure: (UICollectionViewCell) -> ()
     public var onSelect: IndexPathBlock?
     public var onDelete: IndexPathBlock?
     public var reorderable = false
     
+    // Why do we need two `init`?
     public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
         self.reorderable = reorderable
         self.onSelect = nil
@@ -68,6 +70,7 @@ public struct CollectionItem {
 // MARK: - Section
 
 public struct CollectionSection {
+    // We should group these three properties into a tuple or struct. We either have all three of them or none of them.
     var headerClass: UICollectionReusableView.Type?
     var configureHeader: ((UICollectionReusableView) -> ())?
     var headerReuseIdentifier: String? {
@@ -77,6 +80,7 @@ public struct CollectionSection {
     
     public var items: [CollectionItem]
     
+    // And we can reuse that struct here as well
     var footerClass: UICollectionReusableView.Type?
     var configureFooter: ((UICollectionReusableView) -> ())?
     var footerReuseIdentifier: String? {
@@ -132,6 +136,7 @@ public extension BlockCollectionDataSource {
     public func registerReuseIdentifiers(to collectionView: UICollectionView) {
         for section in sections {
             if let headerViewClass = section.headerClass {
+                // Use section.headerReuseIdentifier ?
                 let reuseIdentifier = String(describing: headerViewClass)
                 if let _ = Bundle.main.path(forResource: reuseIdentifier, ofType: "nib") {
                     let nib = UINib(nibName: reuseIdentifier, bundle: nil)
@@ -188,6 +193,7 @@ extension BlockCollectionDataSource: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
             reorder(sourceIndexPath, destinationIndexPath)
+            // is this necessary?
             collectionView.reloadData()
         }
     }
@@ -229,11 +235,13 @@ extension BlockCollectionDataSource: UICollectionViewDelegate {
 // MARK: - Helpers
 
 extension BlockCollectionDataSource {
+    // This is not very swifty. Maybe `item(at indexPath: IndexPath)` ?
     fileprivate func itemAtIndexPath(_ indexPath: IndexPath) -> CollectionItem {
         let section = sections[indexPath.section]
         return section.items[indexPath.row]
     }
     
+    // This is not very swifty. Maybe `section(at index: Int)` ?
     fileprivate func sectionAtIndex(_ index: Int) -> CollectionSection? {
         guard sections.count > index else { return nil }
         return sections[index]
