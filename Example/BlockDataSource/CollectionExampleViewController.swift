@@ -34,8 +34,8 @@ class CollectionExampleViewController: BlockCollectionViewController {
     override func configureDataSource(dataSource: BlockCollectionDataSource) {
         dataSource.sections.append(
             CollectionSection(
-                configureHeader: { (header: ImageReusableView) in
-                    header.imageView.image = UIImage(named: "double_burger")
+                header: CollectionSection.HeaderFooter { (view: ImageReusableView) in
+                    view.imageView.image = UIImage(named: "double_burger")
                 },
                 items: images.map { image in
                     return CollectionItem(reorderable: true) { (cell: ImageCollectionViewCell) in
