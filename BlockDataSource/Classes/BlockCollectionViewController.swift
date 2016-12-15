@@ -10,15 +10,15 @@ import Foundation
 
 
 public protocol ConfigurableCollection: class {
-    var dataSource: BlockCollectionDataSource? { get set }
-    func configureDataSource(dataSource: BlockCollectionDataSource)
+    var dataSource: CollectionData? { get set }
+    func configureDataSource(dataSource: CollectionData)
 }
 
 public extension ConfigurableCollection where Self: UICollectionViewController {
     public func reloadUI() {
         guard let collectionView = collectionView else { return }
         
-        let dataSource = BlockCollectionDataSource()
+        let dataSource = CollectionData()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: collectionView)
@@ -33,9 +33,9 @@ public extension ConfigurableCollection where Self: UICollectionViewController {
 
 
 open class BlockCollectionViewController: UICollectionViewController, ConfigurableCollection {
-    public var dataSource: BlockCollectionDataSource?
+    public var dataSource: CollectionData?
     
-    open func configureDataSource(dataSource: BlockCollectionDataSource) {
+    open func configureDataSource(dataSource: CollectionData) {
         // Base class does nothing
     }
     

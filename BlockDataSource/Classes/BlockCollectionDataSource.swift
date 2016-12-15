@@ -21,7 +21,7 @@
 //  SOFTWARE.
 //
 //
-//  BlockCollectionDataSource.swift
+//  Collection.swift
 //
 //  Created by Adam Cumiskey on 12/07/16.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -33,93 +33,91 @@ public typealias ConfigureCollectionItem = (UICollectionViewCell) -> Void
 public typealias ConfigureCollectionHeaderFooter = (UICollectionReusableView) -> Void
 
 
-// MARK: - Item
+// MARK: - Collection
 
-public struct CollectionItem {
-    var cellClass: UICollectionViewCell.Type
-    var reuseIdentifier: String { return String(describing: cellClass) }
-    
-    var configure: ConfigureCollectionItem
-    public var onSelect: IndexPathBlock?
-    public var onDelete: IndexPathBlock?
-    public var reorderable = false
-    
-    public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
-        self.reorderable = reorderable
-        self.onSelect = nil
-        self.onDelete = nil
-        
-        self.cellClass = Cell.self
-        self.configure = { cell in
-            configure(cell as! Cell)
-        }
-    }
-    
-    public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false) {
-        self.cellClass = Cell.self
-        self.configure = { cell in
-            configure(cell as! Cell)
-        }
-        
-        self.onSelect = onSelect
-        self.onDelete = onDelete
-        self.reorderable = reorderable
-    }
-}
-
-
-// MARK: - Section
-
-public struct CollectionSection {
-    public struct HeaderFooter {
-        var configure: ConfigureCollectionHeaderFooter
-        var viewClass: UICollectionReusableView.Type
-        var reuseIdentifier: String { return String(describing: viewClass) }
-        
-        public init<View: UICollectionReusableView>(configure: @escaping (View) -> Void) {
-            self.viewClass = View.self
-            self.configure = { view in
-                configure(view as! View)
-            }
-        }
-    }
-    
-    public var header: HeaderFooter?
-    public var items: [CollectionItem]
-    public var footer: HeaderFooter?
-    
-    
-    public init(header: HeaderFooter? = nil, items: [CollectionItem], footer: HeaderFooter? = nil) {
-        self.header = header
-        self.items = items
-        self.footer = footer
-    }
-}
-
-
-// MARK: - BlockCollectionDataSource
-
-public class BlockCollectionDataSource: NSObject {
-    public var sections: [CollectionSection]
+public class CollectionData: NSObject {
+    public var sections: [Section]
     public var onReorder: ReorderBlock?
     public var onScroll: ScrollBlock?
     
     public override init() {
-        self.sections = [CollectionSection]()
+        self.sections = [Section]()
         super.init()
     }
     
-    public init(sections: [CollectionSection], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
+    }
+    
+    // MARK: - Item
+    
+    public struct Item {
+        var cellClass: UICollectionViewCell.Type
+        var reuseIdentifier: String { return String(describing: cellClass) }
+        
+        var configure: ConfigureCollectionItem
+        public var onSelect: IndexPathBlock?
+        public var onDelete: IndexPathBlock?
+        public var reorderable = false
+        
+        public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
+            self.reorderable = reorderable
+            self.onSelect = nil
+            self.onDelete = nil
+            
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+        }
+        
+        public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false) {
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+            
+            self.onSelect = onSelect
+            self.onDelete = onDelete
+            self.reorderable = reorderable
+        }
+    }
+    
+    // MARK: - Section
+    
+    public struct Section {
+        public struct HeaderFooter {
+            var configure: ConfigureCollectionHeaderFooter
+            var viewClass: UICollectionReusableView.Type
+            var reuseIdentifier: String { return String(describing: viewClass) }
+            
+            public init<View: UICollectionReusableView>(configure: @escaping (View) -> Void) {
+                self.viewClass = View.self
+                self.configure = { view in
+                    configure(view as! View)
+                }
+            }
+        }
+        
+        public var header: HeaderFooter?
+        public var items: [Item]
+        public var footer: HeaderFooter?
+        
+        
+        public init(header: HeaderFooter? = nil, items: [Item], footer: HeaderFooter? = nil) {
+            self.header = header
+            self.items = items
+            self.footer = footer
+        }
     }
 }
 
 
 // MARK: - Reusable Registration
 
-public extension BlockCollectionDataSource {
+public extension CollectionData {
     @objc(registerReuseIdentifiersToCollectionView:)
     public func registerReuseIdentifiers(to collectionView: UICollectionView) {
         for section in sections {
@@ -135,7 +133,7 @@ public extension BlockCollectionDataSource {
         }
     }
     
-    private func register(headerFooter: CollectionSection.HeaderFooter, kind: String, toCollectionView collectionView: UICollectionView) {
+    private func register(headerFooter: Section.HeaderFooter, kind: String, toCollectionView collectionView: UICollectionView) {
         if let _ = Bundle.main.path(forResource: headerFooter.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: headerFooter.reuseIdentifier, bundle: nil)
             collectionView.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: headerFooter.reuseIdentifier)
@@ -144,7 +142,7 @@ public extension BlockCollectionDataSource {
         }
     }
     
-    private func register(item: CollectionItem, toCollectionView collectionView: UICollectionView) {
+    private func register(item: Item, toCollectionView collectionView: UICollectionView) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
             collectionView.register(nib, forCellWithReuseIdentifier: item.reuseIdentifier)
@@ -157,7 +155,7 @@ public extension BlockCollectionDataSource {
 
 // MARK: - UICollectionViewDataSource
 
-extension BlockCollectionDataSource: UICollectionViewDataSource {
+extension CollectionData: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sectionAtIndex(section)?.items.count ?? 0
     }
@@ -206,7 +204,7 @@ extension BlockCollectionDataSource: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension BlockCollectionDataSource: UICollectionViewDelegate {
+extension CollectionData: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return itemAtIndexPath(indexPath).onSelect != nil
     }
@@ -221,13 +219,13 @@ extension BlockCollectionDataSource: UICollectionViewDelegate {
 
 // MARK: - Helpers
 
-extension BlockCollectionDataSource {
-    fileprivate func itemAtIndexPath(_ indexPath: IndexPath) -> CollectionItem {
+extension CollectionData {
+    fileprivate func itemAtIndexPath(_ indexPath: IndexPath) -> Item {
         let section = sections[indexPath.section]
         return section.items[indexPath.row]
     }
     
-    fileprivate func sectionAtIndex(_ index: Int) -> CollectionSection? {
+    fileprivate func sectionAtIndex(_ index: Int) -> Section? {
         guard sections.count > index else { return nil }
         return sections[index]
     }
