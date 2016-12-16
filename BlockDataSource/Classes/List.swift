@@ -80,6 +80,7 @@ public class List: NSObject {
         return sections[indexPath.section].rows[indexPath.row]
     }
     
+    
     // MARK: - Section
     
     public struct Section {
@@ -103,6 +104,7 @@ public class List: NSObject {
         public subscript(index: Int) -> Row {
             return rows[index]
         }
+        
         
         // MARK: - HeaderFooter
         

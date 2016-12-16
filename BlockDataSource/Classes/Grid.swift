@@ -29,82 +29,149 @@
 
 import Foundation
 
+
 public typealias ConfigureCollectionItem = (UICollectionViewCell) -> Void
 public typealias ConfigureCollectionHeaderFooter = (UICollectionReusableView) -> Void
 
 
-// MARK: - Collection
-
+/// UICollectionView delegate and data source with block-based constructors
 public class Grid: NSObject {
+    /// The section data for the collection view
     public var sections: [Section]
+    /// Callback for when an item is reordered
     public var onReorder: ReorderBlock?
+    /// Callback for the UIScrollViewDelegate
     public var onScroll: ScrollBlock?
     
+    /// Initialize an empty Grid
     public override init() {
         self.sections = [Section]()
         super.init()
     }
     
+    /**
+     Initialize a Grid
+     
+     Example:
+     
+     ````
+     Grid(
+         sections: [
+             Grid.Section(
+                 header: Grid.Section.HeaderFooter { (view: SomeResuableView) in
+                     // Configure header
+                 },
+                 items: [
+                     Grid.Item { (item: SomeCollectionCell) in
+                         // Configure cell
+                     },
+                     ...
+                 ],
+                 footer: Grid.Section.HeaderFooter { (view: SomeOtherReusableView in
+                     // Configure footer
+                 }
+             ),
+             ...
+         ],
+         onReorder: { sourceIndexPath, destinationIndexPath in
+             // Reorder data
+         },
+         onScroll: { scrollView in
+             // Respond to scrolling
+         }
+     )
+     ````
+     */
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
     
-    // Reference sections with `collectionData[index]`
+    /// Reference sections with `grid[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
     }
     
-    // Reference items with `collectionData[indexPath]`
-    public subscript(index: IndexPath) -> Item {
-        return sections[index.section].items[index.item]
+    /// Reference items with `grid[indexPath]`
+    public subscript(indexPath: IndexPath) -> Item {
+        return sections[indexPath.section].items[indexPath.item]
     }
     
-    // MARK: - Section
     
+    /// Data structure representing the sections in the collectionView
     public struct Section {
-        public struct HeaderFooter {
-            var configure: ConfigureCollectionHeaderFooter
-            var viewClass: UICollectionReusableView.Type
-            var reuseIdentifier: String { return String(describing: viewClass) }
-            
-            public init<View: UICollectionReusableView>(configure: @escaping (View) -> Void) {
-                self.viewClass = View.self
-                self.configure = { view in
-                    configure(view as! View)
-                }
-            }
-        }
-        
+        /// The header data for this section
         public var header: HeaderFooter?
+        /// The item data for this section
         public var items: [Item]
+        /// The footer data for this section
         public var footer: HeaderFooter?
         
-        
+        /**
+         Initialize the Section
+         
+           - parameters:
+             - header: The header data for this section
+             - items: The item data in this section
+             - footer: The footer data for this section
+         */
         public init(header: HeaderFooter? = nil, items: [Item], footer: HeaderFooter? = nil) {
             self.header = header
             self.items = items
             self.footer = footer
         }
         
-        // Reference items with `section[index]`
+        /// Reference items with `section[index]`
         public subscript(index: Int) -> Item {
             return items[index]
+        }
+        
+        
+        /// Data structure representing a header or footer for a section
+        public struct HeaderFooter {
+            /// Configuration block for this HeaderFooter
+            var configure: ConfigureCollectionHeaderFooter
+            /// The class of the view to be configured
+            private(set) var viewClass: UICollectionReusableView.Type
+            /// The reuse identifier for the UICollectionReusableView
+            ///     default: the name of the viewClass
+            var reuseIdentifier: String {
+                if let customReuseIdentifier = customReuseIdentifier {
+                    return customReuseIdentifier
+                } else {
+                    return String(describing: viewClass)
+                }
+            }
+            private var customReuseIdentifier: String?
+            
+            /**
+             Initialize the HeaderFooter
+             
+               - parameters:
+                 - customReuseIdentifier: set to override the default reuseIdentifier. Default parameter is nil.
+                 - configure: Generic block used to configure HeaderFooter. You must specify the UICollectionReusableView type.
+            */
+            public init<View: UICollectionReusableView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+                self.viewClass = View.self
+                self.configure = { view in
+                    configure(view as! View)
+                }
+            }
         }
     }
     
     
-    // MARK: - Item
-    
     public struct Item {
-        var cellClass: UICollectionViewCell.Type
-        var reuseIdentifier: String { return String(describing: cellClass) }
-        
         var configure: ConfigureCollectionItem
         public var onSelect: IndexPathBlock?
         public var onDelete: IndexPathBlock?
         public var reorderable = false
+        
+        /// The UICollectionViewCell class for this item
+        private(set) var cellClass: UICollectionViewCell.Type
+        /// The reuse identifier for the collectionView item
+        var reuseIdentifier: String { return String(describing: cellClass) }
         
         public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
             self.reorderable = reorderable
@@ -224,7 +291,6 @@ extension Grid: UICollectionViewDataSource {
 }
 
 
-
 // MARK: - UICollectionViewDelegate
 
 extension Grid: UICollectionViewDelegate {
@@ -235,6 +301,17 @@ extension Grid: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let onSelect = self[indexPath].onSelect {
             onSelect(indexPath)
+        }
+    }
+}
+
+
+// MARK: - UIScrollViewDelegate
+
+extension Grid: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let onScroll = onScroll {
+            onScroll(scrollView)
         }
     }
 }
