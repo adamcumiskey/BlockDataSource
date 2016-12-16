@@ -25,6 +25,7 @@
 		62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAC1DD5065700AB1756 /* Cells.swift */; };
 		62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAE1DD5096500AB1756 /* ImageCell.swift */; };
 		62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D87CAF1DD5096500AB1756 /* ImageCell.xib */; };
+		665516411E03961C0025CD0F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665516401E03961C0025CD0F /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		62D87CAC1DD5065700AB1756 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Cells.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAE1DD5096500AB1756 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAF1DD5096500AB1756 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		665516401E03961C0025CD0F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		845312344886411B746B011C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_Tests/Pods-BlockDataSource_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				62826F161DD6281F009779FB /* Collection View */,
 				62826F0D1DD52E01009779FB /* Table View */,
 				62843CBC1DF8BF4500E8D98D /* View */,
+				6655163F1E0396030025CD0F /* Util */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for BlockDataSource";
@@ -226,6 +229,14 @@
 				62843CC11DF8C02000E8D98D /* ImageReusableView.xib */,
 			);
 			name = "Reusable Views";
+			sourceTree = "<group>";
+		};
+		6655163F1E0396030025CD0F /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				665516401E03961C0025CD0F /* Extensions.swift */,
+			);
+			name = Util;
 			sourceTree = "<group>";
 		};
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
@@ -453,6 +464,7 @@
 				62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */,
 				62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				665516411E03961C0025CD0F /* Extensions.swift in Sources */,
 				62826F041DD51415009779FB /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

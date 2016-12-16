@@ -46,7 +46,6 @@ class CollectionExampleViewController: BlockCollectionViewController {
         )
         dataSource.onReorder = { [unowned self] source, destination in
             self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
-            self.reloadUI()
         }
     }
 }

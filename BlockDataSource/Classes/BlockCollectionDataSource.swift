@@ -51,6 +51,17 @@ public class CollectionData: NSObject {
         self.onScroll = onScroll
     }
     
+    // Reference sections with `collectionData[index]`
+    public subscript(index: Int) -> Section {
+        return sections[index]
+    }
+    
+    // Reference items with `collectionData[indexPath]`
+    public subscript(index: IndexPath) -> Item {
+        return sections[index.section].items[index.item]
+    }
+    
+    
     // MARK: - Item
     
     public struct Item {
@@ -111,6 +122,11 @@ public class CollectionData: NSObject {
             self.items = items
             self.footer = footer
         }
+        
+        // Reference items with `section[index]`
+        public subscript(index: Int) -> Item {
+            return items[index]
+        }
     }
 }
 
@@ -156,12 +172,12 @@ public extension CollectionData {
 // MARK: - UICollectionViewDataSource
 
 extension CollectionData: UICollectionViewDataSource {
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sectionAtIndex(section)?.items.count ?? 0
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection sectionIndex: Int) -> Int {
+        return self[sectionIndex].items.count ?? 0
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = itemAtIndexPath(indexPath)
+        let item = sections[indexPath.section].items[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.reuseIdentifier, for: indexPath)
         item.configure(cell)
         return cell
@@ -173,18 +189,25 @@ extension CollectionData: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         guard onReorder != nil else { return false }
-        return itemAtIndexPath(indexPath).reorderable
+        return self[indexPath].reorderable
     }
     
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
+            // Reorder the items
+            if sourceIndexPath.section == destinationIndexPath.section {
+                sections[sourceIndexPath.section].items.moveObjectAtIndex(sourceIndexPath.item, toIndex: destinationIndexPath.item)
+            } else {
+                let item = sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.item)
+                sections[destinationIndexPath.section].items.insert(item, at: destinationIndexPath.item)
+            }
+            // Update data model in this callback
             reorder(sourceIndexPath, destinationIndexPath)
-            collectionView.reloadData()
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let section = sectionAtIndex(indexPath.section) else { return UICollectionReusableView() }
+        let section = self[indexPath.section]
         if kind == UICollectionElementKindSectionHeader {
             guard let header = section.header else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.reuseIdentifier, for: indexPath)
@@ -206,27 +229,12 @@ extension CollectionData: UICollectionViewDataSource {
 
 extension CollectionData: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return itemAtIndexPath(indexPath).onSelect != nil
+        return self[indexPath].onSelect != nil
     }
  
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let onSelect = itemAtIndexPath(indexPath).onSelect {
+        if let onSelect = self[indexPath].onSelect {
             onSelect(indexPath)
         }
-    }
-}
-
-
-// MARK: - Helpers
-
-extension CollectionData {
-    fileprivate func itemAtIndexPath(_ indexPath: IndexPath) -> Item {
-        let section = sections[indexPath.section]
-        return section.items[indexPath.row]
-    }
-    
-    fileprivate func sectionAtIndex(_ index: Int) -> Section? {
-        guard sections.count > index else { return nil }
-        return sections[index]
     }
 }

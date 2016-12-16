@@ -70,6 +70,16 @@ public class TableData: NSObject {
         )
     }
     
+    // Reference section with `tableData[index]`
+    public subscript(index: Int) -> Section {
+        return sections[index]
+    }
+    
+    // Reference row with `tableData[indexPath]`
+    public subscript(indexPath: IndexPath) -> Row {
+        return sections[indexPath.section].rows[indexPath.row]
+    }
+    
     // MARK: - Row
     
     public struct Row {
@@ -80,7 +90,7 @@ public class TableData: NSObject {
         // The block that executes when the cell is deleted
         public var onDelete: IndexPathBlock?
         // Lets the dataSource know that this row can be reordered
-        public var reorderable = false
+        public var reorderable: Bool = false
         
         // automatically assigned in init
         var cellClass: UITableViewCell.Type
@@ -126,6 +136,11 @@ public class TableData: NSObject {
             self.header = header
             self.rows = [row]
             self.footer = footer
+        }
+        
+        // Reference rows with `section[index]`
+        public subscript(index: Int) -> Row {
+            return rows[index]
         }
         
         // MARK: - HeaderFooter
@@ -184,11 +199,11 @@ extension TableData: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sectionAtIndex(section)?.rows.count ?? 0
+        return self[section].rows.count ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = rowAtIndexPath(indexPath)
+        let row = self[indexPath]
         let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         // resonable default. can be overriden in configure block
         cell.selectionStyle = (row.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
@@ -202,30 +217,29 @@ extension TableData: UITableViewDataSource {
 
 extension TableData: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let row = rowAtIndexPath(indexPath)
-        if let onSelect = row.onSelect {
+        if let onSelect = self[indexPath].onSelect {
             onSelect(indexPath)
         }
     }
     
     @nonobjc public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionAtIndex(section)?.header?.text
+        return self[section].header?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return sectionAtIndex(section)?.header?.view
+        return self[section].header?.view
     }
     
     @nonobjc public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return sectionAtIndex(section)?.footer?.text
+        return self[section].footer?.text
     }
     
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return sectionAtIndex(section)?.footer?.view
+        return self[section].footer?.view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard let header = sectionAtIndex(section)?.header else { return UITableViewAutomaticDimension }
+        guard let header = self[section].header else { return UITableViewAutomaticDimension }
         switch header {
         case .label(_):
             return UITableViewAutomaticDimension
@@ -235,7 +249,7 @@ extension TableData: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard let footer = sectionAtIndex(section)?.footer else { return UITableViewAutomaticDimension }
+        guard let footer = self[section].footer else { return UITableViewAutomaticDimension }
         switch footer {
         case .label(_):
             return UITableViewAutomaticDimension
@@ -245,43 +259,41 @@ extension TableData: UITableViewDelegate {
     }
     
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let row = rowAtIndexPath(indexPath)
+        let row = self[indexPath]
         return row.onDelete != nil || row.reorderable == true
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        let row = rowAtIndexPath(indexPath)
-        guard let _ = row.onDelete else { return .none }
+        guard let _ = self[indexPath].onDelete else { return .none }
         return .delete
     }
     
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let row = rowAtIndexPath(indexPath)
-            if let onDelete = row.onDelete {
-                onDelete(indexPath)
+            if let onDelete = self[indexPath].onDelete {
                 sections[indexPath.section].rows.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                onDelete(indexPath)
             }
         }
     }
     
     @nonobjc public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        let row = rowAtIndexPath(indexPath)
-        return row.reorderable
+        return self[indexPath].reorderable
     }
     
     public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        let destination = rowAtIndexPath(proposedDestinationIndexPath)
-        if destination.reorderable {
-            return proposedDestinationIndexPath
-        } else {
-            return sourceIndexPath
-        }
+        return self[proposedDestinationIndexPath].reorderable ? proposedDestinationIndexPath : sourceIndexPath
     }
     
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
+            if sourceIndexPath.section == destinationIndexPath.section {
+                sections[sourceIndexPath.section].rows.moveObjectAtIndex(sourceIndexPath.row, toIndex: destinationIndexPath.row)
+            } else {
+                let row = sections[sourceIndexPath.section].rows.remove(at: sourceIndexPath.row)
+                sections[destinationIndexPath.section].rows.insert(row, at: destinationIndexPath.row)
+            }
             reorder(sourceIndexPath, destinationIndexPath)
         }
     }
@@ -295,20 +307,5 @@ extension TableData {
         if let onScroll = onScroll {
             onScroll(scrollView)
         }
-    }
-}
-
-
-// MARK: - Helpers
-
-extension TableData {
-    fileprivate func rowAtIndexPath(_ indexPath: IndexPath) -> Row {
-        let section = sections[indexPath.section]
-        return section.rows[indexPath.row]
-    }
-    
-    fileprivate func sectionAtIndex(_ index: Int) -> Section? {
-        guard sections.count > index else { return nil }
-        return sections[index]
     }
 }

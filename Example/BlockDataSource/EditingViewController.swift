@@ -54,16 +54,6 @@ class EditingViewController: BlockTableViewController {
         ]
         dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
             self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
-            self.reloadUI()
         }
-    }
-}
-
-
-extension Array {
-    mutating func moveObjectAtIndex(_ index: Int, toIndex: Int) {
-        let element = self[index]
-        remove(at: index)
-        insert(element, at: toIndex)
     }
 }
