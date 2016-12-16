@@ -11,11 +11,11 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: TableData) {
+    override func configureDataSource(dataSource: List) {
         dataSource.sections.append(
-            TableData.Section(
+            List.Section(
                 rows: [
-                    TableData.Row(
+                    List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Cell Types"
                             cell.accessoryType = .disclosureIndicator
@@ -26,18 +26,18 @@ class MainViewController: BlockTableViewController {
                             self.navigationController?.pushViewController(testVC, animated: true)
                         }
                     ),
-                    TableData.Row(
+                    List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Editing"
                             cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
-                            let reorderVC = EditingViewController(style: .grouped)
+                            let reorderVC = EditingViewController()
                             reorderVC.title = "Editing"
                             self.navigationController?.pushViewController(reorderVC, animated: true)
                         }
                     ),
-                    TableData.Row(
+                    List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Collection View"
                             cell.accessoryType = .disclosureIndicator

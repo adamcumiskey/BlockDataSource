@@ -38,7 +38,7 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 // MARK: - Table
 
-public class TableData: NSObject {
+public class List: NSObject {
     public var sections: [Section]
     public var onReorder: ReorderBlock?
     public var onScroll: ScrollBlock?
@@ -70,53 +70,14 @@ public class TableData: NSObject {
         )
     }
     
-    // Reference section with `tableData[index]`
+    // Reference section with `list[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
     }
     
-    // Reference row with `tableData[indexPath]`
+    // Reference row with `list[indexPath]`
     public subscript(indexPath: IndexPath) -> Row {
         return sections[indexPath.section].rows[indexPath.row]
-    }
-    
-    // MARK: - Row
-    
-    public struct Row {
-        // The block which configures the cell
-        var configure: ConfigureRow
-        // The block that executes when the cell is tapped
-        public var onSelect: IndexPathBlock?
-        // The block that executes when the cell is deleted
-        public var onDelete: IndexPathBlock?
-        // Lets the dataSource know that this row can be reordered
-        public var reorderable: Bool = false
-        
-        // automatically assigned in init
-        var cellClass: UITableViewCell.Type
-        var reuseIdentifier: String { return String(describing: cellClass) }
-
-        
-        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true) {
-            self.onSelect = onSelect
-            self.onDelete = onDelete
-            self.reorderable = reorderable
-            
-            self.cellClass = Cell.self
-            self.configure = { cell in
-                configure(cell as! Cell)
-            }
-        }
-        
-        // Convienence init for trailing closure syntax
-        public init<Cell: UITableViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
-            self.init(
-                configure: configure, 
-                onSelect: nil, 
-                onDelete: nil, 
-                reorderable: reorderable
-            )
-        }
     }
     
     // MARK: - Section
@@ -169,12 +130,51 @@ public class TableData: NSObject {
         }
     }
     
+    
+    // MARK: - Row
+    
+    public struct Row {
+        // The block which configures the cell
+        var configure: ConfigureRow
+        // The block that executes when the cell is tapped
+        public var onSelect: IndexPathBlock?
+        // The block that executes when the cell is deleted
+        public var onDelete: IndexPathBlock?
+        // Lets the dataSource know that this row can be reordered
+        public var reorderable: Bool = false
+        
+        // automatically assigned in init
+        var cellClass: UITableViewCell.Type
+        var reuseIdentifier: String { return String(describing: cellClass) }
+        
+        
+        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true) {
+            self.onSelect = onSelect
+            self.onDelete = onDelete
+            self.reorderable = reorderable
+            
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+        }
+        
+        // Convienence init for trailing closure syntax
+        public init<Cell: UITableViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+            self.init(
+                configure: configure,
+                onSelect: nil,
+                onDelete: nil,
+                reorderable: reorderable
+            )
+        }
+    }
 }
 
 
 // MARK: - Reusable Registration
 
-public extension TableData {
+public extension List {
     @objc(registerReuseIdentifiersToTableView:)
     public func registerReuseIdentifiers(to tableView: UITableView) {
         for section in sections {
@@ -193,7 +193,7 @@ public extension TableData {
 
 // MARK: - UITableViewDataSource
 
-extension TableData: UITableViewDataSource {
+extension List: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -215,7 +215,7 @@ extension TableData: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension TableData: UITableViewDelegate {
+extension List: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let onSelect = self[indexPath].onSelect {
             onSelect(indexPath)
@@ -302,7 +302,7 @@ extension TableData: UITableViewDelegate {
 
 // MARK: - UIScrollViewDelegate
 
-extension TableData {
+extension List {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let onScroll = onScroll {
             onScroll(scrollView)

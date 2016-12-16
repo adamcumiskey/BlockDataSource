@@ -31,8 +31,8 @@ import UIKit
 
 
 public protocol ConfigurableTable: class {
-    var dataSource: TableData? { get set }
-    func configureDataSource(dataSource: TableData)
+    var dataSource: List? { get set }
+    func configureDataSource(dataSource: List)
 }
 
 
@@ -40,7 +40,7 @@ public extension ConfigurableTable where Self: UITableViewController {
     public func reloadUI() {
         guard let tableView = tableView else { return }
         
-        let dataSource = TableData()
+        let dataSource = List()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: tableView)
@@ -54,9 +54,9 @@ public extension ConfigurableTable where Self: UITableViewController {
 
 
 open class BlockTableViewController: UITableViewController, ConfigurableTable {
-    public var dataSource: TableData?
+    public var dataSource: List?
     
-    open func configureDataSource(dataSource: TableData) {
+    open func configureDataSource(dataSource: List) {
         // Base class does nothing
     }
     

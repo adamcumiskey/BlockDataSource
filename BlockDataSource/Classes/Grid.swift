@@ -35,7 +35,7 @@ public typealias ConfigureCollectionHeaderFooter = (UICollectionReusableView) ->
 
 // MARK: - Collection
 
-public class CollectionData: NSObject {
+public class Grid: NSObject {
     public var sections: [Section]
     public var onReorder: ReorderBlock?
     public var onScroll: ScrollBlock?
@@ -59,6 +59,39 @@ public class CollectionData: NSObject {
     // Reference items with `collectionData[indexPath]`
     public subscript(index: IndexPath) -> Item {
         return sections[index.section].items[index.item]
+    }
+    
+    // MARK: - Section
+    
+    public struct Section {
+        public struct HeaderFooter {
+            var configure: ConfigureCollectionHeaderFooter
+            var viewClass: UICollectionReusableView.Type
+            var reuseIdentifier: String { return String(describing: viewClass) }
+            
+            public init<View: UICollectionReusableView>(configure: @escaping (View) -> Void) {
+                self.viewClass = View.self
+                self.configure = { view in
+                    configure(view as! View)
+                }
+            }
+        }
+        
+        public var header: HeaderFooter?
+        public var items: [Item]
+        public var footer: HeaderFooter?
+        
+        
+        public init(header: HeaderFooter? = nil, items: [Item], footer: HeaderFooter? = nil) {
+            self.header = header
+            self.items = items
+            self.footer = footer
+        }
+        
+        // Reference items with `section[index]`
+        public subscript(index: Int) -> Item {
+            return items[index]
+        }
     }
     
     
@@ -95,45 +128,12 @@ public class CollectionData: NSObject {
             self.reorderable = reorderable
         }
     }
-    
-    // MARK: - Section
-    
-    public struct Section {
-        public struct HeaderFooter {
-            var configure: ConfigureCollectionHeaderFooter
-            var viewClass: UICollectionReusableView.Type
-            var reuseIdentifier: String { return String(describing: viewClass) }
-            
-            public init<View: UICollectionReusableView>(configure: @escaping (View) -> Void) {
-                self.viewClass = View.self
-                self.configure = { view in
-                    configure(view as! View)
-                }
-            }
-        }
-        
-        public var header: HeaderFooter?
-        public var items: [Item]
-        public var footer: HeaderFooter?
-        
-        
-        public init(header: HeaderFooter? = nil, items: [Item], footer: HeaderFooter? = nil) {
-            self.header = header
-            self.items = items
-            self.footer = footer
-        }
-        
-        // Reference items with `section[index]`
-        public subscript(index: Int) -> Item {
-            return items[index]
-        }
-    }
 }
 
 
 // MARK: - Reusable Registration
 
-public extension CollectionData {
+public extension Grid {
     @objc(registerReuseIdentifiersToCollectionView:)
     public func registerReuseIdentifiers(to collectionView: UICollectionView) {
         for section in sections {
@@ -171,7 +171,7 @@ public extension CollectionData {
 
 // MARK: - UICollectionViewDataSource
 
-extension CollectionData: UICollectionViewDataSource {
+extension Grid: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection sectionIndex: Int) -> Int {
         return self[sectionIndex].items.count ?? 0
     }
@@ -227,7 +227,7 @@ extension CollectionData: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension CollectionData: UICollectionViewDelegate {
+extension Grid: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return self[indexPath].onSelect != nil
     }
