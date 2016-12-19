@@ -21,7 +21,7 @@
 //  SOFTWARE.
 //
 //
-//  Collection.swift
+//  Grid.swift
 //
 //  Created by Adam Cumiskey on 12/07/16.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -30,18 +30,20 @@
 import Foundation
 
 
-public typealias ConfigureCollectionItem = (UICollectionViewCell) -> Void
-public typealias ConfigureCollectionHeaderFooter = (UICollectionReusableView) -> Void
 
 
-/// UICollectionView delegate and data source with block-based constructors
+/// UICollectionView delegate and dataSource with block-based constructors
 public class Grid: NSObject {
+    
     /// The section data for the collection view
     public var sections: [Section]
+    
     /// Callback for when an item is reordered
     public var onReorder: ReorderBlock?
+    
     /// Callback for the UIScrollViewDelegate
     public var onScroll: ScrollBlock?
+    
     
     /// Initialize an empty Grid
     public override init() {
@@ -51,41 +53,34 @@ public class Grid: NSObject {
     
     /**
      Initialize a Grid
-     
-     Example:
-     
-     ````
-     Grid(
-         sections: [
-             Grid.Section(
-                 header: Grid.Section.HeaderFooter { (view: SomeResuableView) in
-                     // Configure header
-                 },
-                 items: [
-                     Grid.Item { (item: SomeCollectionCell) in
-                         // Configure cell
-                     },
-                     ...
-                 ],
-                 footer: Grid.Section.HeaderFooter { (view: SomeOtherReusableView in
-                     // Configure footer
-                 }
-             ),
-             ...
-         ],
-         onReorder: { sourceIndexPath, destinationIndexPath in
-             // Reorder data
-         },
-         onScroll: { scrollView in
-             // Respond to scrolling
-         }
-     )
-     ````
+
+       - parameters:
+         - sections: The array of sections in this Grid
+         - onReorder: Optional callback for when items are moved. If this property is `nil`, reordering will be disabled for this CollectionView.
+         - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
+    }
+    
+    /// Convenience init for a Grid with a single section
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+        self.init(
+            sections: [section],
+            onReorder: onReorder,
+            onScroll: onScroll
+        )
+    }
+    
+    /// Convenience init for a Grid with a single section with no headers/footers
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+        self.init(
+            sections: [Section(items: items)],
+            onReorder: onReorder,
+            onScroll: onScroll
+        )
     }
     
     /// Reference sections with `grid[index]`
@@ -101,15 +96,19 @@ public class Grid: NSObject {
     
     /// Data structure representing the sections in the collectionView
     public struct Section {
+        
         /// The header data for this section
         public var header: HeaderFooter?
+        
         /// The item data for this section
         public var items: [Item]
+        
         /// The footer data for this section
         public var footer: HeaderFooter?
         
+        
         /**
-         Initialize the Section
+         Initialize a Section
          
            - parameters:
              - header: The header data for this section
@@ -128,51 +127,83 @@ public class Grid: NSObject {
         }
         
         
-        /// Data structure representing a header or footer for a section
+        /// Data structure representing a header or footer for a grid section
         public struct HeaderFooter {
+            
             /// Configuration block for this HeaderFooter
             var configure: ConfigureCollectionHeaderFooter
-            /// The class of the view to be configured
-            private(set) var viewClass: UICollectionReusableView.Type
-            /// The reuse identifier for the UICollectionReusableView
-            ///     default: the name of the viewClass
-            var reuseIdentifier: String {
+            
+            
+            /**
+             Initialize a HeaderFooter
+             
+             - parameter customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+             - parameter configure: Generic block used to configure HeaderFooter. You must specify the UICollectionReusableView type.
+            */
+            public init<View: UICollectionReusableView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+                self.customReuseIdentifier = customReuseIdentifier
+
+                self.viewClass = View.self
+                self.configure = { view in
+                    configure(view as! View)
+                }
+            }
+            
+            
+            // MARK: Private
+            
+            fileprivate var viewClass: UICollectionReusableView.Type
+            
+            private var customReuseIdentifier: String?
+            
+            fileprivate var reuseIdentifier: String {
                 if let customReuseIdentifier = customReuseIdentifier {
                     return customReuseIdentifier
                 } else {
                     return String(describing: viewClass)
                 }
             }
-            private var customReuseIdentifier: String?
-            
-            /**
-             Initialize the HeaderFooter
-             
-               - parameters:
-                 - customReuseIdentifier: set to override the default reuseIdentifier. Default parameter is nil.
-                 - configure: Generic block used to configure HeaderFooter. You must specify the UICollectionReusableView type.
-            */
-            public init<View: UICollectionReusableView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
-                self.viewClass = View.self
-                self.configure = { view in
-                    configure(view as! View)
-                }
-            }
         }
     }
     
-    
+    // Data structure representing an Item in the collection view
     public struct Item {
+        /// Configuration block for the cell
         var configure: ConfigureCollectionItem
+        
+        /// Closure that executes when the cell is tapped
         public var onSelect: IndexPathBlock?
+        
+        /// Closure that executes when the cell is deleted
         public var onDelete: IndexPathBlock?
+        
+        /// Boolean flag for if the cell can be reordered
         public var reorderable = false
         
-        /// The UICollectionViewCell class for this item
-        private(set) var cellClass: UICollectionViewCell.Type
-        /// The reuse identifier for the collectionView item
-        var reuseIdentifier: String { return String(describing: cellClass) }
         
+        /**
+         Initialize an item
+         
+         - parameters:
+           - configure: The cell configuration block
+           - onSelect: The closure to execute when the cell is tapped
+           - onDelete: The closure to execute when the cell is deleted
+           - reorderable: Flag to indicate if this cell can be reordered
+           - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+         */
+        public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) {
+            self.cellClass = Cell.self
+            self.configure = { cell in
+                configure(cell as! Cell)
+            }
+            
+            self.onSelect = onSelect
+            self.onDelete = onDelete
+            self.reorderable = reorderable
+            self.customReuseIdentifier = customReuseIdentifier
+        }
+        
+        /// Convenience initializer for trialing closure syntax
         public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
             self.reorderable = reorderable
             self.onSelect = nil
@@ -184,15 +215,19 @@ public class Grid: NSObject {
             }
         }
         
-        public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false) {
-            self.cellClass = Cell.self
-            self.configure = { cell in
-                configure(cell as! Cell)
+        
+        // MARK: Private
+        
+        fileprivate var cellClass: UICollectionViewCell.Type
+        
+        private var customReuseIdentifier: String?
+        
+        fileprivate var reuseIdentifier: String {
+            if let customReuseIdentifier = customReuseIdentifier {
+                return customReuseIdentifier
+            } else {
+                return String(describing: cellClass)
             }
-            
-            self.onSelect = onSelect
-            self.onDelete = onDelete
-            self.reorderable = reorderable
         }
     }
 }

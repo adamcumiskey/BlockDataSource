@@ -21,7 +21,7 @@
 //  SOFTWARE.
 //
 //
-//  BlockTableDataSource.swift
+//  List.swift
 //
 //  Created by Adam Cumiskey on 6/16/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
@@ -29,31 +29,41 @@
 
 import UIKit
 
-public typealias ConfigureRow = (UITableViewCell) -> Void
-public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
-public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
-public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
-
-
-// MARK: - Table
-
+/// UITableView delegate and dataSource with block-based constructors
 public class List: NSObject {
+    
+    /// The section data for the table view
     public var sections: [Section]
+    
+    /// Callback for when a row is reordered
     public var onReorder: ReorderBlock?
+    
+    /// Callback for the UIScrollViewDelegate
     public var onScroll: ScrollBlock?
     
+    
+    /// Initialize an empty List
     public override init() {
         self.sections = [Section]()
         super.init()
     }
     
+    /**
+     Initialize a List
+     
+       - parameters:
+         - sections: The array of sections in this List
+         - onReorder: Optional callback for when rows are moved. If this property is `nil`, reordering will be disabled for this TableView
+         - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
+     */
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
     }
     
+    /// Convenience init for a List with a single section
     public convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [section],
@@ -62,6 +72,7 @@ public class List: NSObject {
         )
     }
     
+    /// Convenience init for a List with a single section with no headers/footers
     public convenience init(rows: [Row], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [Section(rows: rows)], 
@@ -81,19 +92,34 @@ public class List: NSObject {
     }
     
     
-    // MARK: - Section
-    
+    /// Data structure representing the sections in the tableView
     public struct Section {
+        
+        /// The header data for this section
         public var header: HeaderFooter?
+        
+        /// The row data for this section
         public var rows: [Row]
+        
+        /// The footer data for this section
         public var footer: HeaderFooter?
         
+        
+        /**
+         Initializer for a List Section
+         
+           - parameters: 
+             - header: The list header data for this section
+             - rows: The rows data for this section
+             - footer: The list footer data for this section
+         */
         public init(header: HeaderFooter? = nil, rows: [Row], footer: HeaderFooter? = nil) {
             self.header = header
             self.rows = rows
             self.footer = footer
         }
         
+        /// Convenience init for a section with a single row
         public init(header: HeaderFooter? = nil, row: Row, footer: HeaderFooter? = nil) {
             self.header = header
             self.rows = [row]
@@ -106,13 +132,16 @@ public class List: NSObject {
         }
         
         
-        // MARK: - HeaderFooter
-        
+        /// Enum representing the header or footer data for a list section
         public enum HeaderFooter {
+            /// Provide a text label as the header/footer for the section
             case label(String)
+            
+            /// Provide a custom view as the header/footer for the section
             case customView(UIView, height: CGFloat)
             
-            var text: String? {
+            /// Convenience accessor for the label text. Will return `nil` if the type is `.customView`
+            public var text: String? {
                 switch self {
                 case let .label(text):
                     return text
@@ -121,7 +150,8 @@ public class List: NSObject {
                 }
             }
             
-            var view: UIView? {
+            /// Convenience accessor for the view. Will be `nil` if the type is `.label`
+            public var view: UIView? {
                 switch self {
                 case let .customView(view, _):
                     return view
@@ -133,27 +163,37 @@ public class List: NSObject {
     }
     
     
-    // MARK: - Row
-    
+    ///
     public struct Row {
+        
         // The block which configures the cell
         var configure: ConfigureRow
+        
         // The block that executes when the cell is tapped
         public var onSelect: IndexPathBlock?
+        
         // The block that executes when the cell is deleted
         public var onDelete: IndexPathBlock?
+        
         // Lets the dataSource know that this row can be reordered
         public var reorderable: Bool = false
         
-        // automatically assigned in init
-        var cellClass: UITableViewCell.Type
-        var reuseIdentifier: String { return String(describing: cellClass) }
         
-        
-        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true) {
+        /**
+         Initialize a row
+         
+           - parameters:
+             - configure: The cell configuration block.
+             - onSelect: The closure to execute when the cell is tapped
+             - onDelete: The closure to execute when the cell is deleted
+             - reorderable: Flag to indicate if this cell can be reordered
+             - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+         */
+        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
             self.onSelect = onSelect
             self.onDelete = onDelete
             self.reorderable = reorderable
+            self.customReuseIdentifier = customReuseIdentifier
             
             self.cellClass = Cell.self
             self.configure = { cell in
@@ -169,6 +209,21 @@ public class List: NSObject {
                 onDelete: nil,
                 reorderable: reorderable
             )
+        }
+        
+        
+        // MARK: Private
+        
+        fileprivate var cellClass: UITableViewCell.Type
+        
+        private var customReuseIdentifier: String?
+        
+        fileprivate var reuseIdentifier: String {
+            if let customReuseIdentifier = customReuseIdentifier {
+                return customReuseIdentifier
+            } else {
+                return String(describing: cellClass)
+            }
         }
     }
 }
