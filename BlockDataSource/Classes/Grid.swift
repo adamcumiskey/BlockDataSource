@@ -30,8 +30,6 @@
 import Foundation
 
 
-
-
 /// UICollectionView delegate and dataSource with block-based constructors
 public class Grid: NSObject {
     
@@ -56,7 +54,7 @@ public class Grid: NSObject {
 
        - parameters:
          - sections: The array of sections in this Grid
-         - onReorder: Optional callback for when items are moved. If this property is `nil`, reordering will be disabled for this CollectionView.
+         - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this CollectionView.
          - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
@@ -168,6 +166,7 @@ public class Grid: NSObject {
     
     // Data structure representing an Item in the collection view
     public struct Item {
+        
         /// Configuration block for the cell
         var configure: ConfigureCollectionItem
         
@@ -275,7 +274,7 @@ public extension Grid {
 
 extension Grid: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection sectionIndex: Int) -> Int {
-        return self[sectionIndex].items.count ?? 0
+        return self[sectionIndex].items.count 
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

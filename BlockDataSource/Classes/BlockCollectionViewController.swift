@@ -15,7 +15,7 @@ public protocol ConfigurableCollection: class {
 }
 
 public extension ConfigurableCollection where Self: UICollectionViewController {
-    public func reloadUI() {
+    public func createDataSource() {
         guard let collectionView = collectionView else { return }
         
         let dataSource = Grid()
@@ -24,9 +24,13 @@ public extension ConfigurableCollection where Self: UICollectionViewController {
         dataSource.registerReuseIdentifiers(to: collectionView)
         collectionView.dataSource = dataSource
         collectionView.delegate = dataSource
-        collectionView.reloadData()
         
         self.dataSource = dataSource
+    }
+    
+    public func reloadDataAndUI() {
+        createDataSource()
+        collectionView?.reloadData()
     }
 }
 
@@ -45,6 +49,6 @@ open class BlockCollectionViewController: UICollectionViewController, Configurab
     
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadUI()
+        reloadDataAndUI()
     }
 }

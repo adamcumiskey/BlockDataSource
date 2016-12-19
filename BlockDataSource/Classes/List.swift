@@ -25,9 +25,9 @@
 //
 //  Created by Adam Cumiskey on 6/16/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
-//
 
-import UIKit
+
+import Foundation
 
 
 /// UITableView delegate and dataSource with block-based constructors
@@ -54,7 +54,7 @@ public class List: NSObject {
      
        - parameters:
          - sections: The array of sections in this List
-         - onReorder: Optional callback for when rows are moved. If this property is `nil`, reordering will be disabled for this TableView
+         - onReorder: Optional callback for when rows are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
          - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
     public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
