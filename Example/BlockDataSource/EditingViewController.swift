@@ -28,25 +28,30 @@ func ==(lhs: Item, rhs: Item) -> Bool {
 
 class EditingViewController: BlockTableViewController {
 
-    var data: [Item]?
+    var data: [Item]
+    init() {
+        data = (0..<5).map { Item(title: "\($0)") }
+        super.init(style: .grouped)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = editButtonItem
-        data = (0..<5).map { Item(title: "\($0)") }
     }
     
-    override func configureDataSource(dataSource: BlockDataSource) {
-        guard let data = data else { return }
+    override func configureDataSource(dataSource: List) {
         dataSource.sections = [
-            Section(
+            List.Section(
                 rows: data.map { item in
-                    return Row(
-                        rowID: item.title,
+                    return List.Row(
                         configure: item.configureCell,
                         onDelete: { [unowned self] indexPath in
-                            if let index = self.data!.index(of: item) {
-                                self.data?.remove(at: index)
+                            if let index = self.data.index(of: item) {
+                                self.data.remove(at: index)
                             }
                         }
                     )
@@ -54,17 +59,7 @@ class EditingViewController: BlockTableViewController {
             )
         ]
         dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
-            self.data!.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
-            self.reloadUI()
+            self.data.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
         }
-    }
-}
-
-
-extension Array {
-    mutating func moveObjectAtIndex(_ index: Int, toIndex: Int) {
-        let element = self[index]
-        remove(at: index)
-        insert(element, at: toIndex)
     }
 }

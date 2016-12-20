@@ -12,8 +12,8 @@ import BlockDataSource
 
 class AnimatedViewController: BlockTableViewController {
     
-    let dataset1 = (0..<8).map { Item(title: "\($0)") }
-    let dataset2 = (3..<13).map { Item(title: "\($0)") }
+    let dataset1 = (2..<5).map { Item(title: "\($0)") }
+    let dataset2 = (0..<1).map { Item(title: "\($0)") }
     let dataset3 = (5..<9).map { Item(title: "\($0)") }
     let dataset4 = (1..<3).map { Item(title: "\($0)") }
     
@@ -27,28 +27,28 @@ class AnimatedViewController: BlockTableViewController {
     
     func toggleValue() {
         toggle = !toggle
-        reloadUI(animated: true)
+        reloadDataAndUI(animated: true)
     }
     
-    override func configureDataSource(dataSource: BlockDataSource) {
+    override func configureDataSource(dataSource: List) {
         let section1 = toggle ? dataset1 : dataset2
-        let section2 = toggle ? dataset2 : dataset3
+        let section2 = toggle ? dataset3 : dataset4
         dataSource.sections.append(
             contentsOf: [
-                Section(
+                List.Section(
                     rows: section1.map { item in
-                        return Row(rowID: item.title) { cell in
+                        return List.Row(identifier: item.title, reorderable: false) { (cell: Cell) in
                             cell.textLabel?.text = item.title
                         }
                     }
                 ),
-//                Section(
-//                    rows: section2.map { item in
-//                        return Row(rowID: item.title) { cell in
-//                            cell.textLabel?.text = item.title
-//                        }
-//                    }
-//                )
+                List.Section(
+                    rows: section2.map { item in
+                        return List.Row(identifier: item.title, reorderable: false) { (cell: Cell) in
+                            cell.textLabel?.text = item.title
+                        }
+                    }
+                )
             ]
         )
     }

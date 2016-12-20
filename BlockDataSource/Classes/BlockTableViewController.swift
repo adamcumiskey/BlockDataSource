@@ -30,29 +30,41 @@
 import UIKit
 
 
-extension BlockConfigureable where Self: UITableViewController {
-    public func reloadUI(animated: Bool = false) {
-        guard let tableView = tableView else { return }
+public protocol ConfigurableTable: class {
+    var dataSource: List? { get set }
+    func configureDataSource(dataSource: List)
+}
+
+
+public extension ConfigurableTable where Self: UITableViewController {
+    public func createDataSource() -> List {
+        guard let tableView = tableView else { return List() }
         
-        let dataSource = BlockDataSource()
+        let dataSource = List()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         
-        if animated == false || self.dataSource == nil {
-            tableView.reloadData()
-        } else {
+        self.dataSource = dataSource
+        return dataSource
+    }
+    
+    public func reloadDataAndUI(animated: Bool = false, insertAnimation: UITableViewRowAnimation = .left, deleteAnimation: UITableViewRowAnimation = .fade) {
+        let oldDataSource = self.dataSource
+        let newDataSource = createDataSource()
+        
+        if let oldDataSource = oldDataSource, animated == true {
             var removed = [IndexPath]()
             var added = [IndexPath]()
             
-            for (index, section) in self.dataSource!.sections.enumerated() {
-                guard dataSource.sections.count > index else { continue }
-                let sectionIDs = section.rows.map { $0.rowID }
-                let newSectionIDs = dataSource.sections[index].rows.map { $0.rowID }
+            for (index, section) in oldDataSource.sections.enumerated() {
+                guard newDataSource.sections.count > index else { continue }
+                let sectionIDs = section.rows.map { $0.identifier }
+                let newSectionIDs = newDataSource.sections[index].rows.map { $0.identifier }
                 
-                let diff = getDiff(sectionIDs, newSectionIDs)
+                let diff = sectionIDs.diff(with: newSectionIDs)
                 
                 let removedIndexes = diff.removed.map { IndexPath(row: sectionIDs.index(of: $0)!, section: index) }
                 removed.append(contentsOf: removedIndexes)
@@ -61,25 +73,23 @@ extension BlockConfigureable where Self: UITableViewController {
                 added.append(contentsOf: addedIndexes)
             }
             
-            print("added: \(added)")
-            print("removed: \(removed)")
+            print("Added: \(added), Removed: \(removed)")
+            
             tableView.beginUpdates()
-            if removed.count > 0 {
-                tableView.deleteRows(at: removed, with: .fade)
-            }
-            tableView.insertRows(at: added, with: .fade)
+            tableView.insertRows(at: added, with: insertAnimation)
+            tableView.deleteRows(at: removed, with: deleteAnimation)
             tableView.endUpdates()
+        } else {
+            tableView.reloadData()
         }
-        
-        self.dataSource = dataSource
     }
 }
 
 
-open class BlockTableViewController: UITableViewController, BlockConfigureable {
-    open var dataSource: BlockDataSource?
+open class BlockTableViewController: UITableViewController, ConfigurableTable {
+    public var dataSource: List?
     
-    open func configureDataSource(dataSource: BlockDataSource) {
+    open func configureDataSource(dataSource: List) {
         // Base class does nothing
     }
     
@@ -92,6 +102,6 @@ open class BlockTableViewController: UITableViewController, BlockConfigureable {
     
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadUI()
+        reloadDataAndUI()
     }
 }

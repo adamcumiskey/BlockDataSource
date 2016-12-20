@@ -11,11 +11,11 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: BlockDataSource) {
+    override func configureDataSource(dataSource: List) {
         dataSource.sections.append(
-            Section(
+            List.Section(
                 rows: [
-                    Row(
+                    List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Cell Types"
                             cell.accessoryType = .disclosureIndicator
@@ -26,26 +26,38 @@ class MainViewController: BlockTableViewController {
                             self.navigationController?.pushViewController(testVC, animated: true)
                         }
                     ),
-                    Row(
+                    List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Editing"
                             cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
-                            let reorderVC = EditingViewController(style: .grouped)
+                            let reorderVC = EditingViewController()
                             reorderVC.title = "Editing"
                             self.navigationController?.pushViewController(reorderVC, animated: true)
                         }
                     ),
-                    Row(
+                    List.Row(
                         configure: { cell in
-                            cell.textLabel?.text = "Animations"
+                            cell.textLabel?.text = "TableView Animations"
                             cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
-                            let controller = AnimatedViewController()
-                            controller.title = "Animations"
-                            self.navigationController?.pushViewController(controller, animated: true)
+                            let animationVC = AnimatedViewController(style: .grouped)
+                            animationVC.title = "Animations"
+                            self.navigationController?.pushViewController(animationVC, animated: true)
+                        }
+                    ),
+                    List.Row(
+                        configure: { cell in
+                            cell.textLabel?.text = "Collection View"
+                            cell.accessoryType = .disclosureIndicator
+                        },
+                        onSelect: { [unowned self] indexPath in
+                            let collectionVC = CollectionExampleViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                            collectionVC.collectionView?.backgroundColor = .groupTableViewBackground
+                            collectionVC.title = "Collection View"
+                            self.navigationController?.pushViewController(collectionVC, animated: true)
                         }
                     )
                 ]

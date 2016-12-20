@@ -25,9 +25,29 @@ private struct Cell: CustomDebugStringConvertible {
     }
 }
 
-private struct Grid: CustomDebugStringConvertible {
+private struct LCSGrid: CustomDebugStringConvertible {
     fileprivate var cells = [String: Cell]()
     fileprivate var dimensions: (Int, Int) = (0,0)
+    
+    init<T>(_ a: [T], _ b: [T]) where T: Equatable {
+        for (i, x) in a.enumerated() {
+            for (j, y) in b.enumerated() {
+                var cell: Cell
+                if x == y {
+                    cell = Cell(length: self[i-1,j-1].length + 1, move: .diagonal)
+                } else {
+                    let horizontal = self[i-1,j].length
+                    let vertical = self[i,j-1].length
+                    if horizontal < vertical {
+                        cell = Cell(length: vertical, move: .vertical)
+                    } else {
+                        cell = Cell(length: horizontal, move: .horizontal)
+                    }
+                }
+                self[i,j] = cell
+            }
+        }
+    }
     
     subscript(row: Int, column: Int) -> Cell {
         get {
@@ -58,31 +78,9 @@ private struct Grid: CustomDebugStringConvertible {
     }
 }
 
-private func lcsGrid<T>(_ a: [T], _ b: [T]) -> Grid where T: Equatable {
-    var grid = Grid()
-    for (i, x) in a.enumerated() {
-        for (j, y) in b.enumerated() {
-            var cell: Cell
-            if x == y {
-                cell = Cell(length: grid[i-1,j-1].length + 1, move: .diagonal)
-            } else {
-                let horizontal = grid[i-1,j].length
-                let vertical = grid[i,j-1].length
-                if horizontal < vertical {
-                    cell = Cell(length: vertical, move: .vertical)
-                } else {
-                    cell = Cell(length: horizontal, move: .horizontal)
-                }
-            }
-            grid[i,j] = cell
-        }
-    }
-    return grid
-}
-
 // Longest common subsequence alogorithm
 public func findLCS<T>(_ a: [T], _ b: [T]) -> [T] where T: Equatable {
-    let grid = lcsGrid(a, b)
+    let grid = LCSGrid(a, b)
     var lcs = [T]()
     var i = a.count-1, j = b.count-1
     repeat {
@@ -101,25 +99,26 @@ public func findLCS<T>(_ a: [T], _ b: [T]) -> [T] where T: Equatable {
     return lcs.reversed()
 }
 
-// Return the diff of two arrays as a tuple of (added, removed)
-public func getDiff<T>(_ a: [T], _ b: [T]) -> (added: [T], removed: [T]) where T: Equatable {
-    var added = [T]()
-    var removed = [T]()
-    let lcs = findLCS(a, b)
-
-    // If an item is in the second array, but not the lcs, it was added
-    for item in b {
-        if lcs.index(of: item) == nil {
-            added.append(item)
+extension Array where Element: Equatable {
+    func diff(with array: [Element]) -> (added: [Element], removed: [Element]) {
+        var added = [Element]()
+        var removed = [Element]()
+        let lcs = findLCS(self, array)
+        
+        // If an item is in the second array, but not the lcs, it was added
+        for item in array {
+            if lcs.index(of: item) == nil {
+                added.append(item)
+            }
         }
-    }
-    
-    // If an item is in the first array, but not the lcs, it was deleted
-    for item in a {
-        if lcs.index(of: item) == nil {
-            removed.append(item)
+        
+        // If an item is in the first array, but not the lcs, it was deleted
+        for item in self {
+            if lcs.index(of: item) == nil {
+                removed.append(item)
+            }
         }
+        
+        return (added, removed)
     }
-    
-    return (added, removed)
 }

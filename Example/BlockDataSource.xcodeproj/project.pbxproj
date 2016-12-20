@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		14E77AA0D226D512FFA9FCFE /* Pods_BlockDataSource_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */; };
-		3F9C5E5520499075DAA31321 /* Pods_BlockDataSource_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA2984DB22A205449973E45 /* Pods_BlockDataSource_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
@@ -20,19 +19,23 @@
 		62826F141DD6281B009779FB /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */; };
 		62826F151DD6281B009779FB /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */; };
 		62826F181DD62871009779FB /* CollectionExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62826F171DD62871009779FB /* CollectionExampleViewController.swift */; };
+		62843CC01DF8C01300E8D98D /* ImageReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */; };
+		62843CC21DF8C02000E8D98D /* ImageReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62843CC11DF8C02000E8D98D /* ImageReusableView.xib */; };
 		6288F1E31DEE3FB1006D8EED /* AnimatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6288F1E21DEE3FB1006D8EED /* AnimatedViewController.swift */; };
 		62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAC1DD5065700AB1756 /* Cells.swift */; };
 		62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAE1DD5096500AB1756 /* ImageCell.swift */; };
 		62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D87CAF1DD5096500AB1756 /* ImageCell.xib */; };
+		665516411E03961C0025CD0F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665516401E03961C0025CD0F /* Extensions.swift */; };
+		66D010FD1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
+		66D010FF1E08C3C400D14B54 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
-			remoteInfo = BlockDataSource;
+			remoteInfo = BlockDataSource_Example;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -41,23 +44,27 @@
 		507E76D923C9088DC2F3066F /* Pods-BlockDataSource_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_Example/Pods-BlockDataSource_Example.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BlockDataSource_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockDataSource_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		607FACE51AFB9204008FA782 /* BlockDataSource_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockDataSource_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62826F031DD51415009779FB /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		62826F051DD51611009779FB /* CellExamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellExamplesViewController.swift; sourceTree = "<group>"; };
-		62826F071DD51630009779FB /* EditingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingViewController.swift; sourceTree = "<group>"; };
-		62826F0E1DD6200B009779FB /* BurgerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurgerView.swift; sourceTree = "<group>"; };
+		62826F031DD51415009779FB /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MainViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62826F051DD51611009779FB /* CellExamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CellExamplesViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62826F071DD51630009779FB /* EditingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EditingViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62826F0E1DD6200B009779FB /* BurgerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BurgerView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62826F101DD62014009779FB /* BurgerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BurgerView.xib; sourceTree = "<group>"; };
-		62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		62826F171DD62871009779FB /* CollectionExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionExampleViewController.swift; sourceTree = "<group>"; };
+		62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageReusableView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62843CC11DF8C02000E8D98D /* ImageReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageReusableView.xib; sourceTree = "<group>"; };
 		6288F1E21DEE3FB1006D8EED /* AnimatedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedViewController.swift; sourceTree = "<group>"; };
-		62D87CAC1DD5065700AB1756 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cells.swift; sourceTree = "<group>"; };
-		62D87CAE1DD5096500AB1756 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		62D87CAC1DD5065700AB1756 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Cells.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		62D87CAE1DD5096500AB1756 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAF1DD5096500AB1756 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		665516401E03961C0025CD0F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		66D010FA1E08C3C400D14B54 /* BlockDataSource_ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockDataSource_ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDataSource_ExampleTests.swift; sourceTree = "<group>"; };
+		66D010FE1E08C3C400D14B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		845312344886411B746B011C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_Tests/Pods-BlockDataSource_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -76,11 +83,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		607FACE21AFB9204008FA782 /* Frameworks */ = {
+		66D010F71E08C3C400D14B54 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F9C5E5520499075DAA31321 /* Pods_BlockDataSource_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +109,7 @@
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for BlockDataSource */,
-				607FACE81AFB9204008FA782 /* Tests */,
+				66D010FB1E08C3C400D14B54 /* BlockDataSource_ExampleTests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				2705DA0C14C92AD35A83386E /* Pods */,
 				7A3C49E629CE863AAEAC4ED4 /* Frameworks */,
@@ -114,7 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD01AFB9204008FA782 /* BlockDataSource_Example.app */,
-				607FACE51AFB9204008FA782 /* BlockDataSource_Tests.xctest */,
+				66D010FA1E08C3C400D14B54 /* BlockDataSource_ExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,10 +130,10 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				62826F031DD51415009779FB /* MainViewController.swift */,
-				62826F0E1DD6200B009779FB /* BurgerView.swift */,
-				62826F101DD62014009779FB /* BurgerView.xib */,
 				62826F161DD6281F009779FB /* Collection View */,
 				62826F0D1DD52E01009779FB /* Table View */,
+				62843CBC1DF8BF4500E8D98D /* View */,
+				6655163F1E0396030025CD0F /* Util */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for BlockDataSource";
@@ -140,22 +146,6 @@
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		607FACE81AFB9204008FA782 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				607FACE91AFB9204008FA782 /* Supporting Files */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		607FACE91AFB9204008FA782 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				607FACEA1AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -173,12 +163,10 @@
 		62826F0D1DD52E01009779FB /* Table View */ = {
 			isa = PBXGroup;
 			children = (
+				6288F1E21DEE3FB1006D8EED /* AnimatedViewController.swift */,
 				62826F051DD51611009779FB /* CellExamplesViewController.swift */,
 				62826F071DD51630009779FB /* EditingViewController.swift */,
-				6288F1E21DEE3FB1006D8EED /* AnimatedViewController.swift */,
-				62D87CAC1DD5065700AB1756 /* Cells.swift */,
-				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
-				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
+				62843CBD1DF8BF5200E8D98D /* Cells */,
 			);
 			name = "Table View";
 			sourceTree = "<group>";
@@ -186,11 +174,65 @@
 		62826F161DD6281F009779FB /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
-				62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */,
-				62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */,
 				62826F171DD62871009779FB /* CollectionExampleViewController.swift */,
+				62843CC31DF8C02500E8D98D /* Reusable Views */,
+				62843CBE1DF8BF5800E8D98D /* Cells */,
 			);
 			name = "Collection View";
+			sourceTree = "<group>";
+		};
+		62843CBC1DF8BF4500E8D98D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				62826F0E1DD6200B009779FB /* BurgerView.swift */,
+				62826F101DD62014009779FB /* BurgerView.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		62843CBD1DF8BF5200E8D98D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				62D87CAC1DD5065700AB1756 /* Cells.swift */,
+				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
+				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		62843CBE1DF8BF5800E8D98D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				62826F121DD6281B009779FB /* ImageCollectionViewCell.swift */,
+				62826F131DD6281B009779FB /* ImageCollectionViewCell.xib */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		62843CC31DF8C02500E8D98D /* Reusable Views */ = {
+			isa = PBXGroup;
+			children = (
+				62843CBF1DF8C01300E8D98D /* ImageReusableView.swift */,
+				62843CC11DF8C02000E8D98D /* ImageReusableView.xib */,
+			);
+			name = "Reusable Views";
+			sourceTree = "<group>";
+		};
+		6655163F1E0396030025CD0F /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				665516401E03961C0025CD0F /* Extensions.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		66D010FB1E08C3C400D14B54 /* BlockDataSource_ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */,
+				66D010FE1E08C3C400D14B54 /* Info.plist */,
+			);
+			path = BlockDataSource_ExampleTests;
 			sourceTree = "<group>";
 		};
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
@@ -225,25 +267,22 @@
 			productReference = 607FACD01AFB9204008FA782 /* BlockDataSource_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
-		607FACE41AFB9204008FA782 /* BlockDataSource_Tests */ = {
+		66D010F91E08C3C400D14B54 /* BlockDataSource_ExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "BlockDataSource_Tests" */;
+			buildConfigurationList = 66D011011E08C3C400D14B54 /* Build configuration list for PBXNativeTarget "BlockDataSource_ExampleTests" */;
 			buildPhases = (
-				1A5828B5C12AA4074B115A06 /* [CP] Check Pods Manifest.lock */,
-				607FACE11AFB9204008FA782 /* Sources */,
-				607FACE21AFB9204008FA782 /* Frameworks */,
-				607FACE31AFB9204008FA782 /* Resources */,
-				595C60E461755E4C62053F01 /* [CP] Embed Pods Frameworks */,
-				021A60C71D85AC59AAFF2917 /* [CP] Copy Pods Resources */,
+				66D010F61E08C3C400D14B54 /* Sources */,
+				66D010F71E08C3C400D14B54 /* Frameworks */,
+				66D010F81E08C3C400D14B54 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
+				66D011001E08C3C400D14B54 /* PBXTargetDependency */,
 			);
-			name = BlockDataSource_Tests;
-			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* BlockDataSource_Tests.xctest */;
+			name = BlockDataSource_ExampleTests;
+			productName = BlockDataSource_ExampleTests;
+			productReference = 66D010FA1E08C3C400D14B54 /* BlockDataSource_ExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -252,17 +291,19 @@
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = LRNC44UMYU;
 						LastSwiftMigration = 0810;
 					};
-					607FACE41AFB9204008FA782 = {
-						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0810;
+					66D010F91E08C3C400D14B54 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = LRNC44UMYU;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -281,7 +322,7 @@
 			projectRoot = "";
 			targets = (
 				607FACCF1AFB9204008FA782 /* BlockDataSource_Example */,
-				607FACE41AFB9204008FA782 /* BlockDataSource_Tests */,
+				66D010F91E08C3C400D14B54 /* BlockDataSource_ExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -294,12 +335,13 @@
 				62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */,
 				62826F111DD62014009779FB /* BurgerView.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				62843CC21DF8C02000E8D98D /* ImageReusableView.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				62826F151DD6281B009779FB /* ImageCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		607FACE31AFB9204008FA782 /* Resources */ = {
+		66D010F81E08C3C400D14B54 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -309,21 +351,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		021A60C71D85AC59AAFF2917 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockDataSource_Tests/Pods-BlockDataSource_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		0DF7D8F1F55A356664D11A89 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,36 +364,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		1A5828B5C12AA4074B115A06 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		595C60E461755E4C62053F01 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockDataSource_Tests/Pods-BlockDataSource_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		75DFAC9F07C8FF99BFD8B93F /* [CP] Copy Pods Resources */ = {
@@ -411,28 +408,31 @@
 				62826F061DD51611009779FB /* CellExamplesViewController.swift in Sources */,
 				62826F141DD6281B009779FB /* ImageCollectionViewCell.swift in Sources */,
 				62826F081DD51630009779FB /* EditingViewController.swift in Sources */,
+				62843CC01DF8C01300E8D98D /* ImageReusableView.swift in Sources */,
 				62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */,
 				62D87CAD1DD5065700AB1756 /* Cells.swift in Sources */,
 				6288F1E31DEE3FB1006D8EED /* AnimatedViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				665516411E03961C0025CD0F /* Extensions.swift in Sources */,
 				62826F041DD51415009779FB /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		607FACE11AFB9204008FA782 /* Sources */ = {
+		66D010F61E08C3C400D14B54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66D010FD1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
+		66D011001E08C3C400D14B54 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 607FACCF1AFB9204008FA782 /* BlockDataSource_Example */;
-			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
+			targetProxy = 66D010FF1E08C3C400D14B54 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -541,6 +541,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				INFOPLIST_FILE = BlockDataSource/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -556,6 +557,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
 				INFOPLIST_FILE = BlockDataSource/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -565,39 +567,41 @@
 			};
 			name = Release;
 		};
-		607FACF31AFB9204008FA782 /* Debug */ = {
+		66D011021E08C3C400D14B54 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
+				INFOPLIST_FILE = BlockDataSource_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adamcumiskey.BlockDataSource-ExampleTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlockDataSource_Example.app/BlockDataSource_Example";
 			};
 			name = Debug;
 		};
-		607FACF41AFB9204008FA782 /* Release */ = {
+		66D011031E08C3C400D14B54 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA349E33A224EDC70B8908B8 /* Pods-BlockDataSource_Tests.release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = LRNC44UMYU;
+				INFOPLIST_FILE = BlockDataSource_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adamcumiskey.BlockDataSource-ExampleTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlockDataSource_Example.app/BlockDataSource_Example";
 			};
 			name = Release;
 		};
@@ -622,11 +626,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "BlockDataSource_Tests" */ = {
+		66D011011E08C3C400D14B54 /* Build configuration list for PBXNativeTarget "BlockDataSource_ExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				607FACF31AFB9204008FA782 /* Debug */,
-				607FACF41AFB9204008FA782 /* Release */,
+				66D011021E08C3C400D14B54 /* Debug */,
+				66D011031E08C3C400D14B54 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

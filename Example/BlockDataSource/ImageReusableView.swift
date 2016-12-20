@@ -1,19 +1,19 @@
 //
-//  ImageCollectionViewCell.swift
+//  ImageReusableView.swift
 //  BlockDataSource
 //
-//  Created by Adam Cumiskey on 11/11/16.
+//  Created by Adam Cumiskey on 12/7/16.
 //  Copyright © 2016 CocoaPods. All rights reserved.
 //
 
 import UIKit
 
-class ImageCollectionViewCell: UICollectionViewCell {
 
+class ImageReusableView: UICollectionReusableView {
     @IBOutlet weak var imageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
     }
-
 }
