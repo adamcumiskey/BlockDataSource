@@ -1,5 +1,5 @@
 //
-//  AnimatedViewController.swift
+//  AnimatedListViewController.swift
 //  BlockDataSource
 //
 //  Created by Adam Cumiskey on 11/29/16.
@@ -10,12 +10,12 @@ import Foundation
 import BlockDataSource
 
 
-class AnimatedViewController: BlockTableViewController {
+class AnimatedListViewController: BlockTableViewController {
     
-    let dataset1 = (2..<5).map { Item(title: "\($0)") }
-    let dataset2 = (0..<1).map { Item(title: "\($0)") }
-    let dataset3 = (5..<9).map { Item(title: "\($0)") }
-    let dataset4 = (1..<3).map { Item(title: "\($0)") }
+    let dataset1 = (2..<5).map { DataItem(title: "\($0)") }
+    let dataset2 = (0..<1).map { DataItem(title: "\($0)") }
+    let dataset3 = (5..<9).map { DataItem(title: "\($0)") }
+    let dataset4 = (1..<3).map { DataItem(title: "\($0)") }
     
     var toggle: Bool = false
     

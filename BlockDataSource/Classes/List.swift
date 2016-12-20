@@ -81,6 +81,17 @@ public class List: NSObject {
         )
     }
     
+    /// Convenience init for a list with multiple sections without headers or footers
+    ///   
+    ///  - bug: It looks like nesting a List.Row constructor in a 2d array causes the type infrerence to go nuts
+//    public convenience init(rowSections: [[Row]], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+//        self.init(
+//            sections: rowSections.map { Section(rows: $0) },
+//            onReorder: onReorder,
+//            onScroll: onScroll
+//        )
+//    }
+    
     // Reference section with `list[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
@@ -288,7 +299,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self[section].header?.text
     }
     
@@ -296,7 +307,7 @@ extension List: UITableViewDelegate {
         return self[section].header?.view
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return self[section].footer?.text
     }
     
@@ -324,7 +335,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let row = self[indexPath]
         return row.onDelete != nil || row.reorderable == true
     }
@@ -344,7 +355,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return self[indexPath].reorderable
     }
     
