@@ -9,25 +9,27 @@
 import Foundation
 
 
-private enum Move: String, RawRepresentable {
-    case none = "x"
-    case vertical = "|"
-    case horizontal = "-"
-    case diagonal = "\\"
-}
-
-private struct Cell: CustomDebugStringConvertible {
-    var length: UInt
-    var move: Move
-    
-    var debugDescription: String {
-        return "(\(length), \(move.rawValue))"
-    }
-}
-
 private struct LCSGrid: CustomDebugStringConvertible {
-    fileprivate var cells = [String: Cell]()
-    fileprivate var dimensions: (Int, Int) = (0,0)
+    
+    enum Move: String, RawRepresentable {
+        case none = "x"
+        case vertical = "|"
+        case horizontal = "-"
+        case diagonal = "\\"
+    }
+    
+    struct Cell: CustomDebugStringConvertible {
+        var length: UInt
+        var move: Move
+        
+        var debugDescription: String {
+            return "(\(length), \(move.rawValue))"
+        }
+    }
+    
+    
+    private var cells = [String: Cell]()
+    private var dimensions: (Int, Int) = (0,0)
     
     init<T>(_ a: [T], _ b: [T]) where T: Equatable {
         for (i, x) in a.enumerated() {
@@ -78,32 +80,31 @@ private struct LCSGrid: CustomDebugStringConvertible {
     }
 }
 
-// Longest common subsequence alogorithm
-public func findLCS<T>(_ a: [T], _ b: [T]) -> [T] where T: Equatable {
-    let grid = LCSGrid(a, b)
-    var lcs = [T]()
-    var i = a.count-1, j = b.count-1
-    repeat {
-        switch grid[i, j].move {
-        case .vertical:
-            j -= 1
-        case .horizontal:
-            i -= 1
-        case .diagonal:
-            lcs.append(a[i])
-            i -= 1; j -= 1
-        default: break
-        }
-        
-    } while (grid[i, j].move != .none)
-    return lcs.reversed()
-}
-
 extension Array where Element: Equatable {
+    func longestCommonSubsequence(with array: [Element]) -> [Element] {
+        let grid = LCSGrid(self, array)
+        var lcs = [Element]()
+        var i = self.count-1, j = array.count-1
+        repeat {
+            switch grid[i, j].move {
+            case .vertical:
+                j -= 1
+            case .horizontal:
+                i -= 1
+            case .diagonal:
+                lcs.append(self[i])
+                i -= 1; j -= 1
+            default: break
+            }
+            
+        } while (grid[i, j].move != .none)
+        return lcs.reversed()
+    }
+    
     func diff(with array: [Element]) -> (added: [Element], removed: [Element]) {
         var added = [Element]()
         var removed = [Element]()
-        let lcs = findLCS(self, array)
+        let lcs = self.longestCommonSubsequence(with: array)
         
         // If an item is in the second array, but not the lcs, it was added
         for item in array {
