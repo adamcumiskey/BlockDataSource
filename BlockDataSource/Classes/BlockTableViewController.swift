@@ -31,32 +31,36 @@ import UIKit
 
 
 public protocol ConfigurableTable: class {
-    var dataSource: BlockTableDataSource? { get set }
-    func configureDataSource(dataSource: BlockTableDataSource)
+    var dataSource: List? { get set }
+    func configureDataSource(dataSource: List)
 }
 
 
 public extension ConfigurableTable where Self: UITableViewController {
-    public func reloadUI() {
+    public func createDataSource() {
         guard let tableView = tableView else { return }
         
-        let dataSource = BlockTableDataSource()
+        let dataSource = List()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: tableView)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
-        tableView.reloadData()
         
         self.dataSource = dataSource
+    }
+    
+    public func reloadDataAndUI() {
+        createDataSource()
+        tableView.reloadData()
     }
 }
 
 
 open class BlockTableViewController: UITableViewController, ConfigurableTable {
-    public var dataSource: BlockTableDataSource?
+    public var dataSource: List?
     
-    open func configureDataSource(dataSource: BlockTableDataSource) {
+    open func configureDataSource(dataSource: List) {
         // Base class does nothing
     }
     
@@ -69,6 +73,6 @@ open class BlockTableViewController: UITableViewController, ConfigurableTable {
     
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadUI()
+        reloadDataAndUI()
     }
 }

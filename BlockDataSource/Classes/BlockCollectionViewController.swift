@@ -10,32 +10,36 @@ import Foundation
 
 
 public protocol ConfigurableCollection: class {
-    var dataSource: BlockCollectionDataSource? { get set }
-    func configureDataSource(dataSource: BlockCollectionDataSource)
+    var dataSource: Grid? { get set }
+    func configureDataSource(dataSource: Grid)
 }
 
 public extension ConfigurableCollection where Self: UICollectionViewController {
-    public func reloadUI() {
+    public func createDataSource() {
         guard let collectionView = collectionView else { return }
         
-        let dataSource = BlockCollectionDataSource()
+        let dataSource = Grid()
         configureDataSource(dataSource: dataSource)
         
         dataSource.registerReuseIdentifiers(to: collectionView)
         collectionView.dataSource = dataSource
         collectionView.delegate = dataSource
-        collectionView.reloadData()
         
         self.dataSource = dataSource
+    }
+    
+    public func reloadDataAndUI() {
+        createDataSource()
+        collectionView?.reloadData()
     }
 }
 
 
 
 open class BlockCollectionViewController: UICollectionViewController, ConfigurableCollection {
-    public var dataSource: BlockCollectionDataSource?
+    public var dataSource: Grid?
     
-    open func configureDataSource(dataSource: BlockCollectionDataSource) {
+    open func configureDataSource(dataSource: Grid) {
         // Base class does nothing
     }
     
@@ -45,6 +49,6 @@ open class BlockCollectionViewController: UICollectionViewController, Configurab
     
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadUI()
+        reloadDataAndUI()
     }
 }

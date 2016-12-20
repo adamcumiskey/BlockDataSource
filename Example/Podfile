@@ -3,7 +3,7 @@ use_frameworks!
 target 'BlockDataSource_Example' do
   pod 'BlockDataSource', :path => '../'
 
-  target 'BlockDataSource_Tests' do
+  target 'BlockDataSource_ExampleTests' do
     inherit! :search_paths
   end
 end

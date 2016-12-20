@@ -31,14 +31,14 @@ class CollectionExampleViewController: BlockCollectionViewController {
         }
     }
     
-    override func configureDataSource(dataSource: BlockCollectionDataSource) {
+    override func configureDataSource(dataSource: Grid) {
         dataSource.sections.append(
-            CollectionSection(
-                configureHeader: { (header: ImageReusableView) in
-                    header.imageView.image = UIImage(named: "double_burger")
+            Grid.Section(
+                header: Grid.Section.HeaderFooter { (view: ImageReusableView) in
+                    view.imageView.image = UIImage(named: "double_burger")
                 },
                 items: images.map { image in
-                    return CollectionItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+                    return Grid.Item(reorderable: true) { (cell: ImageCollectionViewCell) in
                         cell.imageView.image = image
                     }
                 }
@@ -46,7 +46,6 @@ class CollectionExampleViewController: BlockCollectionViewController {
         )
         dataSource.onReorder = { [unowned self] source, destination in
             self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
-            self.reloadUI()
         }
     }
 }
