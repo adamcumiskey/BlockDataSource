@@ -102,23 +102,13 @@ extension Array where Element: Equatable {
     }
     
     func diff(with array: [Element]) -> (added: [Element], removed: [Element]) {
-        var added = [Element]()
-        var removed = [Element]()
         let lcs = self.longestCommonSubsequence(with: array)
         
         // If an item is in the second array, but not the lcs, it was added
-        for item in array {
-            if lcs.index(of: item) == nil {
-                added.append(item)
-            }
-        }
-        
+        let added = array.flatMap { return lcs.index(of: $0) == nil ? $0 : nil }
+
         // If an item is in the first array, but not the lcs, it was deleted
-        for item in self {
-            if lcs.index(of: item) == nil {
-                removed.append(item)
-            }
-        }
+        let removed = self.flatMap { return lcs.index(of: $0) == nil ? $0 : nil }
         
         return (added, removed)
     }
