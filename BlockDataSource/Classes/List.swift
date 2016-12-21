@@ -132,7 +132,11 @@ public class List: NSObject {
         }
         
         
-        /// Enum representing the header or footer data for a list section
+        /**
+         Enum representing the header or footer data for a list section
+         
+           - todo: refactor so customView can be reusable
+         */
         public enum HeaderFooter {
             /// Provide a text label as the header/footer for the section
             case label(String)

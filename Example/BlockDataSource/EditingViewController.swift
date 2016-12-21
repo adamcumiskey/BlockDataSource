@@ -14,12 +14,6 @@ struct Item: Equatable {
     var title: String
 }
 
-extension Item {
-    func configureCell(cell: Cell) -> Void {
-        cell.textLabel?.text = title
-    }
-}
-
 func ==(lhs: Item, rhs: Item) -> Bool {
     return lhs.title == rhs.title
 }
@@ -48,7 +42,9 @@ class EditingViewController: BlockTableViewController {
             List.Section(
                 rows: data.map { item in
                     return List.Row(
-                        configure: item.configureCell,
+                        configure: { (cell: Cell) in
+                            cell.textLabel?.text = item.title
+                        },
                         onDelete: { [unowned self] indexPath in
                             if let index = self.data.index(of: item) {
                                 self.data.remove(at: index)

@@ -25,7 +25,9 @@
 		62D87CB01DD5096500AB1756 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87CAE1DD5096500AB1756 /* ImageCell.swift */; };
 		62D87CB11DD5096500AB1756 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62D87CAF1DD5096500AB1756 /* ImageCell.xib */; };
 		665516411E03961C0025CD0F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665516401E03961C0025CD0F /* Extensions.swift */; };
+		666547551E0AD6D90084DA48 /* ListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666547541E0AD6D90084DA48 /* ListTests.swift */; };
 		66D010FD1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */; };
+		A25D63194592CEF9A9EA28E0 /* Pods_BlockDataSource_ExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 772A4DEE38ADA311E1034922 /* Pods_BlockDataSource_ExampleTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		1DC2675DBF19ABC804FFD9F9 /* BlockDataSource.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BlockDataSource.podspec; path = ../BlockDataSource.podspec; sourceTree = "<group>"; };
+		461F29F420F46A7A4D66914B /* Pods-BlockDataSource_ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_ExampleTests/Pods-BlockDataSource_ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		507E76D923C9088DC2F3066F /* Pods-BlockDataSource_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_Example/Pods-BlockDataSource_Example.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BlockDataSource_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockDataSource_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -60,9 +63,13 @@
 		62D87CAE1DD5096500AB1756 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ImageCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		62D87CAF1DD5096500AB1756 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		665516401E03961C0025CD0F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		666547541E0AD6D90084DA48 /* ListTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
+		666547561E0AD75C0084DA48 /* BlockDataSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BlockDataSource.framework; path = "Pods/../build/Debug-iphoneos/BlockDataSource/BlockDataSource.framework"; sourceTree = "<group>"; };
 		66D010FA1E08C3C400D14B54 /* BlockDataSource_ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockDataSource_ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDataSource_ExampleTests.swift; sourceTree = "<group>"; };
 		66D010FE1E08C3C400D14B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		772A4DEE38ADA311E1034922 /* Pods_BlockDataSource_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8436C813740C76B0BA9F742C /* Pods-BlockDataSource_ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_ExampleTests/Pods-BlockDataSource_ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		845312344886411B746B011C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_Tests/Pods-BlockDataSource_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A25D63194592CEF9A9EA28E0 /* Pods_BlockDataSource_ExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +106,8 @@
 				507E76D923C9088DC2F3066F /* Pods-BlockDataSource_Example.release.xcconfig */,
 				984A27D1983AEC8547432C65 /* Pods-BlockDataSource_Tests.debug.xcconfig */,
 				CA349E33A224EDC70B8908B8 /* Pods-BlockDataSource_Tests.release.xcconfig */,
+				8436C813740C76B0BA9F742C /* Pods-BlockDataSource_ExampleTests.debug.xcconfig */,
+				461F29F420F46A7A4D66914B /* Pods-BlockDataSource_ExampleTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -227,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */,
+				666547541E0AD6D90084DA48 /* ListTests.swift */,
 				66D010FE1E08C3C400D14B54 /* Info.plist */,
 			);
 			path = BlockDataSource_ExampleTests;
@@ -235,8 +246,10 @@
 		7A3C49E629CE863AAEAC4ED4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				666547561E0AD75C0084DA48 /* BlockDataSource.framework */,
 				885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */,
 				BBA2984DB22A205449973E45 /* Pods_BlockDataSource_Tests.framework */,
+				772A4DEE38ADA311E1034922 /* Pods_BlockDataSource_ExampleTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -268,9 +281,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66D011011E08C3C400D14B54 /* Build configuration list for PBXNativeTarget "BlockDataSource_ExampleTests" */;
 			buildPhases = (
+				62F21463F2FD1DD20CB621FA /* [CP] Check Pods Manifest.lock */,
 				66D010F61E08C3C400D14B54 /* Sources */,
 				66D010F71E08C3C400D14B54 /* Frameworks */,
 				66D010F81E08C3C400D14B54 /* Resources */,
+				CD7359D190F5FD0CF7D58799 /* [CP] Embed Pods Frameworks */,
+				BDE0CE03AB992B693852D6D3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -363,6 +379,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		62F21463F2FD1DD20CB621FA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		75DFAC9F07C8FF99BFD8B93F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -393,6 +424,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockDataSource_Example/Pods-BlockDataSource_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BDE0CE03AB992B693852D6D3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockDataSource_ExampleTests/Pods-BlockDataSource_ExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CD7359D190F5FD0CF7D58799 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BlockDataSource_ExampleTests/Pods-BlockDataSource_ExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -419,6 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66D010FD1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift in Sources */,
+				666547551E0AD6D90084DA48 /* ListTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,6 +627,7 @@
 		};
 		66D011021E08C3C400D14B54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8436C813740C76B0BA9F742C /* Pods-BlockDataSource_ExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -572,6 +635,10 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = LRNC44UMYU;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/BlockDataSource",
+				);
 				INFOPLIST_FILE = BlockDataSource_ExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -585,12 +652,17 @@
 		};
 		66D011031E08C3C400D14B54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 461F29F420F46A7A4D66914B /* Pods-BlockDataSource_ExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEVELOPMENT_TEAM = LRNC44UMYU;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/BlockDataSource",
+				);
 				INFOPLIST_FILE = BlockDataSource_ExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -629,6 +701,7 @@
 				66D011031E08C3C400D14B54 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
