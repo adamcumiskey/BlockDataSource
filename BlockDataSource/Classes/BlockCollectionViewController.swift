@@ -15,8 +15,8 @@ public protocol ConfigurableCollection: class {
 }
 
 public extension ConfigurableCollection where Self: UICollectionViewController {
-    public func createDataSource() {
-        guard let collectionView = collectionView else { return }
+    public func createDataSource() -> Grid {
+        guard let collectionView = collectionView else { return Grid() }
         
         let dataSource = Grid()
         configureDataSource(dataSource: dataSource)
@@ -26,11 +26,38 @@ public extension ConfigurableCollection where Self: UICollectionViewController {
         collectionView.delegate = dataSource
         
         self.dataSource = dataSource
+        return dataSource
     }
     
-    public func reloadDataAndUI() {
-        createDataSource()
-        collectionView?.reloadData()
+    public func reloadDataAndUI(animated: Bool = false) {
+        let oldDataSource = self.dataSource
+        let newDataSource = createDataSource()
+        
+        if let oldDataSource = oldDataSource, animated == true {
+            var removed = [IndexPath]()
+            var added = [IndexPath]()
+            
+            for (index, section) in oldDataSource.sections.enumerated() {
+                guard newDataSource.sections.count > index else { continue }
+                let sectionIDs = section.items.map { $0.identifier }
+                let newSectionIDs = newDataSource.sections[index].items.map { $0.identifier }
+                
+                let diff = sectionIDs.diff(with: newSectionIDs)
+                
+                let removedIndexes = diff.removed.map { IndexPath(item: sectionIDs.index(of: $0)!, section: index) }
+                removed.append(contentsOf: removedIndexes)
+                
+                let addedIndexes = diff.added.map { IndexPath(item: newSectionIDs.index(of: $0)!, section: index) }
+                added.append(contentsOf: addedIndexes)
+            }
+            
+            collectionView?.performBatchUpdates({ 
+                self.collectionView?.insertItems(at: added)
+                self.collectionView?.deleteItems(at: removed)
+            }, completion: nil)
+        } else {
+            collectionView?.reloadData()
+        }
     }
 }
 

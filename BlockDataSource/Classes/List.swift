@@ -81,6 +81,17 @@ public class List: NSObject {
         )
     }
     
+    /// Convenience init for a list with multiple sections without headers or footers
+    ///   
+    ///  - bug: It looks like nesting a List.Row constructor in a 2d array causes the type infrerence to go nuts
+//    public convenience init(rowSections: [[Row]], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+//        self.init(
+//            sections: rowSections.map { Section(rows: $0) },
+//            onReorder: onReorder,
+//            onScroll: onScroll
+//        )
+//    }
+    
     // Reference section with `list[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
@@ -163,19 +174,26 @@ public class List: NSObject {
     }
     
     
-    ///
+    /// Data structure representing a cell in the table view
     public struct Row {
         
-        // The block which configures the cell
+        /**
+         The identifier for this row. Defaults to "row".
+         
+           - note: You must set this proporty in order for animations to work in the BlockTableViewController
+         */
+        var identifier: String
+        
+        /// The block which configures the cell
         var configure: ConfigureRow
         
-        // The block that executes when the cell is tapped
+        /// The block that executes when the cell is tapped
         public var onSelect: IndexPathBlock?
         
-        // The block that executes when the cell is deleted
+        /// The block that executes when the cell is deleted
         public var onDelete: IndexPathBlock?
         
-        // Lets the dataSource know that this row can be reordered
+        /// Lets the dataSource know that this row can be reordered
         public var reorderable: Bool = false
         
         
@@ -183,13 +201,15 @@ public class List: NSObject {
          Initialize a row
          
            - parameters:
+             - identifier: Identifier used to identify row when animating. If you do not set this property to a unique value animations will not work for this row.
              - configure: The cell configuration block.
              - onSelect: The closure to execute when the cell is tapped
              - onDelete: The closure to execute when the cell is deleted
              - reorderable: Flag to indicate if this cell can be reordered
              - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
          */
-        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+        public init<Cell: UITableViewCell>(identifier: String = "row", configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+            self.identifier = identifier
             self.onSelect = onSelect
             self.onDelete = onDelete
             self.reorderable = reorderable
@@ -202,8 +222,9 @@ public class List: NSObject {
         }
         
         // Convienence init for trailing closure syntax
-        public init<Cell: UITableViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+        public init<Cell: UITableViewCell>(identifier: String = "row", reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
             self.init(
+                identifier: identifier,
                 configure: configure,
                 onSelect: nil,
                 onDelete: nil,
@@ -279,7 +300,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self[section].header?.text
     }
     
@@ -287,7 +308,7 @@ extension List: UITableViewDelegate {
         return self[section].header?.view
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return self[section].footer?.text
     }
     
@@ -315,7 +336,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let row = self[indexPath]
         return row.onDelete != nil || row.reorderable == true
     }
@@ -335,7 +356,7 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return self[indexPath].reorderable
     }
     

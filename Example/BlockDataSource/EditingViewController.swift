@@ -10,17 +10,17 @@ import Foundation
 import BlockDataSource
 
 
-struct Item: Equatable {
+struct DataItem: Equatable {
     var title: String
 }
 
-extension Item {
+extension DataItem {
     func configureCell(cell: Cell) -> Void {
         cell.textLabel?.text = title
     }
 }
 
-func ==(lhs: Item, rhs: Item) -> Bool {
+func ==(lhs: DataItem, rhs: DataItem) -> Bool {
     return lhs.title == rhs.title
 }
 
@@ -28,9 +28,9 @@ func ==(lhs: Item, rhs: Item) -> Bool {
 
 class EditingViewController: BlockTableViewController {
 
-    var data: [Item]
+    var data: [DataItem]
     init() {
-        data = (0..<5).map { Item(title: "\($0)") }
+        data = (0..<5).map { DataItem(title: "\($0)") }
         super.init(style: .grouped)
     }
     

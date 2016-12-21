@@ -37,8 +37,8 @@ public protocol ConfigurableTable: class {
 
 
 public extension ConfigurableTable where Self: UITableViewController {
-    public func createDataSource() {
-        guard let tableView = tableView else { return }
+    public func createDataSource() -> List {
+        guard let tableView = tableView else { return List() }
         
         let dataSource = List()
         configureDataSource(dataSource: dataSource)
@@ -48,11 +48,40 @@ public extension ConfigurableTable where Self: UITableViewController {
         tableView.delegate = dataSource
         
         self.dataSource = dataSource
+        return dataSource
     }
     
-    public func reloadDataAndUI() {
-        createDataSource()
-        tableView.reloadData()
+    public func reloadDataAndUI(animated: Bool = false, insertAnimation: UITableViewRowAnimation = .left, deleteAnimation: UITableViewRowAnimation = .fade) {
+        let oldDataSource = self.dataSource
+        let newDataSource = createDataSource()
+        
+        if let oldDataSource = oldDataSource, animated == true {
+            var removed = [IndexPath]()
+            var added = [IndexPath]()
+            
+            for (index, section) in oldDataSource.sections.enumerated() {
+                guard newDataSource.sections.count > index else { continue }
+                let sectionIDs = section.rows.map { $0.identifier }
+                let newSectionIDs = newDataSource.sections[index].rows.map { $0.identifier }
+                
+                let diff = sectionIDs.diff(with: newSectionIDs)
+                
+                let removedIndexes = diff.removed.map { IndexPath(row: sectionIDs.index(of: $0)!, section: index) }
+                removed.append(contentsOf: removedIndexes)
+                
+                let addedIndexes = diff.added.map { IndexPath(row: newSectionIDs.index(of: $0)!, section: index) }
+                added.append(contentsOf: addedIndexes)
+            }
+            
+            print("Added: \(added), Removed: \(removed)")
+            
+            tableView.beginUpdates()
+            tableView.insertRows(at: added, with: insertAnimation)
+            tableView.deleteRows(at: removed, with: deleteAnimation)
+            tableView.endUpdates()
+        } else {
+            tableView.reloadData()
+        }
     }
 }
 
@@ -68,7 +97,7 @@ open class BlockTableViewController: UITableViewController, ConfigurableTable {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 50.0
-        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
     }
     
     override open func viewWillAppear(_ animated: Bool) {
