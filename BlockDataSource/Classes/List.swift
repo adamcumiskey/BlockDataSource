@@ -178,7 +178,7 @@ public class List: NSObject {
     public struct Row {
         
         /**
-         The identifier for this row
+         The identifier for this row. Defaults to "row".
          
            - note: You must set this proporty in order for animations to work in the BlockTableViewController
          */
@@ -201,6 +201,7 @@ public class List: NSObject {
          Initialize a row
          
            - parameters:
+             - identifier: Identifier used to identify row when animating. If you do not set this property to a unique value animations will not work for this row.
              - configure: The cell configuration block.
              - onSelect: The closure to execute when the cell is tapped
              - onDelete: The closure to execute when the cell is deleted

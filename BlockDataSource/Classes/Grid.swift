@@ -167,6 +167,13 @@ public class Grid: NSObject {
     // Data structure representing a cell in the collection view
     public struct Item {
         
+        /**
+         The identifier for this item. Defaults to "item".
+         
+           - note: You must set this proporty in order for animations to work in the BlockCollectionViewController
+         */
+        var identifier: String
+        
         /// Configuration block for the cell
         var configure: ConfigureCollectionItem
         
@@ -184,18 +191,20 @@ public class Grid: NSObject {
          Initialize an item
          
          - parameters:
+           - identifier: Identifier used to identify item when animating. If you do not set this property to a unique value animations will not work for this item.
            - configure: The cell configuration block
            - onSelect: The closure to execute when the cell is tapped
            - onDelete: The closure to execute when the cell is deleted
            - reorderable: Flag to indicate if this cell can be reordered
            - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
          */
-        public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) {
+        public init<Cell: UICollectionViewCell>(identifier: String = "item", configure: @escaping (Cell) -> (), onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) {
             self.cellClass = Cell.self
             self.configure = { cell in
                 configure(cell as! Cell)
             }
             
+            self.identifier = identifier
             self.onSelect = onSelect
             self.onDelete = onDelete
             self.reorderable = reorderable
@@ -203,7 +212,8 @@ public class Grid: NSObject {
         }
         
         /// Convenience initializer for trialing closure syntax
-        public init<Cell: UICollectionViewCell>(reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
+        public init<Cell: UICollectionViewCell>(identifier: String = "item", reorderable: Bool = false, configure: @escaping (Cell) -> ()) {
+            self.identifier = identifier
             self.reorderable = reorderable
             self.onSelect = nil
             self.onDelete = nil

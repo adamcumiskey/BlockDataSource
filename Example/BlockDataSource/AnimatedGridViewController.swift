@@ -30,7 +30,7 @@ class AnimatedGridViewController: BlockCollectionViewController {
     
     func toggleDataSource() {
         toggle = !toggle
-        reloadDataAndUI()
+        reloadDataAndUI(animated: true)
     }
     
     override func configureDataSource(dataSource: Grid) {
@@ -38,7 +38,7 @@ class AnimatedGridViewController: BlockCollectionViewController {
         dataSource.sections.append(
             Grid.Section(
                 items: dataSet.map { dataItem in
-                    return Grid.Item { (cell: LabelCollectionViewCell) in
+                    return Grid.Item(identifier: dataItem.title) { (cell: LabelCollectionViewCell) in
                         cell.label.text = dataItem.title
                         cell.backgroundColor = .white
                     }
