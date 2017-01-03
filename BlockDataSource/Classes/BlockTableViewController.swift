@@ -32,38 +32,34 @@ import UIKit
 
 public protocol ConfigurableTable: class {
     var dataSource: List? { get set }
-    func configureDataSource(dataSource: List)
 }
 
 
 public extension ConfigurableTable where Self: UITableViewController {
-    public func createDataSource() {
+    func configureWithList(list: List) {
         guard let tableView = tableView else { return }
         
-        let dataSource = List()
-        configureDataSource(dataSource: dataSource)
-        
-        dataSource.registerReuseIdentifiers(to: tableView)
-        tableView.dataSource = dataSource
-        tableView.delegate = dataSource
-        
-        self.dataSource = dataSource
+        list.registerReuseIdentifiers(to: tableView)
+        tableView.dataSource = list
+        tableView.delegate = list
     }
     
     public func reloadDataAndUI() {
-        createDataSource()
-        tableView.reloadData()
+        if let dataSource = self.dataSource {
+            configureWithList(list: dataSource)
+            tableView.reloadData()
+        }
     }
 }
 
 
 open class BlockTableViewController: UITableViewController, ConfigurableTable {
-    public var dataSource: List?
-    
-    open func configureDataSource(dataSource: List) {
-        // Base class does nothing
+    open var dataSource: List? {
+        didSet {
+            self.reloadDataAndUI()
+        }
     }
-    
+
     override open func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
