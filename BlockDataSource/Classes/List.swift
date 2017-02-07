@@ -34,7 +34,7 @@ import Foundation
 public class List: NSObject {
     
     /// The section data for the table view
-    public var sections: [Section]
+    public var sections = [Section]()
     
     /// Callback for when a row is reordered
     public var onReorder: ReorderBlock?
@@ -42,12 +42,11 @@ public class List: NSObject {
     /// Callback for the UIScrollViewDelegate
     public var onScroll: ScrollBlock?
     
+    /// Cell configuration middleware.
+    /// Gets applied in list order to cells matching the middleware cellClass type
+    public var middlewareStack = [Middleware]()
     
-    /// Initialize an empty List
-    public override init() {
-        self.sections = [Section]()
-        super.init()
-    }
+    public override init() { super.init() }
     
     /**
      Initialize a List
@@ -264,6 +263,9 @@ extension List: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         // resonable default. can be overriden in configure block
         cell.selectionStyle = (row.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
+        for middleware in middlewareStack {
+            middleware.apply(cell)
+        }
         row.configure(cell)
         return cell
     }

@@ -18,7 +18,6 @@ class MainViewController: BlockTableViewController {
                     List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Cell Types"
-                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let testVC = CellExamplesViewController(style: .grouped)
@@ -29,7 +28,6 @@ class MainViewController: BlockTableViewController {
                     List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Editing"
-                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let reorderVC = EditingViewController()
@@ -40,7 +38,6 @@ class MainViewController: BlockTableViewController {
                     List.Row(
                         configure: { cell in
                             cell.textLabel?.text = "Collection View"
-                            cell.accessoryType = .disclosureIndicator
                         },
                         onSelect: { [unowned self] indexPath in
                             let collectionVC = CollectionExampleViewController(collectionViewLayout: UICollectionViewFlowLayout())
@@ -52,5 +49,9 @@ class MainViewController: BlockTableViewController {
                 ]
             )
         ]
+        
+        let boldTitles = Middleware { $0.textLabel?.font = .boldSystemFont(ofSize: 15) }
+        let disclosureIndicator = Middleware { $0.accessoryType = .disclosureIndicator }
+        dataSource.middlewareStack = [boldTitles, disclosureIndicator]
     }
 }
