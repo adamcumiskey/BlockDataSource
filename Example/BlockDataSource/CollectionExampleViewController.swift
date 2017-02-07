@@ -32,7 +32,7 @@ class CollectionExampleViewController: BlockCollectionViewController {
     }
     
     override func configureDataSource(dataSource: Grid) {
-        dataSource.sections.append(
+        dataSource.sections = [
             Grid.Section(
                 header: Grid.Section.HeaderFooter { (view: ImageReusableView) in
                     view.imageView.image = UIImage(named: "double_burger")
@@ -43,7 +43,8 @@ class CollectionExampleViewController: BlockCollectionViewController {
                     }
                 }
             )
-        )
+        ]
+        
         dataSource.onReorder = { [unowned self] source, destination in
             self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
         }

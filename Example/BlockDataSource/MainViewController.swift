@@ -12,7 +12,7 @@ import BlockDataSource
 
 class MainViewController: BlockTableViewController {
     override func configureDataSource(dataSource: List) {
-        dataSource.sections.append(
+        dataSource.sections = [
             List.Section(
                 rows: [
                     List.Row(
@@ -51,6 +51,6 @@ class MainViewController: BlockTableViewController {
                     )
                 ]
             )
-        )
+        ]
     }
 }
