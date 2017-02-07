@@ -15,7 +15,9 @@ public struct Middleware {
     public init<Cell: UITableViewCell>(apply: @escaping (Cell) -> Void) {
         self.cellClass = Cell.self
         self.apply = { cell in
-            apply(cell as! Cell)
+            if let cell = cell as? Cell {
+                apply(cell)
+            }
         }
     }
 }
