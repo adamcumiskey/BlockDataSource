@@ -37,6 +37,16 @@ class MainViewController: BlockTableViewController {
                     ),
                     List.Row(
                         configure: { cell in
+                            cell.textLabel?.text = "Middleware"
+                    },
+                        onSelect: { [unowned self] indexPath in
+                            let controller = MiddlewareViewController(style: .grouped)
+                            controller.title = "Middleware"
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
+                    ),
+                    List.Row(
+                        configure: { cell in
                             cell.textLabel?.text = "Collection View"
                         },
                         onSelect: { [unowned self] indexPath in
@@ -50,8 +60,8 @@ class MainViewController: BlockTableViewController {
             )
         ]
         
-        let boldTitles = Middleware { $0.textLabel?.font = .boldSystemFont(ofSize: 15) }
-        let disclosureIndicator = Middleware { $0.accessoryType = .disclosureIndicator }
+        let boldTitles = Middleware { $0.0.textLabel?.font = .boldSystemFont(ofSize: 15) }
+        let disclosureIndicator = Middleware { $0.0.accessoryType = .disclosureIndicator }
         dataSource.middlewareStack = [boldTitles, disclosureIndicator]
     }
 }

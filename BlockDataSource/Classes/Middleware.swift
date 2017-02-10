@@ -11,12 +11,12 @@ import Foundation
 
 public struct Middleware {
     var cellClass: UITableViewCell.Type
-    var apply: (UITableViewCell) -> Void
-    public init<Cell: UITableViewCell>(apply: @escaping (Cell) -> Void) {
+    var apply: (UITableViewCell, IndexPath, [List.Section]) -> Void // will the sections pass by value?
+    public init<Cell: UITableViewCell>(apply: @escaping (Cell, IndexPath, [List.Section]) -> Void) {
         self.cellClass = Cell.self
-        self.apply = { cell in
+        self.apply = { cell, indexPath, structure in
             if let cell = cell as? Cell {
-                apply(cell)
+                apply(cell, indexPath, structure)
             }
         }
     }

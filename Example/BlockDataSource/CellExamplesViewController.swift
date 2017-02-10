@@ -47,12 +47,20 @@ class CellExamplesViewController: BlockTableViewController {
                         cell.bigImageView.image = UIImage(named: "lego_burger")
                     }
                 ],
-                footer: .customView(UIImageView(image: UIImage(named: "king_burger")), height: 300)
+                footer:.customView({
+                    let view = UIImageView(image: UIImage(named: "king_burger"))
+                    view.contentMode = .scaleAspectFit
+                    return view
+                }(),
+                    height: 300
+                )
             )
         ]
         
-        let subtitleItalics = Middleware { $0.detailTextLabel?.font = .italicSystemFont(ofSize: 12) }
-        let aspectPhil = Middleware { (cell: ImageCell) in cell.bigImageView.contentMode = .scaleAspectFill }
+        let subtitleItalics = Middleware { $0.0.detailTextLabel?.font = .italicSystemFont(ofSize: 12) }
+        let aspectPhil = Middleware { (cell: ImageCell, indexPath: IndexPath, structure: [List.Section]) in
+            cell.bigImageView.contentMode = .scaleAspectFit
+        }
         dataSource.middlewareStack = [subtitleItalics, aspectPhil]
     }
 }

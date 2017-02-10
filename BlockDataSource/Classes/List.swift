@@ -264,7 +264,7 @@ extension List: UITableViewDataSource {
         // resonable default. can be overriden in configure block
         cell.selectionStyle = (row.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
         for middleware in middlewareStack {
-            middleware.apply(cell)
+            middleware.apply(cell, indexPath, self.sections)
         }
         row.configure(cell)
         return cell

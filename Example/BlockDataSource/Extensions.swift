@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 extension Array {
@@ -14,5 +15,13 @@ extension Array {
         let element = self[index]
         remove(at: index)
         insert(element, at: toIndex)
+    }
+}
+
+
+extension UIView {
+    func outline(color: UIColor = .green, borderWidth: CGFloat = 1.0) {
+        self.layer.borderColor = color.cgColor
+        self.layer.borderWidth = borderWidth
     }
 }
