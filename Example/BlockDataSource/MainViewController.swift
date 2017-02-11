@@ -40,7 +40,7 @@ class MainViewController: BlockTableViewController {
                             cell.textLabel?.text = "Middleware"
                     },
                         onSelect: { [unowned self] indexPath in
-                            let controller = MiddlewareViewController(style: .grouped)
+                            let controller = MiddlewareViewController()
                             controller.title = "Middleware"
                             self.navigationController?.pushViewController(controller, animated: true)
                         }

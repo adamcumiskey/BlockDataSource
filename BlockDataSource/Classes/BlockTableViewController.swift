@@ -35,10 +35,24 @@ public protocol ConfigurableTable: class {
     func configureDataSource(dataSource: List)
 }
 
+public protocol Table {
+    var table: UITableView! { get set }
+}
 
-public extension ConfigurableTable where Self: UITableViewController {
+extension UITableViewController: Table {
+    public var table: UITableView! {
+        get {
+            return self.tableView
+        }
+        set(newTableView) {
+            self.tableView = newTableView
+        }
+    }
+}
+
+public extension ConfigurableTable where Self: Table {
     public func createDataSource() {
-        guard let tableView = tableView else { return }
+        guard let tableView = table else { return }
         
         let dataSource = List()
         configureDataSource(dataSource: dataSource)
@@ -52,7 +66,7 @@ public extension ConfigurableTable where Self: UITableViewController {
     
     public func reloadDataAndUI() {
         createDataSource()
-        tableView.reloadData()
+        table?.reloadData()
     }
 }
 

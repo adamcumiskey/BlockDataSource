@@ -17,8 +17,7 @@ class RoundCorneredCell: UITableViewCell {
         case bottom
     }
     
-    var xInset: CGFloat = 20.0
-    var position: Postion = .middle {
+    public var position: Postion = .middle {
         didSet { layoutSubviews() }
     }
     
@@ -34,20 +33,25 @@ class RoundCorneredCell: UITableViewCell {
         }
     }
     
+    private var _cornerRadius: CGFloat? = nil
+    public var cornerRadius: CGFloat {
+        get {
+            return _cornerRadius ?? contentView.frame.height/2.0
+        }
+        set(newRadius){
+            _cornerRadius = newRadius
+            setNeedsLayout()
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .red
-        contentView.outline()
-
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.backgroundColor = _backgroundColor
-        
-        let newFrame = contentView.bounds.insetBy(dx: xInset, dy: 0)
-        contentView.frame = newFrame
         
         // Apply Corners
         var corners: UIRectCorner?
@@ -59,9 +63,7 @@ class RoundCorneredCell: UITableViewCell {
             corners = [.bottomLeft, .bottomRight]
         }
         
-        
         if let corners = corners {
-            let cornerRadius = contentView.frame.height/2.0
             let path = UIBezierPath(
                 roundedRect: contentView.bounds,
                 byRoundingCorners: corners,
@@ -71,5 +73,13 @@ class RoundCorneredCell: UITableViewCell {
             mask.path = path.cgPath
             contentView.layer.mask = mask
         }
+    }
+}
+
+
+extension UITableViewCell {
+    func drawCustomSeparator(with color: UIColor) {
+        let width = contentView.bounds.width
+        
     }
 }

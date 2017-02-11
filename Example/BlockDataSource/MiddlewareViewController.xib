@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16E144f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MiddlewareViewController" customModule="BlockDataSource_Example" customModuleProvider="target">
+            <connections>
+                <outlet property="leftMarginConstraint" destination="RMX-Qa-YfF" id="NJ9-F8-oWL"/>
+                <outlet property="rightMarginConstraint" destination="bmN-h7-nva" id="gog-Gb-0iW"/>
+                <outlet property="table" destination="eKi-oq-BKN" id="95g-n0-5uF"/>
+                <outlet property="view" destination="iN0-l3-epB" id="tNG-SJ-1id"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-oq-BKN">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="eKi-oq-BKN" secondAttribute="bottom" id="KGD-w6-fon"/>
+                <constraint firstItem="eKi-oq-BKN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="RMX-Qa-YfF"/>
+                <constraint firstAttribute="trailing" secondItem="eKi-oq-BKN" secondAttribute="trailing" id="bmN-h7-nva"/>
+                <constraint firstItem="eKi-oq-BKN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="clJ-RJ-eHx"/>
+            </constraints>
+            <point key="canvasLocation" x="-117.5" y="18.5"/>
+        </view>
+    </objects>
+</document>
