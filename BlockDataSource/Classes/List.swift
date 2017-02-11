@@ -263,11 +263,14 @@ extension List: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: row.reuseIdentifier, for: indexPath)
         // resonable default. can be overriden in configure block
         cell.selectionStyle = (row.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
+        row.configure(cell)
+        return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         for middleware in middlewareStack {
             middleware.apply(cell, indexPath, self.sections)
         }
-        row.configure(cell)
-        return cell
     }
 }
 

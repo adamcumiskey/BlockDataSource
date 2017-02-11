@@ -60,8 +60,8 @@ class MainViewController: BlockTableViewController {
             )
         ]
         
-        let boldTitles = Middleware { $0.0.textLabel?.font = .boldSystemFont(ofSize: 15) }
-        let disclosureIndicator = Middleware { $0.0.accessoryType = .disclosureIndicator }
-        dataSource.middlewareStack = [boldTitles, disclosureIndicator]
+        dataSource.middlewareStack = [
+            Middleware { $0.0.accessoryType = .disclosureIndicator }
+        ]
     }
 }

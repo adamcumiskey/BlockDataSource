@@ -22,7 +22,7 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
         }
     }
     
-    var data = ["a", "b", "c", "d", "e", "f"]
+    var data = (0..<100).map { "\($0)" }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,14 +45,27 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
                     cell.position = .top
                 } else if path.row == structure[path.section].rows.count-1 {
                     cell.position = .bottom
+                } else {
+                    cell.position = .middle
                 }
+            },
+            Middleware { [unowned self] (cell: RoundCorneredCell, path, structure) in
+                let hue = CGFloat(path.row)/CGFloat(self.data.count)
+                let color = UIColor(
+                    hue: hue,
+                    saturation: 1.0, 
+                    brightness: 1.0, 
+                    alpha: 1.0
+                )
+                cell.customSeparatorColor = color
+                print(hue)
             }
         ]
         dataSource.sections = [
             List.Section(
                 rows: data.map { n in
                     return List.Row { (cell: RoundCorneredCell) in
-                        cell.textLabel?.text = "\(n)"
+                        cell.textLabel?.text = n
                     }
                 }
             )

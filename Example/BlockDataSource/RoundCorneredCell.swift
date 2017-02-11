@@ -21,6 +21,11 @@ class RoundCorneredCell: UITableViewCell {
         didSet { layoutSubviews() }
     }
     
+    private weak var separator: UIView?
+    public var customSeparatorColor: UIColor? = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2044084821) {
+        didSet { layoutSubviews() }
+    }
+    
     private var _backgroundColor: UIColor? = .white
     override var backgroundColor: UIColor? {
         get {
@@ -58,9 +63,16 @@ class RoundCorneredCell: UITableViewCell {
         switch position {
         case .top:
             corners = [.topLeft, .topRight]
-        case .middle: break
+            if let separatorColor = customSeparatorColor {
+                drawCustomSeparator(with: separatorColor)
+            }
+        case .middle:
+            if let separatorColor = customSeparatorColor {
+                drawCustomSeparator(with: separatorColor)
+            }
         case .bottom:
             corners = [.bottomLeft, .bottomRight]
+            separator?.removeFromSuperview()
         }
         
         if let corners = corners {
@@ -74,12 +86,22 @@ class RoundCorneredCell: UITableViewCell {
             contentView.layer.mask = mask
         }
     }
-}
-
-
-extension UITableViewCell {
+    
     func drawCustomSeparator(with color: UIColor) {
-        let width = contentView.bounds.width
-        
+        if let separator = separator {
+            separator.backgroundColor = color
+        } else {
+            let view = UIView(
+                frame: CGRect(
+                    x: separatorInset.left,
+                    y: contentView.bounds.height-0.5,
+                    width: contentView.bounds.width - (separatorInset.left + separatorInset.right),
+                    height: 0.5
+                )
+            )
+            view.backgroundColor = color
+            separator = view
+            contentView.addSubview(view)
+        }
     }
 }
