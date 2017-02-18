@@ -30,7 +30,6 @@
 		66D010FD1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D010FC1E08C3C400D14B54 /* BlockDataSource_ExampleTests.swift */; };
 		66F1EB811E4AB3BF00A69893 /* MiddlewareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F1EB801E4AB3BF00A69893 /* MiddlewareViewController.swift */; };
 		66F1EB831E4ACA1300A69893 /* RoundCorneredCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F1EB821E4ACA1300A69893 /* RoundCorneredCell.swift */; };
-		66F1EB851E4ACA2400A69893 /* RoundCorneredCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66F1EB841E4ACA2400A69893 /* RoundCorneredCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,7 +71,6 @@
 		66D010FE1E08C3C400D14B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66F1EB801E4AB3BF00A69893 /* MiddlewareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiddlewareViewController.swift; sourceTree = "<group>"; };
 		66F1EB821E4ACA1300A69893 /* RoundCorneredCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundCorneredCell.swift; sourceTree = "<group>"; };
-		66F1EB841E4ACA2400A69893 /* RoundCorneredCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RoundCorneredCell.xib; sourceTree = "<group>"; };
 		80EDB7DE485C495EA382B249 /* Pods-BlockDataSource_ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockDataSource_ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlockDataSource_ExampleTests/Pods-BlockDataSource_ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		845312344886411B746B011C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		885603540DE1E7F03E82860D /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,7 +209,6 @@
 				62D87CAE1DD5096500AB1756 /* ImageCell.swift */,
 				62D87CAF1DD5096500AB1756 /* ImageCell.xib */,
 				66F1EB821E4ACA1300A69893 /* RoundCorneredCell.swift */,
-				66F1EB841E4ACA2400A69893 /* RoundCorneredCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -358,7 +355,6 @@
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				62843CC21DF8C02000E8D98D /* ImageReusableView.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				66F1EB851E4ACA2400A69893 /* RoundCorneredCell.xib in Resources */,
 				62826F151DD6281B009779FB /* ImageCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

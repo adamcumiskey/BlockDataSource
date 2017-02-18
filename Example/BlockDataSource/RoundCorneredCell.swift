@@ -39,13 +39,18 @@ class RoundCorneredCell: UITableViewCell {
     }
     
     private static let noCornerRadiusValue: CGFloat = 0.0001
-    private var maskLayer: CAShapeLayer!
+    private var maskLayer: CAShapeLayer
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        layer.masksToBounds = true
-        maskLayer = CAShapeLayer(layer: UIBezierPath(roundedRect: bounds, cornerRadius: RoundCorneredCell.noCornerRadiusValue))
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        maskLayer = CAShapeLayer(layer: UIBezierPath(roundedRect: .zero, cornerRadius: RoundCorneredCell.noCornerRadiusValue))
+
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         layer.mask = maskLayer
+        layer.masksToBounds = true
     }
     
     override func layoutSubviews() {
@@ -77,10 +82,10 @@ class RoundCorneredCell: UITableViewCell {
         
         // Don't render corners while editing
         let radius = isEditing ? RoundCorneredCell.noCornerRadiusValue : cornerRadius
-        layer.masksToBounds = !isEditing
+        let maskBounds = isEditing ? bounds.insetBy(dx: -200, dy: 0) : bounds
 
         let path = UIBezierPath(
-            roundedRect: bounds,
+            roundedRect: maskBounds,
             byRoundingCorners: corners,
             cornerRadii: CGSize(width: radius, height: radius)
         )

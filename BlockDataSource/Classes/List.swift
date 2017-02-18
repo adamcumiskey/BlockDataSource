@@ -175,8 +175,9 @@ public class List: NSObject {
         public var onDelete: IndexPathBlock?
         
         // Lets the dataSource know that this row can be reordered
-        public var reorderable: Bool = false
+        public var reorderable: Bool
         
+        public var shouldIndentWhileEditing: Bool
         
         /**
          Initialize a row
@@ -188,10 +189,18 @@ public class List: NSObject {
              - reorderable: Flag to indicate if this cell can be reordered
              - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
          */
-        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+        public init<Cell: UITableViewCell>(
+            configure: @escaping (Cell) -> Void,
+            onSelect: IndexPathBlock? = nil,
+            onDelete: IndexPathBlock? = nil,
+            reorderable: Bool = false,
+            shouldIndentWhileEditing: Bool = true,
+            customReuseIdentifier: String? = nil)
+        {
             self.onSelect = onSelect
             self.onDelete = onDelete
             self.reorderable = reorderable
+            self.shouldIndentWhileEditing = shouldIndentWhileEditing
             self.customReuseIdentifier = customReuseIdentifier
             
             self.cellClass = Cell.self
@@ -272,6 +281,7 @@ extension List: UITableViewDataSource {
             middleware.apply(cell, indexPath, self.sections)
         }
     }
+    
 }
 
 
@@ -320,9 +330,14 @@ extension List: UITableViewDelegate {
         }
     }
     
-    @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let row = self[indexPath]
         return row.onDelete != nil || row.reorderable == true
+    }
+    
+    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        let row = self[indexPath]
+        return row.shouldIndentWhileEditing
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -357,6 +372,13 @@ extension List: UITableViewDelegate {
                 sections[destinationIndexPath.section].rows.insert(row, at: destinationIndexPath.row)
             }
             reorder(sourceIndexPath, destinationIndexPath)
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) else { return }
+        for middleware in middlewareStack {
+            middleware.apply(cell, indexPath, self.sections)
         }
     }
 }

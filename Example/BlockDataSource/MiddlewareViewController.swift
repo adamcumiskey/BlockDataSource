@@ -54,6 +54,7 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
     
     func configureDataSource(dataSource: List) {
         let cornerMiddleware = Middleware { (cell: RoundCorneredCell, path, structure) in
+            cell.cornerRadius = 15.0
             if structure[path.section].rows.count == 1 {
                 cell.position = .single
             } else if path.row == 0 {
@@ -84,11 +85,16 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
                         },
                         onDelete: { [unowned self] indexPath in
                             self.data.remove(at: indexPath.row)
-                        }
+                        },
+                        reorderable: true,
+                        shouldIndentWhileEditing: false
                     )
                 }
             )
         ]
+        dataSource.onReorder = { [unowned self] _, _ in
+            self.table.reloadData()
+        }
     }
     
 }
