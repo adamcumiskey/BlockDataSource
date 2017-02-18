@@ -11,7 +11,7 @@ import Foundation
 
 public struct Middleware {
     var cellClass: UITableViewCell.Type
-    var apply: (UITableViewCell, IndexPath, [List.Section]) -> Void // will the sections pass by value?
+    public var apply: (UITableViewCell, IndexPath, [List.Section]) -> Void // will the sections pass by value?
     public init<Cell: UITableViewCell>(apply: @escaping (Cell, IndexPath, [List.Section]) -> Void) {
         self.cellClass = Cell.self
         self.apply = { cell, indexPath, structure in

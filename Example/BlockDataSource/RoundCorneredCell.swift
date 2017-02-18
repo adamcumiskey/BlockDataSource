@@ -15,6 +15,7 @@ class RoundCorneredCell: UITableViewCell {
         case top
         case middle
         case bottom
+        case single
     }
     
     public var position: Postion = .middle {
@@ -25,19 +26,7 @@ class RoundCorneredCell: UITableViewCell {
     public var customSeparatorColor: UIColor? = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2044084821) {
         didSet { layoutSubviews() }
     }
-    
-    private var _backgroundColor: UIColor? = .white
-    override var backgroundColor: UIColor? {
-        get {
-            return _backgroundColor
-        }
-        set(newColor) {
-            super.backgroundColor = nil
-            _backgroundColor = newColor
-            setNeedsLayout()
-        }
-    }
-    
+
     private var _cornerRadius: CGFloat? = nil
     public var cornerRadius: CGFloat {
         get {
@@ -49,15 +38,24 @@ class RoundCorneredCell: UITableViewCell {
         }
     }
     
+    private static let noCornerRadiusValue: CGFloat = 0.0001
+    private var maskLayer: CAShapeLayer!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        contentView.layer.masksToBounds = true
+        layer.masksToBounds = true
+        maskLayer = CAShapeLayer(layer: UIBezierPath(roundedRect: bounds, cornerRadius: RoundCorneredCell.noCornerRadiusValue))
+        maskLayer.frame = bounds
+        layer.mask = maskLayer
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.backgroundColor = _backgroundColor
-        
+        self.updateStyle(animated: true)
+        maskLayer.frame = bounds
+    }
+    
+    private func updateStyle(animated: Bool) {
         // Apply Corners
         var corners: UIRectCorner?
         switch position {
@@ -73,32 +71,54 @@ class RoundCorneredCell: UITableViewCell {
         case .bottom:
             corners = [.bottomLeft, .bottomRight]
             separator?.removeFromSuperview()
+        case .single:
+            corners = [.topLeft, .topRight, .bottomLeft, .bottomRight]
+            separator?.removeFromSuperview()
         }
         
+        // Don't render corners while editing
+        if isEditing {
+            corners = nil
+        }
+        
+        let path: UIBezierPath
         if let corners = corners {
-            let path = UIBezierPath(
-                roundedRect: contentView.bounds,
+            path = UIBezierPath(
+                roundedRect: bounds,
                 byRoundingCorners: corners,
                 cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
             )
-            let mask = CAShapeLayer()
-            mask.path = path.cgPath
-            contentView.layer.mask = mask
+        } else {
+            path = UIBezierPath(
+                roundedRect: bounds,
+                cornerRadius: RoundCorneredCell.noCornerRadiusValue
+            )
         }
+        if animated {
+            let animation = CABasicAnimation(keyPath: "path")
+            animation.fromValue = maskLayer.path
+            animation.toValue = path.cgPath
+            animation.duration = 0.23
+            maskLayer.add(animation, forKey: "maskPath")
+        }
+        CATransaction.begin()
+        CATransaction.disableActions()
+        maskLayer.path = path.cgPath
+        CATransaction.commit()
     }
     
     func drawCustomSeparator(with color: UIColor) {
+        let frame = CGRect(
+            x: separatorInset.left,
+            y: contentView.bounds.height-0.5,
+            width: contentView.bounds.width - (separatorInset.left + separatorInset.right),
+            height: 0.5
+        )
         if let separator = separator {
             separator.backgroundColor = color
+            separator.frame = frame
         } else {
-            let view = UIView(
-                frame: CGRect(
-                    x: separatorInset.left,
-                    y: contentView.bounds.height-0.5,
-                    width: contentView.bounds.width - (separatorInset.left + separatorInset.right),
-                    height: 0.5
-                )
-            )
+            let view = UIView(frame: frame)
             view.backgroundColor = color
             separator = view
             contentView.addSubview(view)

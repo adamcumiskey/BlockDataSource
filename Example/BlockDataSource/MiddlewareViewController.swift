@@ -26,10 +26,13 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        margin = 10
+        margin = 15
         view.backgroundColor = table.backgroundColor
         table.contentInset = .init(top: 10, left: 0, bottom: 10, right: 0)
         table.separatorStyle = .none
+        table.showsVerticalScrollIndicator = false
+        
+        navigationItem.rightBarButtonItem = editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,36 +40,53 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
         reloadDataAndUI()
     }
     
-    func configureDataSource(dataSource: List) {
-        dataSource.middlewareStack = [
-            Middleware { (cell: RoundCorneredCell, path, structure) in
-                cell.cornerRadius = 5.0
-                if path.row == 0 {
-                    cell.position = .top
-                } else if path.row == structure[path.section].rows.count-1 {
-                    cell.position = .bottom
-                } else {
-                    cell.position = .middle
-                }
-            },
-            Middleware { [unowned self] (cell: RoundCorneredCell, path, structure) in
-                let hue = CGFloat(path.row)/CGFloat(self.data.count)
-                let color = UIColor(
-                    hue: hue,
-                    saturation: 1.0, 
-                    brightness: 1.0, 
-                    alpha: 1.0
-                )
-                cell.customSeparatorColor = color
-                print(hue)
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        self.margin = editing ? 0 : 15
+        UIView.animate(
+            withDuration: 0.23,
+            animations: view.layoutIfNeeded,
+            completion: { finished in
+                super.setEditing(editing, animated: animated)
+                self.table.setEditing(editing, animated: animated)
             }
-        ]
+        )
+    }
+    
+    func configureDataSource(dataSource: List) {
+        let cornerMiddleware = Middleware { (cell: RoundCorneredCell, path, structure) in
+            cell.cornerRadius = 10
+            if structure[path.section].rows.count == 1 {
+                cell.position = .single
+            } else if path.row == 0 {
+                cell.position = .top
+            } else if path.row == structure[path.section].rows.count-1 {
+                cell.position = .bottom
+            } else {
+                cell.position = .middle
+            }
+        }
+        let colorMiddleware = Middleware { [unowned self] (cell: RoundCorneredCell, path, structure) in
+            let hue = CGFloat(path.row)/CGFloat(self.data.count)
+            let color = UIColor(
+                hue: hue,
+                saturation: 1.0,
+                brightness: 1.0,
+                alpha: 1.0
+            )
+            cell.customSeparatorColor = color
+        }
+        dataSource.middlewareStack = [cornerMiddleware, colorMiddleware]
         dataSource.sections = [
             List.Section(
                 rows: data.map { n in
-                    return List.Row { (cell: RoundCorneredCell) in
-                        cell.textLabel?.text = n
-                    }
+                    return List.Row(
+                        configure: { (cell: RoundCorneredCell) in
+                            cell.textLabel?.text = n
+                        },
+                        onDelete: { [unowned self] indexPath in
+                            self.data.remove(at: indexPath.row)
+                        }
+                    )
                 }
             )
         ]
