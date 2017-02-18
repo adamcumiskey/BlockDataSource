@@ -54,7 +54,6 @@ class MiddlewareViewController: UIViewController, ConfigurableTable, Table {
     
     func configureDataSource(dataSource: List) {
         let cornerMiddleware = Middleware { (cell: RoundCorneredCell, path, structure) in
-            cell.cornerRadius = 10
             if structure[path.section].rows.count == 1 {
                 cell.position = .single
             } else if path.row == 0 {

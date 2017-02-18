@@ -45,19 +45,18 @@ class RoundCorneredCell: UITableViewCell {
         super.awakeFromNib()
         layer.masksToBounds = true
         maskLayer = CAShapeLayer(layer: UIBezierPath(roundedRect: bounds, cornerRadius: RoundCorneredCell.noCornerRadiusValue))
-        maskLayer.frame = bounds
         layer.mask = maskLayer
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.updateStyle(animated: true)
         maskLayer.frame = bounds
+        self.updateStyle(animated: true)
     }
     
     private func updateStyle(animated: Bool) {
         // Apply Corners
-        var corners: UIRectCorner?
+        var corners: UIRectCorner = []
         switch position {
         case .top:
             corners = [.topLeft, .topRight]
@@ -77,23 +76,14 @@ class RoundCorneredCell: UITableViewCell {
         }
         
         // Don't render corners while editing
-        if isEditing {
-            corners = nil
-        }
-        
-        let path: UIBezierPath
-        if let corners = corners {
-            path = UIBezierPath(
-                roundedRect: bounds,
-                byRoundingCorners: corners,
-                cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
-            )
-        } else {
-            path = UIBezierPath(
-                roundedRect: bounds,
-                cornerRadius: RoundCorneredCell.noCornerRadiusValue
-            )
-        }
+        let radius = isEditing ? RoundCorneredCell.noCornerRadiusValue : cornerRadius
+        layer.masksToBounds = !isEditing
+
+        let path = UIBezierPath(
+            roundedRect: bounds,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
         if animated {
             let animation = CABasicAnimation(keyPath: "path")
             animation.fromValue = maskLayer.path
