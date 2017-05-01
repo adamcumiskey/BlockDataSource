@@ -30,20 +30,20 @@
 import UIKit
 
 
-public protocol ConfigurableTable: class {
-    var dataSource: List? { get set }
-    func configureDataSource(dataSource: List)
+public protocol BlockDataSourceConfigurable: class {
+    var dataSource: DataSource? { get set }
+    func configureDataSource(dataSource: DataSource)
 }
 
 
-public extension ConfigurableTable where Self: UITableViewController {
+public extension BlockDataSourceConfigurable where Self: UITableViewController {
     public func createDataSource() {
         guard let tableView = tableView else { return }
         
-        let dataSource = List()
+        let dataSource = DataSource()
         configureDataSource(dataSource: dataSource)
         
-        dataSource.registerReuseIdentifiers(to: tableView)
+        tableView.registerReuseIdentifiers(forDataSource: dataSource)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         
@@ -56,23 +56,51 @@ public extension ConfigurableTable where Self: UITableViewController {
     }
 }
 
+public extension BlockDataSourceConfigurable where Self: UICollectionViewController {
+    public func createDataSource() {
+        guard let collectionView = collectionView else { return }
 
-open class BlockTableViewController: UITableViewController, ConfigurableTable {
-    public var dataSource: List?
+        let dataSource = DataSource()
+        configureDataSource(dataSource: dataSource)
+
+        collectionView.registerReuseIdentifiers(forDataSource: dataSource)
+        collectionView.dataSource = dataSource
+        collectionView.delegate = dataSource
+
+        self.dataSource = dataSource
+    }
+
+    public func reloadDataAndUI() {
+        createDataSource()
+        collectionView?.reloadData()
+    }
+}
+
+
+open class BlockTableViewController: UITableViewController, BlockDataSourceConfigurable {
+    public var dataSource: DataSource?
     
-    open func configureDataSource(dataSource: List) {
+    open func configureDataSource(dataSource: DataSource) {
         // Base class does nothing
     }
-    
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 50.0
-        tableView.separatorInset = UIEdgeInsets.zero
-    }
-    
+
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadDataAndUI()
     }
 }
+
+
+open class BlockCollectionViewController: UICollectionViewController, BlockDataSourceConfigurable {
+    public var dataSource: DataSource?
+
+    open func configureDataSource(dataSource: DataSource) {
+        // Base class does nothing
+    }
+
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadDataAndUI()
+    }
+}
+
