@@ -14,12 +14,6 @@ struct Item: Equatable {
     var title: String
 }
 
-extension Item {
-    func configureCell(cell: Cell) -> Void {
-        cell.textLabel?.text = title
-    }
-}
-
 func ==(lhs: Item, rhs: Item) -> Bool {
     return lhs.title == rhs.title
 }
@@ -43,12 +37,14 @@ class EditingViewController: BlockTableViewController {
         navigationItem.rightBarButtonItem = editButtonItem
     }
     
-    override func configureDataSource(dataSource: List) {
+    override func configureDataSource(dataSource: DataSource) {
         dataSource.sections = [
-            List.Section(
-                rows: data.map { item in
-                    return List.Row(
-                        configure: item.configureCell,
+            DataSource.Section(
+                items: data.map { item in
+                    return DataSource.ListItem(
+                        configure: { (cell: Cell) in
+                            cell.textLabel?.text = item.title
+                        },
                         onDelete: { [unowned self] indexPath in
                             if let index = self.data.index(of: item) {
                                 self.data.remove(at: index)

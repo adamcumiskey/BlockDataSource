@@ -11,19 +11,18 @@ import BlockDataSource
 
 
 class CellExamplesViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: List) {
+    override func configureDataSource(dataSource: DataSource) {
         dataSource.sections = [
-            List.Section(
-                header: .label("Examples"),
-                rows: [
-                    List.Row { cell in
+            DataSource.Section(
+                items: [
+                    DataSource.ListItem { (cell: Cell) -> Void in
                         cell.textLabel?.text = "Basic Cell"
                     },
-                    List.Row { (cell: SubtitleCell) in
+                    DataSource.ListItem { (cell: SubtitleCell) in
                         cell.textLabel?.text = "Subtitle Cell"
                         cell.detailTextLabel?.text = "This is a subtitle"
                     },
-                    List.Row { (cell: RightAlignedCell) in
+                    DataSource.ListItem { (cell: RightAlignedCell) in
                         cell.textLabel?.text = "Switch"
                         cell.detailTextLabel?.text = "Switch it up"
                         
@@ -40,14 +39,12 @@ class CellExamplesViewController: BlockTableViewController {
                     }
                 ]
             ),
-            List.Section(
-                header: .label("Burger Section 🍔"),
-                rows: [
-                    List.Row { (cell: ImageCell) in
+            DataSource.Section(
+                items: [
+                    DataSource.ListItem { (cell: ImageCell) in
                         cell.bigImageView.image = UIImage(named: "lego_burger")
                     }
-                ],
-                footer: .customView(UIImageView(image: UIImage(named: "king_burger")), height: 300)
+                ]
             )
         ]
         
