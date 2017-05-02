@@ -51,8 +51,8 @@ class MainViewController: BlockTableViewController {
                 )
             ],
             middleware: [
-                Middleware { $0.textLabel?.font = .boldSystemFont(ofSize: 15) },
-                Middleware { $0.accessoryType = .disclosureIndicator }
+                ListMiddleware { $0.textLabel?.font = .boldSystemFont(ofSize: 15) },
+                ListMiddleware { (cell: UITableViewCell) in cell.accessoryType = .disclosureIndicator }
             ]
         )
     }

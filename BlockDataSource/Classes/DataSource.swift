@@ -70,7 +70,14 @@ public class DataSource: NSObject {
     
     /// Cell configuration middleware.
     /// Gets applied in DataSource order to cells matching the middleware cellClass type
-    public var middlewareStack = [Middleware]()
+    public var middleware = [Middleware]() {
+        didSet {
+            _listMiddleware = middleware.filter { $0 is ListMiddleware }
+            _gridMiddleware = middleware.filter { $0 is GridMiddleware }
+        }
+    }
+    fileprivate var _listMiddleware = [Middleware]()
+    fileprivate var _gridMiddleware = [Middleware]()
     
     public override init() { super.init() }
     
@@ -87,7 +94,9 @@ public class DataSource: NSObject {
         self.onReorder = onReorder
         self.onScroll = onScroll
         if let middleware = middleware {
-            self.middlewareStack = middleware
+            self.middleware = middleware
+            self._listMiddleware = middleware.filter { $0 is ListMiddleware }
+            self._gridMiddleware = middleware.filter { $0 is GridMiddleware }
         }
     }
     
@@ -409,9 +418,6 @@ extension DataSource: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: item.reuseIdentifier, for: indexPath)
         // resonable default. can be overriden in configure block
         cell.selectionStyle = (item.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
-        for middleware in middlewareStack {
-            middleware.apply(cell)
-        }
         item.configure(cell)
         return cell
     }
@@ -421,6 +427,12 @@ extension DataSource: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension DataSource: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        for middleware in _listMiddleware {
+            middleware.apply(cell)
+        }
+    }
+
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let onSelect = self[indexPath].onSelect {
             onSelect(indexPath)
@@ -557,6 +569,12 @@ extension DataSource: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension DataSource: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        for middleware in _gridMiddleware {
+            middleware.apply(cell)
+        }
+    }
+
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return self[indexPath].onSelect != nil
     }

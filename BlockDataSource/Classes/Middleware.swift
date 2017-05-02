@@ -9,11 +9,24 @@
 import Foundation
 
 
-public struct Middleware {
-    var cellClass: UITableViewCell.Type
-    var apply: (UITableViewCell) -> Void
+public protocol Middleware {
+    var apply: (UIView) -> Void { get }
+}
+
+public struct ListMiddleware: Middleware {
+    public var apply: (UIView) -> Void
     public init<Cell: UITableViewCell>(apply: @escaping (Cell) -> Void) {
-        self.cellClass = Cell.self
+        self.apply = { cell in
+            if let cell = cell as? Cell {
+                apply(cell)
+            }
+        }
+    }
+}
+
+public struct GridMiddleware: Middleware {
+    public var apply: (UIView) -> Void
+    public init<Cell: UICollectionViewCell>(apply: @escaping (Cell) -> Void) {
         self.apply = { cell in
             if let cell = cell as? Cell {
                 apply(cell)
