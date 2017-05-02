@@ -12,10 +12,10 @@ import Foundation
 // MARK: -
 /// UITableView delegate and dataSource with block-based constructors
 public class ListDataSource: NSObject, DataSource {
-    public typealias Item = ListItem
+    public typealias ViewType = List
 
     /// The section data for the table view
-    public var sections = [Section<Item>]()
+    public var sections = [Section<ViewType>]()
 
     /// Callback for when a item is reordered
     public var onReorder: ReorderBlock?
@@ -25,7 +25,7 @@ public class ListDataSource: NSObject, DataSource {
 
     /// Cell configuration middleware.
     /// Gets applied in DataSource order to cells matching the middleware cellClass type
-    public var middleware: [Item.MiddlewareType]
+    public var middleware: [ViewType.Middleware]
 
     /**
      Initialize a DataSource
@@ -35,7 +35,7 @@ public class ListDataSource: NSObject, DataSource {
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
      - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    public init(sections: [Section<Item>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Item.MiddlewareType] = []) {
+    public init(sections: [Section<ViewType>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [ViewType.Middleware] = []) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
@@ -47,7 +47,7 @@ public class ListDataSource: NSObject, DataSource {
     }
 
     /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section<Item>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public convenience init(section: Section<ViewType>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [section],
             onReorder: onReorder,
@@ -56,9 +56,9 @@ public class ListDataSource: NSObject, DataSource {
     }
 
     /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public convenience init(items: [ViewType.Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
-            sections: [Section<Item>(items: items)],
+            sections: [Section<ViewType>(items: items)],
             onReorder: onReorder,
             onScroll: onScroll
         )
@@ -194,7 +194,7 @@ public extension UITableView {
     public func registerReuseIdentifiers(forDataSource dataSource: ListDataSource) {
         for section in dataSource.sections {
             if let header = section.header {
-                register(headerFooter: header)
+                register(sectionDecoration: header)
             }
             for item in section.items {
                 if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
@@ -205,17 +205,17 @@ public extension UITableView {
                 }
             }
             if let footer = section.footer {
-                register(headerFooter: footer)
+                register(sectionDecoration: footer)
             }
         }
     }
 
-    private func register(headerFooter: ListHeader) {
-        if let _ = Bundle.main.path(forResource: headerFooter.reuseIdentifier, ofType: "nib") {
-            let nib = UINib(nibName: headerFooter.reuseIdentifier, bundle: nil)
-            register(nib, forHeaderFooterViewReuseIdentifier: headerFooter.reuseIdentifier)
+    private func register(sectionDecoration: ListSectionDecoration) {
+        if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            register(nib, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
         } else {
-            register(headerFooter.viewClass, forHeaderFooterViewReuseIdentifier: headerFooter.reuseIdentifier)
+            register(sectionDecoration.viewClass, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
         }
     }
 }

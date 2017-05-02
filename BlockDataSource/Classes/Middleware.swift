@@ -9,11 +9,11 @@
 import Foundation
 
 
-public protocol Middleware {
+public protocol MiddlewareProtocol {
     var apply: (UIView) -> Void { get }
 }
 
-public struct ListMiddleware: Middleware {
+public struct ListMiddleware: MiddlewareProtocol {
     public var apply: (UIView) -> Void
     public init<Cell: UITableViewCell>(apply: @escaping (Cell) -> Void) {
         self.apply = { cell in
@@ -24,7 +24,7 @@ public struct ListMiddleware: Middleware {
     }
 }
 
-public struct GridMiddleware: Middleware {
+public struct GridMiddleware: MiddlewareProtocol {
     public var apply: (UIView) -> Void
     public init<Cell: UICollectionViewCell>(apply: @escaping (Cell) -> Void) {
         self.apply = { cell in
