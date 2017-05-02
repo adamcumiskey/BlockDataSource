@@ -11,12 +11,12 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func createDataSource() -> DataSource {
+    override func createDataSource() -> DataSource<ListItem> {
         return DataSource(
             sections: [
                 DataSource.Section(
                     items: [
-                        DataSource.ListItem(
+                        ListItem(
                             configure: { cell in
                                 cell.textLabel?.text = "Cell Types"
                             },
@@ -26,7 +26,7 @@ class MainViewController: BlockTableViewController {
                                 self.navigationController?.pushViewController(testVC, animated: true)
                             }
                         ),
-                        DataSource.ListItem(
+                        ListItem(
                             configure: { cell in
                                 cell.textLabel?.text = "Editing"
                             },
@@ -36,7 +36,7 @@ class MainViewController: BlockTableViewController {
                                 self.navigationController?.pushViewController(reorderVC, animated: true)
                             }
                         ),
-                        DataSource.ListItem(
+                        ListItem(
                             configure: { cell in
                                 cell.textLabel?.text = "Collection View"
                             },

@@ -31,15 +31,15 @@ class CollectionExampleViewController: BlockCollectionViewController {
         }
     }
     
-    override func createDataSource() -> DataSource {
+    override func createDataSource() -> DataSource<GridItem> {
         return DataSource(
             sections: [
                 DataSource.Section(
-                    header: DataSource.HeaderFooter { (view: ImageReusableView) in
+                    header: HeaderFooter { (view: ImageReusableView) in
                         view.imageView.image = UIImage(named: "double_burger")
                     },
                     items: images.map { image in
-                        return DataSource.GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+                        return GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
                             cell.imageView.image = image
                         }
                     }

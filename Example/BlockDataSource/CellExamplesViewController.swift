@@ -11,19 +11,19 @@ import BlockDataSource
 
 
 class CellExamplesViewController: BlockTableViewController {
-    override func createDataSource() -> DataSource {
+    override func createDataSource() -> DataSource<ListItem> {
         return DataSource(
             sections: [
                 DataSource.Section(
                     items: [
-                        DataSource.ListItem { (cell: Cell) -> Void in
+                        ListItem { (cell: Cell) -> Void in
                             cell.textLabel?.text = "Basic Cell"
                         },
-                        DataSource.ListItem { (cell: SubtitleCell) in
+                        ListItem { (cell: SubtitleCell) in
                             cell.textLabel?.text = "Subtitle Cell"
                             cell.detailTextLabel?.text = "This is a subtitle"
                         },
-                        DataSource.ListItem { (cell: RightAlignedCell) in
+                        ListItem { (cell: RightAlignedCell) in
                             cell.textLabel?.text = "Switch"
                             cell.detailTextLabel?.text = "Switch it up"
 

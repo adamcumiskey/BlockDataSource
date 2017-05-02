@@ -37,12 +37,12 @@ class EditingViewController: BlockTableViewController {
         navigationItem.rightBarButtonItem = editButtonItem
     }
     
-    override func createDataSource() -> DataSource {
+    override func createDataSource() -> DataSource<ListItem> {
         return DataSource(
             sections: [
                 DataSource.Section(
                     items: data.map { item in
-                        return DataSource.ListItem(
+                        return ListItem(
                             configure: { (cell: Cell) in
                                 cell.textLabel?.text = item.title
                             },
