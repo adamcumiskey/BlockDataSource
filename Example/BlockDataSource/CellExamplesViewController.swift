@@ -16,14 +16,14 @@ class CellExamplesViewController: BlockTableViewController {
             sections: [
                 DataSource.Section(
                     items: [
-                        DataSource.ListItem { (cell: Cell) -> Void in
+                        GenericItem { (cell: Cell) -> Void in
                             cell.textLabel?.text = "Basic Cell"
                         },
-                        DataSource.ListItem { (cell: SubtitleCell) in
+                        GenericItem { (cell: SubtitleCell) in
                             cell.textLabel?.text = "Subtitle Cell"
                             cell.detailTextLabel?.text = "This is a subtitle"
                         },
-                        DataSource.ListItem { (cell: RightAlignedCell) in
+                        GenericItem { (cell: RightAlignedCell) in
                             cell.textLabel?.text = "Switch"
                             cell.detailTextLabel?.text = "Switch it up"
 

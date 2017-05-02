@@ -79,8 +79,8 @@ public class DataSource: NSObject {
     fileprivate var _listMiddleware = [Middleware]()
     fileprivate var _gridMiddleware = [Middleware]()
     
-    public override init() { super.init() }
-    
+//    public override init() { super.init() }
+
     /**
      Initialize a DataSource
      
@@ -89,7 +89,8 @@ public class DataSource: NSObject {
          - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
          - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware]? = nil) {
+    public convenience init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware]? = nil) {
+        self.init()
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
@@ -170,129 +171,6 @@ public class DataSource: NSObject {
         }
     }
 
-
-    // MARK: -
-
-    public struct ListItem: DataSourceItem {
-        
-        // The block which configures the cell
-        public var configure: ConfigureBlock
-
-        // The block that executes when the cell is tapped
-        public var onSelect: IndexPathBlock?
-        
-        // The block that executes when the cell is deleted
-        public var onDelete: IndexPathBlock?
-        
-        // Lets the dataSource know that this item can be reordered
-        public var reorderable: Bool = false
-
-        public var viewClass: UIView.Type
-
-        private var customReuseIdentifier: String?
-
-        public var reuseIdentifier: String {
-            if let customReuseIdentifier = customReuseIdentifier {
-                return customReuseIdentifier
-            } else {
-                return String(describing: viewClass)
-            }
-        }
-
-        /**
-         Initialize a item
-         
-           - parameters:
-             - configure: The cell configuration block.
-             - onSelect: The closure to execute when the cell is tapped
-             - onDelete: The closure to execute when the cell is deleted
-             - reorderable: Flag to indicate if this cell can be reordered
-             - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
-         */
-        public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
-            self.onSelect = onSelect
-            self.onDelete = onDelete
-            self.reorderable = reorderable
-            self.customReuseIdentifier = customReuseIdentifier
-            
-            self.viewClass = Cell.self
-            self.configure = { cell in
-                configure(cell as! Cell)
-            }
-        }
-        
-        // Convienence init for trailing closure syntax
-        public init<Cell: UITableViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
-            self.init(
-                configure: configure,
-                onSelect: nil,
-                onDelete: nil,
-                reorderable: reorderable
-            )
-        }
-    }
-
-
-    // MARK: -
-
-    public struct GridItem: DataSourceItem {
-
-        // The block which configures the cell
-        public var configure: ConfigureBlock
-
-        // The block that executes when the cell is tapped
-        public var onSelect: IndexPathBlock?
-
-        // The block that executes when the cell is deleted
-        public var onDelete: IndexPathBlock?
-
-        // Lets the dataSource know that this item can be reordered
-        public var reorderable: Bool = false
-
-        public var viewClass: UIView.Type
-
-        private var customReuseIdentifier: String?
-
-        public var reuseIdentifier: String {
-            if let customReuseIdentifier = customReuseIdentifier {
-                return customReuseIdentifier
-            } else {
-                return String(describing: viewClass)
-            }
-        }
-
-        /**
-         Initialize a item
-
-         - parameters:
-         - configure: The cell configuration block.
-         - onSelect: The closure to execute when the cell is tapped
-         - onDelete: The closure to execute when the cell is deleted
-         - reorderable: Flag to indicate if this cell can be reordered
-         - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
-         */
-        public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
-            self.onSelect = onSelect
-            self.onDelete = onDelete
-            self.reorderable = reorderable
-            self.customReuseIdentifier = customReuseIdentifier
-
-            self.viewClass = Cell.self
-            self.configure = { cell in
-                configure(cell as! Cell)
-            }
-        }
-
-        // Convienence init for trailing closure syntax
-        public init<Cell: UICollectionViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
-            self.init(
-                configure: configure,
-                onSelect: nil,
-                onDelete: nil,
-                reorderable: reorderable
-            )
-        }
-    }
 
 
     // MARK: -
@@ -417,7 +295,7 @@ extension DataSource: UITableViewDataSource {
         let item = self[indexPath]
         let cell = tableView.dequeueReusableCell(withIdentifier: item.reuseIdentifier, for: indexPath)
         // resonable default. can be overriden in configure block
-        cell.selectionStyle = (item.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
+        cell.selectionStyle = (item.onSelect != nil) ? .default : .none
         item.configure(cell)
         return cell
     }
@@ -589,10 +467,143 @@ extension DataSource: UICollectionViewDelegate {
 
 // MARK: - UIScrollViewDelegate
 
-extension DataSource {
+extension DataSource: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let onScroll = onScroll {
             onScroll(scrollView)
         }
     }
 }
+
+
+
+// MARK: -
+
+public struct GenericItem: DataSourceItem {
+
+    // The block which configures the cell
+    public var configure: ConfigureBlock
+
+    // The block that executes when the cell is tapped
+    public var onSelect: IndexPathBlock?
+
+    // The block that executes when the cell is deleted
+    public var onDelete: IndexPathBlock?
+
+    // Lets the dataSource know that this item can be reordered
+    public var reorderable: Bool = false
+
+    public var viewClass: UIView.Type
+
+    fileprivate var customReuseIdentifier: String?
+
+    public var reuseIdentifier: String {
+        if let customReuseIdentifier = customReuseIdentifier {
+            return customReuseIdentifier
+        } else {
+            return String(describing: viewClass)
+        }
+    }
+
+    /**
+     Initialize a item
+
+     - parameters:
+     - configure: The cell configuration block.
+     - onSelect: The closure to execute when the cell is tapped
+     - onDelete: The closure to execute when the cell is deleted
+     - reorderable: Flag to indicate if this cell can be reordered
+     - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+     */
+    public init<Cell: UIView>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+        self.onSelect = onSelect
+        self.onDelete = onDelete
+        self.reorderable = reorderable
+        self.customReuseIdentifier = customReuseIdentifier
+
+        self.viewClass = Cell.self
+        self.configure = { cell in
+            configure(cell as! Cell)
+        }
+    }
+
+    // Convienence init for trailing closure syntax
+    public init<Cell: UIView>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+        self.init(
+            configure: configure,
+            onSelect: nil,
+            onDelete: nil,
+            reorderable: reorderable
+        )
+    }
+}
+
+//extension GenericItem {
+//    /**
+//     Initialize a item
+//
+//     - parameters:
+//     - configure: The cell configuration block.
+//     - onSelect: The closure to execute when the cell is tapped
+//     - onDelete: The closure to execute when the cell is deleted
+//     - reorderable: Flag to indicate if this cell can be reordered
+//     - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+//     */
+//    public init<Cell: UITableViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+//        self.onSelect = onSelect
+//        self.onDelete = onDelete
+//        self.reorderable = reorderable
+//        self.customReuseIdentifier = customReuseIdentifier
+//
+//        self.viewClass = Cell.self
+//        self.configure = { cell in
+//            configure(cell as! Cell)
+//        }
+//    }
+//
+//    // Convienence init for trailing closure syntax
+//    public init<Cell: UITableViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+//        self.init(
+//            configure: configure,
+//            onSelect: nil,
+//            onDelete: nil,
+//            reorderable: reorderable
+//        )
+//    }
+//
+//}
+//
+//extension GenericItem {
+//    /**
+//     Initialize a item
+//
+//     - parameters:
+//     - configure: The cell configuration block.
+//     - onSelect: The closure to execute when the cell is tapped
+//     - onDelete: The closure to execute when the cell is deleted
+//     - reorderable: Flag to indicate if this cell can be reordered
+//     - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+//     */
+//    public init<Cell: UICollectionViewCell>(configure: @escaping (Cell) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = true, customReuseIdentifier: String? = nil) {
+//        self.onSelect = onSelect
+//        self.onDelete = onDelete
+//        self.reorderable = reorderable
+//        self.customReuseIdentifier = customReuseIdentifier
+//
+//        self.viewClass = Cell.self
+//        self.configure = { cell in
+//            configure(cell as! Cell)
+//        }
+//    }
+//
+//    // Convienence init for trailing closure syntax
+//    public init<Cell: UICollectionViewCell>(reorderable: Bool = true, configure: @escaping (Cell) -> Void) {
+//        self.init(
+//            configure: configure,
+//            onSelect: nil,
+//            onDelete: nil,
+//            reorderable: reorderable
+//        )
+//    }
+//}
+

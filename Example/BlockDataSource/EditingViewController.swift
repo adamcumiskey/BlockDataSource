@@ -42,7 +42,7 @@ class EditingViewController: BlockTableViewController {
             sections: [
                 DataSource.Section(
                     items: data.map { item in
-                        return DataSource.ListItem(
+                        return GenericItem(
                             configure: { (cell: Cell) in
                                 cell.textLabel?.text = item.title
                             },
