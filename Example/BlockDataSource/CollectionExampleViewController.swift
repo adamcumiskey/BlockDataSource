@@ -39,7 +39,7 @@ class CollectionExampleViewController: BlockCollectionViewController {
                         view.imageView.image = UIImage(named: "double_burger")
                     },
                     items: images.map { image in
-                        return DataSource.GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+                        return GenericItem(reorderable: true) { (cell: ImageCollectionViewCell) in
                             cell.imageView.image = image
                         }
                     }

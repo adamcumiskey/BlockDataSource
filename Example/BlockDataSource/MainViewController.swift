@@ -16,8 +16,8 @@ class MainViewController: BlockTableViewController {
             sections: [
                 DataSource.Section(
                     items: [
-                        DataSource.ListItem(
-                            configure: { cell in
+                        GenericItem(
+                            configure: { (cell: UITableViewCell) in
                                 cell.textLabel?.text = "Cell Types"
                             },
                             onSelect: { [unowned self] indexPath in
@@ -26,8 +26,8 @@ class MainViewController: BlockTableViewController {
                                 self.navigationController?.pushViewController(testVC, animated: true)
                             }
                         ),
-                        DataSource.ListItem(
-                            configure: { cell in
+                        GenericItem(
+                            configure: { (cell: UITableViewCell) in
                                 cell.textLabel?.text = "Editing"
                             },
                             onSelect: { [unowned self] indexPath in
@@ -36,8 +36,8 @@ class MainViewController: BlockTableViewController {
                                 self.navigationController?.pushViewController(reorderVC, animated: true)
                             }
                         ),
-                        DataSource.ListItem(
-                            configure: { cell in
+                        GenericItem(
+                            configure: { (cell: UITableViewCell) in
                                 cell.textLabel?.text = "Collection View"
                             },
                             onSelect: { [unowned self] indexPath in
