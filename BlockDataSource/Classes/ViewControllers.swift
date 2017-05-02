@@ -32,47 +32,37 @@ import UIKit
 
 public protocol BlockDataSourceConfigurable: class {
     var dataSource: DataSource? { get set }
-    func configureDataSource(dataSource: DataSource)
+    func createDataSource() -> DataSource
 }
 
 
 public extension BlockDataSourceConfigurable where Self: UITableViewController {
-    public func createDataSource() {
+    public func reloadDataAndUI() {
         guard let tableView = tableView else { return }
-        
-        let dataSource = DataSource()
-        configureDataSource(dataSource: dataSource)
-        
+
+        let dataSource = createDataSource()
+
         tableView.registerReuseIdentifiers(forDataSource: dataSource)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
-        
+
         self.dataSource = dataSource
-    }
-    
-    public func reloadDataAndUI() {
-        createDataSource()
         tableView.reloadData()
     }
 }
 
 public extension BlockDataSourceConfigurable where Self: UICollectionViewController {
-    public func createDataSource() {
+    public func reloadDataAndUI() {
         guard let collectionView = collectionView else { return }
 
-        let dataSource = DataSource()
-        configureDataSource(dataSource: dataSource)
+        let dataSource = createDataSource()
 
         collectionView.registerReuseIdentifiers(forDataSource: dataSource)
         collectionView.dataSource = dataSource
         collectionView.delegate = dataSource
 
         self.dataSource = dataSource
-    }
-
-    public func reloadDataAndUI() {
-        createDataSource()
-        collectionView?.reloadData()
+        collectionView.reloadData()
     }
 }
 
@@ -80,8 +70,8 @@ public extension BlockDataSourceConfigurable where Self: UICollectionViewControl
 open class BlockTableViewController: UITableViewController, BlockDataSourceConfigurable {
     public var dataSource: DataSource?
     
-    open func configureDataSource(dataSource: DataSource) {
-        // Base class does nothing
+    open func createDataSource() -> DataSource {
+        return DataSource()
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -94,8 +84,8 @@ open class BlockTableViewController: UITableViewController, BlockDataSourceConfi
 open class BlockCollectionViewController: UICollectionViewController, BlockDataSourceConfigurable {
     public var dataSource: DataSource?
 
-    open func configureDataSource(dataSource: DataSource) {
-        // Base class does nothing
+    open func createDataSource() -> DataSource {
+        return DataSource()
     }
 
     override open func viewWillAppear(_ animated: Bool) {

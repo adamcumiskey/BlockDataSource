@@ -31,22 +31,24 @@ class CollectionExampleViewController: BlockCollectionViewController {
         }
     }
     
-    override func configureDataSource(dataSource: DataSource) {
-        dataSource.sections = [
-            DataSource.Section(
-                header: DataSource.HeaderFooter { (view: ImageReusableView) in
-                    view.imageView.image = UIImage(named: "double_burger")
-                },
-                items: images.map { image in
-                    return DataSource.GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
-                        cell.imageView.image = image
+    override func createDataSource() -> DataSource {
+        return DataSource(
+            sections: [
+                DataSource.Section(
+                    header: DataSource.HeaderFooter { (view: ImageReusableView) in
+                        view.imageView.image = UIImage(named: "double_burger")
+                    },
+                    items: images.map { image in
+                        return DataSource.GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+                            cell.imageView.image = image
+                        }
                     }
-                }
-            )
-        ]
-        
-        dataSource.onReorder = { [unowned self] source, destination in
-            self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
-        }
+                )
+            ],
+            onReorder: { [unowned self] source, destination in
+                self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
+            }
+        )
     }
+    
 }

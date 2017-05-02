@@ -37,25 +37,27 @@ class EditingViewController: BlockTableViewController {
         navigationItem.rightBarButtonItem = editButtonItem
     }
     
-    override func configureDataSource(dataSource: DataSource) {
-        dataSource.sections = [
-            DataSource.Section(
-                items: data.map { item in
-                    return DataSource.ListItem(
-                        configure: { (cell: Cell) in
-                            cell.textLabel?.text = item.title
-                        },
-                        onDelete: { [unowned self] indexPath in
-                            if let index = self.data.index(of: item) {
-                                self.data.remove(at: index)
+    override func createDataSource() -> DataSource {
+        return DataSource(
+            sections: [
+                DataSource.Section(
+                    items: data.map { item in
+                        return DataSource.ListItem(
+                            configure: { (cell: Cell) in
+                                cell.textLabel?.text = item.title
+                            },
+                            onDelete: { [unowned self] indexPath in
+                                if let index = self.data.index(of: item) {
+                                    self.data.remove(at: index)
+                                }
                             }
-                        }
-                    )
-                }
-            )
-        ]
-        dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
-            self.data.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
-        }
+                        )
+                    }
+                )
+            ],
+            onReorder: { [unowned self] (firstIndex, secondIndex) in
+                self.data.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
+            }
+        )
     }
 }

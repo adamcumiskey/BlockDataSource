@@ -82,10 +82,13 @@ public class DataSource: NSObject {
          - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
          - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware]? = nil) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
+        if let middleware = middleware {
+            self.middlewareStack = middleware
+        }
     }
     
     /// Convenience init for a DataSource with a single section
