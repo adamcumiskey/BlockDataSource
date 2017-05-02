@@ -35,7 +35,7 @@ class CollectionExampleViewController: BlockCollectionViewController {
         return DataSource(
             sections: [
                 DataSource.Section(
-                    header: HeaderFooter { (view: ImageReusableView) in
+                    header: GridHeader { (view: ImageReusableView) in
                         view.imageView.image = UIImage(named: "double_burger")
                     },
                     items: images.map { image in

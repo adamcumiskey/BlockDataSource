@@ -31,7 +31,7 @@ import Foundation
 
 
 // MARK: -
-
+///
 public protocol DataSourceConfigurable {
     var configure: ConfigureBlock { get }
 
@@ -42,8 +42,11 @@ public protocol DataSourceConfigurable {
 
 
 // MARK: -
-
+///
 public protocol DataSourceItem: DataSourceConfigurable {
+    associatedtype HeaderType: DataSourceConfigurable
+    associatedtype MiddlewareType: Middleware
+
     // The block that executes when the cell is tapped
     var onSelect: IndexPathBlock? { get set }
 
@@ -56,8 +59,10 @@ public protocol DataSourceItem: DataSourceConfigurable {
 
 
 // MARK: -
-
+///
 public struct ListItem: DataSourceItem {
+    public typealias HeaderType = ListHeader
+    public typealias MiddlewareType = ListMiddleware
 
     // The block which configures the cell
     public var configure: ConfigureBlock
@@ -118,8 +123,10 @@ public struct ListItem: DataSourceItem {
 
 
 // MARK: -
-
+///
 public struct GridItem: DataSourceItem {
+    public typealias HeaderType = GridHeader
+    public typealias MiddlewareType = GridMiddleware
 
     // The block which configures the cell
     public var configure: ConfigureBlock
@@ -180,7 +187,7 @@ public struct GridItem: DataSourceItem {
 
 // MARK: - Header Footer
 /// Data structure representing a header or footer for a grid section
-public struct HeaderFooter: DataSourceConfigurable {
+public struct ListHeader: DataSourceConfigurable {
 
     /// Configuration block for this HeaderFooter
     public var configure: ConfigureBlock
@@ -198,12 +205,47 @@ public struct HeaderFooter: DataSourceConfigurable {
     }
 
     /**
-     Initialize a HeaderFooter
+     Initialize a ListHeader
 
      - parameter customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
      - parameter configure: Generic block used to configure HeaderFooter. You must specify the UICollectionReusableView type.
      */
     public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+        self.customReuseIdentifier = customReuseIdentifier
+
+        self.viewClass = View.self
+        self.configure = { view in
+            configure(view as! View)
+        }
+    }
+}
+
+// MARK: - Grid Header
+/// Data structure representing a header or footer for a grid section
+public struct GridHeader: DataSourceConfigurable {
+
+    /// Configuration block for this HeaderFooter
+    public var configure: ConfigureBlock
+
+    public var viewClass: UIView.Type
+
+    private var customReuseIdentifier: String?
+
+    public var reuseIdentifier: String {
+        if let customReuseIdentifier = customReuseIdentifier {
+            return customReuseIdentifier
+        } else {
+            return String(describing: viewClass)
+        }
+    }
+
+    /**
+     Initialize a ListHeader
+
+     - parameter customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+     - parameter configure: Generic block used to configure HeaderFooter. You must specify the UICollectionReusableView type.
+     */
+    public init<View: UICollectionReusableView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
         self.customReuseIdentifier = customReuseIdentifier
 
         self.viewClass = View.self
@@ -228,32 +270,21 @@ public class DataSource<Item: DataSourceItem>: NSObject, UITableViewDataSource, 
     
     /// Cell configuration middleware.
     /// Gets applied in DataSource order to cells matching the middleware cellClass type
-    public var middleware = [Middleware]() {
-        didSet {
-            _listMiddleware = middleware.filter { $0 is ListMiddleware }
-            _gridMiddleware = middleware.filter { $0 is GridMiddleware }
-        }
-    }
-    fileprivate var _listMiddleware = [Middleware]()
-    fileprivate var _gridMiddleware = [Middleware]()
+    public var middleware: [Item.MiddlewareType]
 
     /**
      Initialize a DataSource
-     
+
        - parameters:
          - sections: The array of sections in this DataSource
          - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
          - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    public init(sections: [Section<Item>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware]? = nil) {
+    public init(sections: [Section<Item>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Item.MiddlewareType] = []) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
-        if let middleware = middleware {
-            self.middleware = middleware
-            self._listMiddleware = middleware.filter { $0 is ListMiddleware }
-            self._gridMiddleware = middleware.filter { $0 is GridMiddleware }
-        }
+        self.middleware = middleware
     }
 
     public convenience override init() {
@@ -294,13 +325,13 @@ public class DataSource<Item: DataSourceItem>: NSObject, UITableViewDataSource, 
     public struct Section<Item: DataSourceItem> {
         
         /// The header data for this section
-        public var header: HeaderFooter?
+        public var header: Item.HeaderType?
         
         /// The item data for this section
         public var items: [Item]
         
         /// The footer data for this section
-        public var footer: HeaderFooter?
+        public var footer: Item.HeaderType?
         
         
         /**
@@ -311,14 +342,14 @@ public class DataSource<Item: DataSourceItem>: NSObject, UITableViewDataSource, 
              - items: The items data for this section
              - footer: The DataSource footer data for this section
          */
-        public init(header: HeaderFooter? = nil, items: [Item], footer: HeaderFooter? = nil) {
+        public init(header: Item.HeaderType? = nil, items: [Item], footer: Item.HeaderType? = nil) {
             self.header = header
             self.items = items
             self.footer = footer
         }
         
         /// Convenience init for a section with a single item
-        public init(header: HeaderFooter? = nil, item: Item, footer: HeaderFooter? = nil) {
+        public init(header: Item.HeaderType? = nil, item: Item, footer: Item.HeaderType? = nil) {
             self.header = header
             self.items = [item]
             self.footer = footer
@@ -353,7 +384,7 @@ public class DataSource<Item: DataSourceItem>: NSObject, UITableViewDataSource, 
     // MARK: - UITableViewDelegate
 
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        for middleware in _listMiddleware {
+        for middleware in middleware {
             middleware.apply(cell)
         }
     }
@@ -489,7 +520,7 @@ public class DataSource<Item: DataSourceItem>: NSObject, UITableViewDataSource, 
     // MARK: - UICollectionViewDelegate
 
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        for middleware in _gridMiddleware {
+        for middleware in middleware {
             middleware.apply(cell)
         }
     }
@@ -536,7 +567,7 @@ public extension UITableView {
         }
     }
 
-    private func register(headerFooter: HeaderFooter) {
+    private func register(headerFooter: ListHeader) {
         if let _ = Bundle.main.path(forResource: headerFooter.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: headerFooter.reuseIdentifier, bundle: nil)
             register(nib, forHeaderFooterViewReuseIdentifier: headerFooter.reuseIdentifier)
@@ -561,7 +592,7 @@ public extension UICollectionView {
         }
     }
 
-    private func register(headerFooter: HeaderFooter, kind: String) {
+    private func register(headerFooter: GridHeader, kind: String) {
         if let _ = Bundle.main.path(forResource: headerFooter.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: headerFooter.reuseIdentifier, bundle: nil)
             register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: headerFooter.reuseIdentifier)
