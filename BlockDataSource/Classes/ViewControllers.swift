@@ -30,13 +30,19 @@
 import UIKit
 
 
-public protocol BlockDataSourceConfigurable: class {
-    var dataSource: DataSource? { get set }
-    func createDataSource() -> DataSource
-}
 
+open class BlockTableViewController: UITableViewController {
+    public var dataSource: DataSource<ListItem>?
+    
+    open func createDataSource() -> DataSource<ListItem> {
+        return DataSource()
+    }
 
-public extension BlockDataSourceConfigurable where Self: UITableViewController {
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadDataAndUI()
+    }
+
     public func reloadDataAndUI() {
         guard let tableView = tableView else { return }
 
@@ -51,7 +57,19 @@ public extension BlockDataSourceConfigurable where Self: UITableViewController {
     }
 }
 
-public extension BlockDataSourceConfigurable where Self: UICollectionViewController {
+
+open class BlockCollectionViewController: UICollectionViewController {
+    public var dataSource: DataSource<GridItem>?
+
+    open func createDataSource() -> DataSource<GridItem> {
+        return DataSource()
+    }
+
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadDataAndUI()
+    }
+
     public func reloadDataAndUI() {
         guard let collectionView = collectionView else { return }
 
@@ -63,34 +81,6 @@ public extension BlockDataSourceConfigurable where Self: UICollectionViewControl
 
         self.dataSource = dataSource
         collectionView.reloadData()
-    }
-}
-
-
-open class BlockTableViewController: UITableViewController, BlockDataSourceConfigurable {
-    public var dataSource: DataSource?
-    
-    open func createDataSource() -> DataSource {
-        return DataSource()
-    }
-
-    override open func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        reloadDataAndUI()
-    }
-}
-
-
-open class BlockCollectionViewController: UICollectionViewController, BlockDataSourceConfigurable {
-    public var dataSource: DataSource?
-
-    open func createDataSource() -> DataSource {
-        return DataSource()
-    }
-
-    override open func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        reloadDataAndUI()
     }
 }
 
