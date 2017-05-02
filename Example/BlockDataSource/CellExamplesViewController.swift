@@ -11,10 +11,10 @@ import BlockDataSource
 
 
 class CellExamplesViewController: BlockTableViewController {
-    override func createDataSource() -> DataSource<ListItem> {
-        return DataSource(
+    override func createDataSource() -> ListDataSource {
+        return ListDataSource(
             sections: [
-                DataSource.Section(
+                Section(
                     items: [
                         ListItem { (cell: Cell) -> Void in
                             cell.textLabel?.text = "Basic Cell"

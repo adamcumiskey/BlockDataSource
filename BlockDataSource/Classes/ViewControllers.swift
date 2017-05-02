@@ -32,10 +32,10 @@ import UIKit
 
 
 open class BlockTableViewController: UITableViewController {
-    public var dataSource: DataSource<ListItem>?
+    public var dataSource: ListDataSource?
     
-    open func createDataSource() -> DataSource<ListItem> {
-        return DataSource()
+    open func createDataSource() -> ListDataSource {
+        return ListDataSource()
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -59,10 +59,10 @@ open class BlockTableViewController: UITableViewController {
 
 
 open class BlockCollectionViewController: UICollectionViewController {
-    public var dataSource: DataSource<GridItem>?
+    public var dataSource: GridDataSource?
 
-    open func createDataSource() -> DataSource<GridItem> {
-        return DataSource()
+    open func createDataSource() -> GridDataSource {
+        return GridDataSource()
     }
 
     override open func viewWillAppear(_ animated: Bool) {

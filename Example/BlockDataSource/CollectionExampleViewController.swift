@@ -31,10 +31,10 @@ class CollectionExampleViewController: BlockCollectionViewController {
         }
     }
     
-    override func createDataSource() -> DataSource<GridItem> {
-        return DataSource(
+    override func createDataSource() -> GridDataSource {
+        return GridDataSource(
             sections: [
-                DataSource.Section(
+                Section(
                     header: GridHeader { (view: ImageReusableView) in
                         view.imageView.image = UIImage(named: "double_burger")
                     },

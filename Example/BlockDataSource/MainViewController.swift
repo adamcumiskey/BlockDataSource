@@ -11,10 +11,10 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func createDataSource() -> DataSource<ListItem> {
-        return DataSource(
+    override func createDataSource() -> ListDataSource {
+        return ListDataSource(
             sections: [
-                DataSource.Section(
+                Section(
                     items: [
                         ListItem(
                             configure: { cell in
