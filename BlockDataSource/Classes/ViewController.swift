@@ -48,7 +48,7 @@ public extension ConfigurableTableView {
     }
 }
 
-public class TableViewController: UITableViewController, ReloadableTableView {
+open class TableViewController: UITableViewController, ReloadableTableView {
     public var dataSource: DataSource {
         didSet { reload() }
     }
@@ -62,7 +62,7 @@ public class TableViewController: UITableViewController, ReloadableTableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewWillAppear(_ animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
     }
@@ -102,7 +102,7 @@ public extension ConfigurableCollectionView {
     }
 }
 
-public class CollectionViewController: UICollectionViewController, ReloadableCollectionView {
+open class CollectionViewController: UICollectionViewController, ReloadableCollectionView {
     public var dataSource: DataSource {
         didSet { reload() }
     }
@@ -116,7 +116,7 @@ public class CollectionViewController: UICollectionViewController, ReloadableCol
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewWillAppear(_ animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
     }
