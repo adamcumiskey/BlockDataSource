@@ -11,6 +11,10 @@ import UIKit
 class GridViewController: DataSourceViewController<GridDataSource>, DataSourceReloadable {
     @IBOutlet var collectionView: UICollectionView!
 
+    override var dataSource: GridDataSource {
+        didSet { reload() }
+    }
+
     init(dataSource: GridDataSource) {
         super.init(dataSource: dataSource, nibName: "GridViewController", bundle: nil)
     }

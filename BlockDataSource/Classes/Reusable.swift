@@ -30,7 +30,7 @@ public class ReusableBase {
         }
     }
 
-    public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+    init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
         self.configure = { view in
             configure(view as! View)
         }

@@ -38,7 +38,7 @@ public class ItemBase: Reusable {
      - reorderable: Flag to indicate if this item can be reordered
      - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
      */
-    public init<T: UIView>(configure: @escaping (T) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) where T : UIView {
+    init<T: UIView>(configure: @escaping (T) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) where T : UIView {
         super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
         self.onSelect = onSelect
         self.onDelete = onDelete

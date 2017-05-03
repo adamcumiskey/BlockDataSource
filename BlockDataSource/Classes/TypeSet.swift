@@ -9,26 +9,23 @@
 import Foundation
 
 
-// MARK: - DataSourceType
+// MARK: - TypeSet
 /// A type which holds the data types for a data source
-public protocol DataSourceTypeProtocol {
-    associatedtype Container: UIView
+public protocol DataSourceTypeSet {
     associatedtype Item: ItemProtocol
     associatedtype Decoration: ReusableProtocol
     associatedtype Middleware: MiddlewareProtocol
     init()
 }
 
-public struct List: DataSourceTypeProtocol {
-    public typealias Container = UITableView
+public struct List: DataSourceTypeSet {
     public typealias Item = ListItem
     public typealias Decoration = ListSectionDecoration
     public typealias Middleware = ListMiddleware
     public init() {}
 }
 
-public struct Grid: DataSourceTypeProtocol {
-    public typealias Container = UICollectionView
+public struct Grid: DataSourceTypeSet {
     public typealias Item = GridItem
     public typealias Decoration = GridSectionDecoration
     public typealias Middleware = GridMiddleware

@@ -15,7 +15,7 @@ public protocol MiddlewareProtocol {
 
 public class MiddlewareBase {
     public var apply: (UIView) -> Void
-    public init<View: UIView>(apply: @escaping (View) -> Void) {
+    init<View: UIView>(apply: @escaping (View) -> Void) {
         self.apply = { view in
             if let view = view as? View {
                 apply(view)

@@ -64,7 +64,9 @@ open class DataSourceTableViewController: UITableViewController, DataSourceReloa
 
 
 open class DataSourceCollectionViewController: UICollectionViewController, DataSourceReloadable {
-    public var dataSource: GridDataSource
+    public var dataSource: GridDataSource {
+        didSet { reload() }
+    }
 
     public init() {
         self.dataSource = GridDataSource()

@@ -31,32 +31,32 @@ import Foundation
 
 
 public protocol DataSourceProtocol {
-    associatedtype DataSourceType: DataSourceTypeProtocol
-    var sections: [Section<DataSourceType>] { get set }
+    associatedtype TypeSet: DataSourceTypeSet
+    var sections: [Section<TypeSet>] { get set }
     var onReorder: ReorderBlock? { get set }
     var onScroll: ScrollBlock? { get set }
-    var middleware: [DataSourceType.Middleware] { get set }
+    var middleware: [TypeSet.Middleware] { get set }
 }
 
 extension DataSourceProtocol {
     // Reference section with `DataSource[index]`
-    public subscript(index: Int) -> Section<DataSourceType> {
+    public subscript(index: Int) -> Section<TypeSet> {
         return sections[index]
     }
 
     // Reference item with `DataSource[indexPath]`
-    public subscript(indexPath: IndexPath) -> DataSourceType.Item {
+    public subscript(indexPath: IndexPath) -> TypeSet.Item {
         return sections[indexPath.section].items[indexPath.item]
     }
 }
 
 
-public class DataSource<DataSourceType: DataSourceTypeProtocol>: NSObject, DataSourceProtocol, UIScrollViewDelegate {
-    public var sections: [Section<DataSourceType>]
+public class DataSource<TypeSet: DataSourceTypeSet>: NSObject, DataSourceProtocol, UIScrollViewDelegate {
+    public var sections: [Section<TypeSet>]
     public var onReorder: ReorderBlock?
     public var onScroll: ScrollBlock?
-    public var middleware: [DataSourceType.Middleware]
-    public var type: DataSourceType
+    public var middleware: [TypeSet.Middleware]
+    public var type: TypeSet
 
     /**
      Initialize a DataSource
@@ -66,20 +66,20 @@ public class DataSource<DataSourceType: DataSourceTypeProtocol>: NSObject, DataS
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
      - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    public init(sections: [Section<DataSourceType>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [DataSourceType.Middleware] = []) {
-        self.type = DataSourceType()
+    init(sections: [Section<TypeSet>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [TypeSet.Middleware] = []) {
+        self.type = TypeSet()
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
         self.middleware = middleware
     }
 
-    public convenience override init() {
+    convenience override init() {
         self.init(items: [])
     }
 
     /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section<DataSourceType>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    convenience init(section: Section<TypeSet>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [section],
             onReorder: onReorder,
@@ -88,9 +88,9 @@ public class DataSource<DataSourceType: DataSourceTypeProtocol>: NSObject, DataS
     }
 
     /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [DataSourceType.Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    convenience init(items: [TypeSet.Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
-            sections: [Section<DataSourceType>(items: items)],
+            sections: [Section<TypeSet>(items: items)],
             onReorder: onReorder,
             onScroll: onScroll
         )

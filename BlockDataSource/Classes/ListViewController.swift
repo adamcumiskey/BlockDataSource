@@ -11,6 +11,10 @@ import UIKit
 class ListViewController: DataSourceViewController<ListDataSource>, DataSourceReloadable {
     @IBOutlet weak var tableView: UITableView!
 
+    override var dataSource: ListDataSource {
+        didSet { reload() }
+    }
+
     init(dataSource: ListDataSource, nibName: String = "ListViewController") {
         super.init(dataSource: dataSource, nibName: nibName)
     }
