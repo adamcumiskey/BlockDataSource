@@ -9,6 +9,20 @@
 import UIKit
 import BlockDataSource
 
+let CollectionExampleDataSource: DataSource = DataSource(
+    sections: [
+        DataSouce.Section(
+            header: GridHeader { (view: ImageReusableView) in
+                view.imageView.image = UIImage(named: "double_burger")
+            },
+            items: images.map { image in
+                return GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+                    cell.imageView.image = image
+                }
+            }
+        )
+    ]
+)
 
 class CollectionExampleViewController: DataSourceCollectionViewController {
     var images = [UIImage]()
