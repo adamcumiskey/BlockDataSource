@@ -1,5 +1,5 @@
 //
-//  Types.swift
+//  Constants.swift
 //  Pods
 //
 //  Created by Adam Cumiskey on 12/19/16.

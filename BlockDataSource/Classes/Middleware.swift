@@ -13,24 +13,31 @@ public protocol MiddlewareProtocol {
     var apply: (UIView) -> Void { get }
 }
 
-public struct ListMiddleware: MiddlewareProtocol {
+public class MiddlewareBase {
     public var apply: (UIView) -> Void
-    public init<Cell: UITableViewCell>(apply: @escaping (Cell) -> Void) {
-        self.apply = { cell in
-            if let cell = cell as? Cell {
-                apply(cell)
+    public init<View: UIView>(apply: @escaping (View) -> Void) {
+        self.apply = { view in
+            if let view = view as? View {
+                apply(view)
             }
         }
     }
 }
 
-public struct GridMiddleware: MiddlewareProtocol {
-    public var apply: (UIView) -> Void
-    public init<Cell: UICollectionViewCell>(apply: @escaping (Cell) -> Void) {
-        self.apply = { cell in
-            if let cell = cell as? Cell {
-                apply(cell)
-            }
-        }
+public class Middleware: MiddlewareBase, MiddlewareProtocol {
+    public override init<View: UIView>(apply: @escaping (View) -> Void) {
+        super.init(apply: apply)
+    }
+}
+
+public class ListMiddleware: Middleware {
+    public override init<View: UITableViewCell>(apply: @escaping (View) -> Void) {
+        super.init(apply: apply)
+    }
+}
+
+public class GridMiddleware: Middleware {
+    public override init<View: UICollectionViewCell>(apply: @escaping (View) -> Void) {
+        super.init(apply: apply)
     }
 }

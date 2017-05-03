@@ -11,7 +11,7 @@ import Foundation
 
 // MARK: -
 /// Data structure representing the sections in the tableView
-public struct Section<ViewType: DataSourceDataType> {
+public struct Section<ViewType: DataSourceType> {
 
     /// The header data for this section
     public var header: ViewType.Decoration?

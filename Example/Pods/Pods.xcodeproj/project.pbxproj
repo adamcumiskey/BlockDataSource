@@ -13,15 +13,17 @@
 		32DF84C5C65346C270D30073D50548E9 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */; };
 		5A90531F4A2F24C27F0F41B5ABEFCD32 /* Pods-BlockDataSource_ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C6906B9881DDC91BF1F3F831EF2296 /* Pods-BlockDataSource_ExampleTests-dummy.m */; };
 		608AFD7AE7ABD02D7CD09937FA14C4E0 /* Pods-BlockDataSource_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587281CB611F1683D49B439168C70E /* Pods-BlockDataSource_Example-dummy.m */; };
-		624CBC4F1EB902C300C4D0CE /* DataSourceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC4E1EB902C300C4D0CE /* DataSourceItem.swift */; };
-		624CBC511EB9032F00C4D0CE /* DataSourceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC501EB9032F00C4D0CE /* DataSourceSection.swift */; };
+		624CBC4F1EB902C300C4D0CE /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC4E1EB902C300C4D0CE /* Item.swift */; };
+		624CBC511EB9032F00C4D0CE /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC501EB9032F00C4D0CE /* Section.swift */; };
 		624CBC531EB9047B00C4D0CE /* ListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC521EB9047B00C4D0CE /* ListDataSource.swift */; };
 		624CBC551EB9048600C4D0CE /* GridDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624CBC541EB9048600C4D0CE /* GridDataSource.swift */; };
 		62B600CF1EB92AD60096F2B5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600CD1EB92AD60096F2B5 /* ListViewController.swift */; };
 		62B600D21EB92D0D0096F2B5 /* GridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D01EB92D0D0096F2B5 /* GridViewController.swift */; };
+		62B600D41EB9561E0096F2B5 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D31EB9561E0096F2B5 /* Reusable.swift */; };
+		62B600D61EB958F50096F2B5 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D51EB958F50096F2B5 /* Type.swift */; };
 		657C6D48BB06325B5074A0CC92BAF8FD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC57575C9FC34DC7061ED95912597D8 /* Extensions.swift */; };
 		66861C8E1E496EBB00DA179C /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66861C8D1E496EBB00DA179C /* Middleware.swift */; };
-		74F32947066E26596773CEC29F80F379 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5052FEF28478CACF751D63577FC58BF1 /* Types.swift */; };
+		74F32947066E26596773CEC29F80F379 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5052FEF28478CACF751D63577FC58BF1 /* Constants.swift */; };
 		7785E5D570E808D7DBC44F2FD675C342 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		AB6B52D13E9BA7D053A93AEBBE698677 /* Pods-BlockDataSource_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F195D7128842EE4E085BA73D99434496 /* Pods-BlockDataSource_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE90D9310765C47AE8DB5AAC3524AA24 /* Pods-BlockDataSource_ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5A7DC1CDA2D8CE11E5DBF90E36EE08F /* Pods-BlockDataSource_ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -51,18 +53,20 @@
 		278B672463E64964A1F2B88EBADEDD03 /* Pods-BlockDataSource_ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BlockDataSource_ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		445C7CB0A21AABFA5D03EFD2559BC52B /* Pods-BlockDataSource_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BlockDataSource_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		483C572E5681B099E268EEA7372003AC /* BlockDataSource-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BlockDataSource-dummy.m"; sourceTree = "<group>"; };
-		5052FEF28478CACF751D63577FC58BF1 /* Types.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		5052FEF28478CACF751D63577FC58BF1 /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		52A126A75A29AE043B2633B1A06F94F6 /* BlockDataSource.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = BlockDataSource.modulemap; sourceTree = "<group>"; };
 		583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DataSource.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		597781CF07C0A9212255A0B04C08F498 /* Pods_BlockDataSource_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockDataSource_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		624CBC4E1EB902C300C4D0CE /* DataSourceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceItem.swift; sourceTree = "<group>"; };
-		624CBC501EB9032F00C4D0CE /* DataSourceSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceSection.swift; sourceTree = "<group>"; };
+		624CBC4E1EB902C300C4D0CE /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Item.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		624CBC501EB9032F00C4D0CE /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Section.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		624CBC521EB9047B00C4D0CE /* ListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListDataSource.swift; sourceTree = "<group>"; };
 		624CBC541EB9048600C4D0CE /* GridDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridDataSource.swift; sourceTree = "<group>"; };
 		62B600CD1EB92AD60096F2B5 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		62B600CE1EB92AD60096F2B5 /* ListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListViewController.xib; sourceTree = "<group>"; };
 		62B600D01EB92D0D0096F2B5 /* GridViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridViewController.swift; sourceTree = "<group>"; };
 		62B600D11EB92D0D0096F2B5 /* GridViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridViewController.xib; sourceTree = "<group>"; };
+		62B600D31EB9561E0096F2B5 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		62B600D51EB958F50096F2B5 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		66861C8D1E496EBB00DA179C /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		6A41B73ACB14C8989B6BF3941D3B0659 /* BlockDataSource.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BlockDataSource.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B77FAC90B14919342BC39D3C927226F /* Pods-BlockDataSource_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BlockDataSource_Example.modulemap"; sourceTree = "<group>"; };
@@ -126,9 +130,11 @@
 				583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */,
 				624CBC521EB9047B00C4D0CE /* ListDataSource.swift */,
 				624CBC541EB9048600C4D0CE /* GridDataSource.swift */,
-				624CBC501EB9032F00C4D0CE /* DataSourceSection.swift */,
-				624CBC4E1EB902C300C4D0CE /* DataSourceItem.swift */,
-				5052FEF28478CACF751D63577FC58BF1 /* Types.swift */,
+				624CBC501EB9032F00C4D0CE /* Section.swift */,
+				624CBC4E1EB902C300C4D0CE /* Item.swift */,
+				62B600D51EB958F50096F2B5 /* Type.swift */,
+				62B600D31EB9561E0096F2B5 /* Reusable.swift */,
+				5052FEF28478CACF751D63577FC58BF1 /* Constants.swift */,
 				66861C8D1E496EBB00DA179C /* Middleware.swift */,
 			);
 			path = Classes;
@@ -372,17 +378,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				66861C8E1E496EBB00DA179C /* Middleware.swift in Sources */,
+				62B600D41EB9561E0096F2B5 /* Reusable.swift in Sources */,
 				D5CF45DF5F56CA60212387C3221B77EB /* BlockDataSource-dummy.m in Sources */,
-				624CBC511EB9032F00C4D0CE /* DataSourceSection.swift in Sources */,
+				624CBC511EB9032F00C4D0CE /* Section.swift in Sources */,
 				2C55A37FCE0C55687CD1C5D6189AA733 /* ViewControllers.swift in Sources */,
 				624CBC551EB9048600C4D0CE /* GridDataSource.swift in Sources */,
 				62B600CF1EB92AD60096F2B5 /* ListViewController.swift in Sources */,
 				624CBC531EB9047B00C4D0CE /* ListDataSource.swift in Sources */,
-				624CBC4F1EB902C300C4D0CE /* DataSourceItem.swift in Sources */,
+				624CBC4F1EB902C300C4D0CE /* Item.swift in Sources */,
 				62B600D21EB92D0D0096F2B5 /* GridViewController.swift in Sources */,
 				657C6D48BB06325B5074A0CC92BAF8FD /* Extensions.swift in Sources */,
+				62B600D61EB958F50096F2B5 /* Type.swift in Sources */,
 				32DF84C5C65346C270D30073D50548E9 /* DataSource.swift in Sources */,
-				74F32947066E26596773CEC29F80F379 /* Types.swift in Sources */,
+				74F32947066E26596773CEC29F80F379 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

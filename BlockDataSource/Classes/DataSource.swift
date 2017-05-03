@@ -31,21 +31,21 @@ import Foundation
 
 
 public protocol DataSource {
-    associatedtype ViewType: DataSourceDataType
-    var sections: [Section<ViewType>] { get set }
+    associatedtype TypeConstraint: DataSourceType
+    var sections: [Section<TypeConstraint>] { get set }
     var onReorder: ReorderBlock? { get set }
     var onScroll: ScrollBlock? { get set }
-    var middleware: [ViewType.Middleware] { get set }
+    var middleware: [TypeConstraint.Middleware] { get set }
 }
 
 extension DataSource {
     // Reference section with `DataSource[index]`
-    public subscript(index: Int) -> Section<ViewType> {
+    public subscript(index: Int) -> Section<TypeConstraint> {
         return sections[index]
     }
 
     // Reference item with `DataSource[indexPath]`
-    public subscript(indexPath: IndexPath) -> ViewType.Item {
+    public subscript(indexPath: IndexPath) -> TypeConstraint.Item {
         return sections[indexPath.section].items[indexPath.item]
     }
 }
