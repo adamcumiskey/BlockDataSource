@@ -52,19 +52,19 @@ public class DataSource: NSObject {
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
      - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
      */
-    init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware] = []) {
+    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware] = []) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
         self.middleware = middleware
     }
 
-    convenience override init() {
+    public convenience override init() {
         self.init(items: [])
     }
 
     /// Convenience init for a DataSource with a single section
-    convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [section],
             onReorder: onReorder,
@@ -73,7 +73,7 @@ public class DataSource: NSObject {
     }
 
     /// Convenience init for a DataSource with a single section with no headers/footers
-    convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
         self.init(
             sections: [Section(items: items)],
             onReorder: onReorder,
@@ -109,7 +109,7 @@ extension DataSource {
             }
         }
 
-        init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+        public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
             self.configure = { view in
                 configure(view as! View)
             }
@@ -140,7 +140,7 @@ extension DataSource {
          - reorderable: Flag to indicate if this item can be reordered
          - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
          */
-        fileprivate init<T: UIView>(configure: @escaping (T) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) where T : UIView {
+        public init<T: UIView>(configure: @escaping (T) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) where T : UIView {
             super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
             self.onSelect = onSelect
             self.onDelete = onDelete
@@ -197,7 +197,7 @@ extension DataSource {
 extension DataSource {
     public struct Middleware {
         public var apply: (UIView) -> Void
-        init<View: UIView>(apply: @escaping (View) -> Void) {
+        public init<View: UIView>(apply: @escaping (View) -> Void) {
             self.apply = { view in
                 if let view = view as? View {
                     apply(view)
