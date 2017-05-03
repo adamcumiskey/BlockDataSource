@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		106076DA90C8BFD4FBDC3B45E971B203 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		25A80FBD3123727E431F5164C7303B76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
-		2C55A37FCE0C55687CD1C5D6189AA733 /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF415FE89F513C312A3CCE0892010110 /* ViewControllers.swift */; };
 		32DF84C5C65346C270D30073D50548E9 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */; };
 		5A90531F4A2F24C27F0F41B5ABEFCD32 /* Pods-BlockDataSource_ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C6906B9881DDC91BF1F3F831EF2296 /* Pods-BlockDataSource_ExampleTests-dummy.m */; };
 		608AFD7AE7ABD02D7CD09937FA14C4E0 /* Pods-BlockDataSource_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587281CB611F1683D49B439168C70E /* Pods-BlockDataSource_Example-dummy.m */; };
@@ -21,6 +20,7 @@
 		62B600D21EB92D0D0096F2B5 /* GridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D01EB92D0D0096F2B5 /* GridViewController.swift */; };
 		62B600D41EB9561E0096F2B5 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D31EB9561E0096F2B5 /* Reusable.swift */; };
 		62B600D61EB958F50096F2B5 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D51EB958F50096F2B5 /* Type.swift */; };
+		62B600D81EB95FB20096F2B5 /* DataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B600D71EB95FB20096F2B5 /* DataSourceViewController.swift */; };
 		657C6D48BB06325B5074A0CC92BAF8FD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC57575C9FC34DC7061ED95912597D8 /* Extensions.swift */; };
 		66861C8E1E496EBB00DA179C /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66861C8D1E496EBB00DA179C /* Middleware.swift */; };
 		74F32947066E26596773CEC29F80F379 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5052FEF28478CACF751D63577FC58BF1 /* Constants.swift */; };
@@ -67,6 +67,7 @@
 		62B600D11EB92D0D0096F2B5 /* GridViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridViewController.xib; sourceTree = "<group>"; };
 		62B600D31EB9561E0096F2B5 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		62B600D51EB958F50096F2B5 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
+		62B600D71EB95FB20096F2B5 /* DataSourceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceViewController.swift; sourceTree = "<group>"; };
 		66861C8D1E496EBB00DA179C /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		6A41B73ACB14C8989B6BF3941D3B0659 /* BlockDataSource.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BlockDataSource.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B77FAC90B14919342BC39D3C927226F /* Pods-BlockDataSource_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BlockDataSource_Example.modulemap"; sourceTree = "<group>"; };
@@ -87,7 +88,6 @@
 		F195D7128842EE4E085BA73D99434496 /* Pods-BlockDataSource_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BlockDataSource_Example-umbrella.h"; sourceTree = "<group>"; };
 		F3923B437EA56E90EF6719006B899CB5 /* BlockDataSource.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BlockDataSource.xcconfig; sourceTree = "<group>"; };
 		FBE562AAAD41571B417EB16EC0A74DDA /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FF415FE89F513C312A3CCE0892010110 /* ViewControllers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ViewControllers.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,21 +121,10 @@
 		03997CA684288225A1046CDB402E1B3E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				FF415FE89F513C312A3CCE0892010110 /* ViewControllers.swift */,
-				62B600CD1EB92AD60096F2B5 /* ListViewController.swift */,
-				62B600CE1EB92AD60096F2B5 /* ListViewController.xib */,
-				62B600D01EB92D0D0096F2B5 /* GridViewController.swift */,
-				62B600D11EB92D0D0096F2B5 /* GridViewController.xib */,
-				DEC57575C9FC34DC7061ED95912597D8 /* Extensions.swift */,
-				583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */,
-				624CBC521EB9047B00C4D0CE /* ListDataSource.swift */,
-				624CBC541EB9048600C4D0CE /* GridDataSource.swift */,
-				624CBC501EB9032F00C4D0CE /* Section.swift */,
-				624CBC4E1EB902C300C4D0CE /* Item.swift */,
-				62B600D51EB958F50096F2B5 /* Type.swift */,
-				62B600D31EB9561E0096F2B5 /* Reusable.swift */,
 				5052FEF28478CACF751D63577FC58BF1 /* Constants.swift */,
-				66861C8D1E496EBB00DA179C /* Middleware.swift */,
+				DEC57575C9FC34DC7061ED95912597D8 /* Extensions.swift */,
+				62B600E01EB995530096F2B5 /* DataSource */,
+				62B600E11EB9955D0096F2B5 /* ViewControllers */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -179,6 +168,33 @@
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/BlockDataSource";
+			sourceTree = "<group>";
+		};
+		62B600E01EB995530096F2B5 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				583D6DDEF8910AC77BE4632BA576603B /* DataSource.swift */,
+				624CBC521EB9047B00C4D0CE /* ListDataSource.swift */,
+				624CBC541EB9048600C4D0CE /* GridDataSource.swift */,
+				624CBC501EB9032F00C4D0CE /* Section.swift */,
+				624CBC4E1EB902C300C4D0CE /* Item.swift */,
+				62B600D51EB958F50096F2B5 /* Type.swift */,
+				62B600D31EB9561E0096F2B5 /* Reusable.swift */,
+				66861C8D1E496EBB00DA179C /* Middleware.swift */,
+			);
+			name = DataSource;
+			sourceTree = "<group>";
+		};
+		62B600E11EB9955D0096F2B5 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				62B600D71EB95FB20096F2B5 /* DataSourceViewController.swift */,
+				62B600CD1EB92AD60096F2B5 /* ListViewController.swift */,
+				62B600CE1EB92AD60096F2B5 /* ListViewController.xib */,
+				62B600D01EB92D0D0096F2B5 /* GridViewController.swift */,
+				62B600D11EB92D0D0096F2B5 /* GridViewController.xib */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		7531C8F8DE19F1AA3C8A7AC97A91DC29 /* iOS */ = {
@@ -379,9 +395,9 @@
 			files = (
 				66861C8E1E496EBB00DA179C /* Middleware.swift in Sources */,
 				62B600D41EB9561E0096F2B5 /* Reusable.swift in Sources */,
+				62B600D81EB95FB20096F2B5 /* DataSourceViewController.swift in Sources */,
 				D5CF45DF5F56CA60212387C3221B77EB /* BlockDataSource-dummy.m in Sources */,
 				624CBC511EB9032F00C4D0CE /* Section.swift in Sources */,
-				2C55A37FCE0C55687CD1C5D6189AA733 /* ViewControllers.swift in Sources */,
 				624CBC551EB9048600C4D0CE /* GridDataSource.swift in Sources */,
 				62B600CF1EB92AD60096F2B5 /* ListViewController.swift in Sources */,
 				624CBC531EB9047B00C4D0CE /* ListDataSource.swift in Sources */,

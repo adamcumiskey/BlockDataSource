@@ -20,7 +20,7 @@ func ==(lhs: Item, rhs: Item) -> Bool {
 
 
 
-class EditingViewController: BlockTableViewController {
+class EditingViewController: DataSourceTableViewController {
 
     var data: [Item]
     init() {

@@ -30,21 +30,20 @@ public class ReusableBase {
         }
     }
 
-    public init<T: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (T) -> Void) {
+    public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
         self.configure = { view in
-            configure(view as! T)
+            configure(view as! View)
         }
-        self.viewClass = T.self
+        self.viewClass = View.self
     }
 }
 
 
 public class Reusable: ReusableBase, ReusableProtocol {
-    public override init<T>(customReuseIdentifier: String?, configure: @escaping (T) -> Void) where T : UIView {
+    public override init<View: UIView>(customReuseIdentifier: String?, configure: @escaping (View) -> Void) {
         super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
     }
 }
-
 
 /// UIView for UITableView headers/footers
 public class ListSectionDecoration: Reusable { }

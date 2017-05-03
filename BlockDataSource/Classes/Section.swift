@@ -11,17 +11,16 @@ import Foundation
 
 // MARK: -
 /// Data structure representing the sections in the tableView
-public struct Section<ViewType: DataSourceType> {
+public struct Section<DataSourceType: DataSourceTypeProtocol> {
 
     /// The header data for this section
-    public var header: ViewType.Decoration?
+    public var header: DataSourceType.Decoration?
 
     /// The item data for this section
-    public var items: [ViewType.Item]
+    public var items: [DataSourceType.Item]
 
     /// The footer data for this section
-    public var footer: ViewType.Decoration?
-
+    public var footer: DataSourceType.Decoration?
 
     /**
      Initializer for a DataSource Section
@@ -31,21 +30,21 @@ public struct Section<ViewType: DataSourceType> {
      - items: The items data for this section
      - footer: The DataSource footer data for this section
      */
-    public init(header: ViewType.Decoration? = nil, items: [ViewType.Item], footer: ViewType.Decoration? = nil) {
+    public init(header: DataSourceType.Decoration? = nil, items: [DataSourceType.Item], footer: DataSourceType.Decoration? = nil) {
         self.header = header
         self.items = items
         self.footer = footer
     }
 
     /// Convenience init for a section with a single item
-    public init(header: ViewType.Decoration? = nil, item: ViewType.Item, footer: ViewType.Decoration? = nil) {
+    public init(header: DataSourceType.Decoration? = nil, item: DataSourceType.Item, footer: DataSourceType.Decoration? = nil) {
         self.header = header
         self.items = [item]
         self.footer = footer
     }
 
     // Reference items with `section[index]`
-    public subscript(index: Int) -> ViewType.Item {
+    public subscript(index: Int) -> DataSourceType.Item {
         return items[index]
     }
 }

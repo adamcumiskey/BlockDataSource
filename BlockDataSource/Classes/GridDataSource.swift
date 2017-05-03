@@ -9,64 +9,10 @@
 import Foundation
 
 
-public class GridDataSource: NSObject, DataSource {
-    public typealias ViewType = Grid
+public class GridDataSource: DataSource<Grid>, UICollectionViewDataSource, UICollectionViewDelegate {
 
-    /// The section data for the table view
-    public var sections = [Section<ViewType>]()
+    // MARK: - UICollectionViewDataSource
 
-    /// Callback for when a item is reordered
-    public var onReorder: ReorderBlock?
-
-    /// Callback for the UIScrollViewDelegate
-    public var onScroll: ScrollBlock?
-
-    /// Cell configuration middleware.
-    /// Gets applied in DataSource order to cells matching the middleware cellClass type
-    public var middleware: [ViewType.Middleware]
-
-    /**
-     Initialize a DataSource
-
-     - parameters:
-     - sections: The array of sections in this DataSource
-     - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
-     - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
-     */
-    public init(sections: [Section<ViewType>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [ViewType.Middleware] = []) {
-        self.sections = sections
-        self.onReorder = onReorder
-        self.onScroll = onScroll
-        self.middleware = middleware
-    }
-
-    public convenience override init() {
-        self.init(items: [])
-    }
-
-    /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section<ViewType>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [section],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
-    }
-
-    /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [ViewType.Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [Section<ViewType>(items: items)],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
-    }
-}
-
-
-// MARK: - UICollectionViewDataSource
-
-extension GridDataSource: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection sectionIndex: Int) -> Int {
         return self[sectionIndex].items.count
     }
@@ -116,12 +62,10 @@ extension GridDataSource: UICollectionViewDataSource {
         }
         return UICollectionReusableView()
     }
-}
 
 
-// MARK: - UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
 
-extension GridDataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         for middleware in middleware {
             middleware.apply(cell)

@@ -10,7 +10,7 @@ import UIKit
 import BlockDataSource
 
 
-class CollectionExampleViewController: BlockCollectionViewController {
+class CollectionExampleViewController: DataSourceCollectionViewController {
     var images = [UIImage]()
     
     override func viewDidLoad() {

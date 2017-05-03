@@ -10,7 +10,7 @@ import Foundation
 import BlockDataSource
 
 
-class MainViewController: BlockTableViewController {
+class MainViewController: DataSourceTableViewController {
     override func createDataSource() -> ListDataSource {
         return ListDataSource(
             sections: [

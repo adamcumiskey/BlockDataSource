@@ -8,16 +8,11 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+class ListViewController: DataSourceViewController<ListDataSource>, DataSourceReloadable {
     @IBOutlet weak var tableView: UITableView!
 
-    var dataSource: ListDataSource {
-        didSet { reload() }
-    }
-
-    init(dataSource: ListDataSource) {
-        self.dataSource = dataSource
-        super.init(nibName: "ListViewController", bundle: nil)
+    init(dataSource: ListDataSource, nibName: String = "ListViewController") {
+        super.init(dataSource: dataSource, nibName: nibName)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -8,16 +8,11 @@
 
 import UIKit
 
-class GridViewController: UIViewController {
+class GridViewController: DataSourceViewController<GridDataSource>, DataSourceReloadable {
     @IBOutlet var collectionView: UICollectionView!
 
-    var dataSource: GridDataSource {
-        didSet { reload() }
-    }
-
     init(dataSource: GridDataSource) {
-        self.dataSource = dataSource
-        super.init(nibName: "GridViewController", bundle: nil)
+        super.init(dataSource: dataSource, nibName: "GridViewController", bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

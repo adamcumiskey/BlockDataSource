@@ -11,65 +11,10 @@ import Foundation
 
 // MARK: -
 /// UITableView delegate and dataSource with block-based constructors
-public class ListDataSource: NSObject, DataSource {
-    public typealias ViewType = List
+public class ListDataSource: DataSource<List>, UITableViewDataSource, UITableViewDelegate {
 
-    /// The section data for the table view
-    public var sections = [Section<ViewType>]()
-
-    /// Callback for when a item is reordered
-    public var onReorder: ReorderBlock?
-
-    /// Callback for the UIScrollViewDelegate
-    public var onScroll: ScrollBlock?
-
-    /// Cell configuration middleware.
-    /// Gets applied in DataSource order to cells matching the middleware cellClass type
-    public var middleware: [ViewType.Middleware]
-
-    /**
-     Initialize a DataSource
-
-     - parameters:
-     - sections: The array of sections in this DataSource
-     - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
-     - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
-     */
-    public init(sections: [Section<ViewType>], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [ViewType.Middleware] = []) {
-        self.sections = sections
-        self.onReorder = onReorder
-        self.onScroll = onScroll
-        self.middleware = middleware
-    }
-
-    public convenience override init() {
-        self.init(items: [])
-    }
-
-    /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section<ViewType>, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [section],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
-    }
-
-    /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [ViewType.Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [Section<ViewType>(items: items)],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
-    }
-
-}
-
-
-// MARK: - UITableViewDataSource
-
-extension ListDataSource: UITableViewDataSource {
+    // MARK: - UITableViewDataSource
+    
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -81,17 +26,12 @@ extension ListDataSource: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = self[indexPath]
         let cell = tableView.dequeueReusableCell(withIdentifier: item.reuseIdentifier, for: indexPath)
-        // resonable default. can be overriden in configure block
-        cell.selectionStyle = (item.onSelect != nil) ? UITableViewCellSelectionStyle.`default` : UITableViewCellSelectionStyle.none
         item.configure(cell)
         return cell
     }
-}
 
 
-// MARK: - UITableViewDelegate
-
-extension ListDataSource: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
 
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         for middleware in middleware {
@@ -172,17 +112,6 @@ extension ListDataSource: UITableViewDelegate {
                 sections[destinationIndexPath.section].items.insert(item, at: destinationIndexPath.item)
             }
             reorder(sourceIndexPath, destinationIndexPath)
-        }
-    }
-}
-
-
-// MARK: - UIScrollViewDelegate
-
-extension ListDataSource: UIScrollViewDelegate {
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let onScroll = onScroll {
-            onScroll(scrollView)
         }
     }
 }
