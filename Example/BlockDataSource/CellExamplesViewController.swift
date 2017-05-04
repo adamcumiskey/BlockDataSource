@@ -12,6 +12,7 @@ import BlockDataSource
 
 class CellExamplesViewController: BlockTableViewController {
     override func configure(dataSource: DataSource) {
+
         dataSource.sections = [
             Section(
                 items: [
@@ -37,7 +38,10 @@ class CellExamplesViewController: BlockTableViewController {
                         )
                         cell.accessoryView = `switch`
                     }
-                ]
+                ],
+                footer: Reusable { (banner: ImageTableHeaderFooterView) in
+                    banner.imageView.image = #imageLiteral(resourceName: "king_burger")
+                }
             )
         ]
         dataSource.middleware = [
