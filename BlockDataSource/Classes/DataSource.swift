@@ -244,9 +244,9 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let header = self[section].footer else { return nil }
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
-        header.configure(view)
+        guard let footer = self[section].footer else { return nil }
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
+        footer.configure(view)
         return view
     }
 
