@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
             
-            let mainVC = MainViewController(style: .grouped)
+            let mainVC = MainViewController()
             mainVC.title = "Menu"
             
             let navVC = UINavigationController(rootViewController: mainVC)
