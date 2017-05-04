@@ -16,16 +16,11 @@ public protocol DataSourceProvidable: class {
 
 // MARK: - Table View Controller
 
-public protocol ReloadableTableView: DataSourceProvidable {
+public protocol TableViewReloadable: DataSourceProvidable {
     var tableView: UITableView! { get }
-    func reload()
 }
 
-public protocol ConfigurableTableView: ReloadableTableView {
-    func configure(dataSource: DataSource)
-}
-
-public extension ReloadableTableView {
+public extension TableViewReloadable {
     func reload() {
         guard let tableView = tableView else { return }
         tableView.registerReuseIdentifiers(forDataSource: dataSource)
@@ -35,7 +30,12 @@ public extension ReloadableTableView {
     }
 }
 
-public extension ConfigurableTableView {
+public protocol TableViewConfigurable: DataSourceProvidable {
+    var tableView: UITableView! { get }
+    func configure(dataSource: DataSource)
+}
+
+public extension TableViewConfigurable {
     func reload() {
         guard let tableView = tableView else { return }
         let dataSource = DataSource()
@@ -48,38 +48,27 @@ public extension ConfigurableTableView {
     }
 }
 
-open class TableViewController: UITableViewController, ReloadableTableView {
-    public var dataSource: DataSource {
-        didSet { reload() }
-    }
-
-    init(dataSource: DataSource, style: UITableViewStyle = .plain) {
-        self.dataSource = dataSource
-        super.init(style: style)
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+open class BlockTableViewController: UITableViewController, TableViewConfigurable {
+    public var dataSource: DataSource = DataSource()
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
     }
+
+    open func configure(dataSource: DataSource) {
+        // Subclass
+    }
 }
+
 
 // MARK: - Collection View Controller
 
-public protocol ReloadableCollectionView: DataSourceProvidable {
+public protocol CollectionViewReloadable: DataSourceProvidable {
     var collectionView: UICollectionView? { get }
-    func reload()
 }
 
-public protocol ConfigurableCollectionView: ReloadableCollectionView {
-    func configure(dataSource: DataSource)
-}
-
-public extension ReloadableCollectionView {
+public extension CollectionViewReloadable {
     func reload() {
         guard let collectionView = collectionView else { return }
         collectionView.registerReuseIdentifiers(forDataSource: dataSource)
@@ -89,7 +78,12 @@ public extension ReloadableCollectionView {
     }
 }
 
-public extension ConfigurableCollectionView {
+public protocol CollectionViewConfigurable: DataSourceProvidable {
+    var collectionView: UICollectionView? { get }
+    func configure(dataSource: DataSource)
+}
+
+public extension CollectionViewConfigurable {
     func reload() {
         guard let collectionView = collectionView else { return }
         let dataSource = DataSource()
@@ -102,22 +96,15 @@ public extension ConfigurableCollectionView {
     }
 }
 
-open class CollectionViewController: UICollectionViewController, ReloadableCollectionView {
-    public var dataSource: DataSource {
-        didSet { reload() }
-    }
-
-    init(dataSource: DataSource, collectionViewLayout: UICollectionViewLayout) {
-        self.dataSource = dataSource
-        super.init(collectionViewLayout: collectionViewLayout)
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+open class BlockCollectionViewController: UICollectionViewController, CollectionViewConfigurable {
+    public var dataSource: DataSource = DataSource()
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
+    }
+
+    open func configure(dataSource: DataSource) {
+        // Subclass
     }
 }

@@ -10,41 +10,39 @@ import Foundation
 import BlockDataSource
 
 
-class CellExamplesViewController: DataSourceTableViewController {
-    override func createDataSource() -> ListDataSource {
-        return ListDataSource(
-            sections: [
-                Section(
-                    items: [
-                        ListItem { (cell: Cell) -> Void in
-                            cell.textLabel?.text = "Basic Cell"
-                        },
-                        ListItem { (cell: SubtitleCell) in
-                            cell.textLabel?.text = "Subtitle Cell"
-                            cell.detailTextLabel?.text = "This is a subtitle"
-                        },
-                        ListItem { (cell: RightAlignedCell) in
-                            cell.textLabel?.text = "Switch"
-                            cell.detailTextLabel?.text = "Switch it up"
+class CellExamplesViewController: BlockTableViewController {
+    override func configure(dataSource: DataSource) {
+        dataSource.sections = [
+            Section(
+                items: [
+                    Item { (cell: UITableViewCell) -> Void in
+                        cell.textLabel?.text = "Basic Cell"
+                    },
+                    Item { (cell: SubtitleCell) in
+                        cell.textLabel?.text = "Subtitle Cell"
+                        cell.detailTextLabel?.text = "This is a subtitle"
+                    },
+                    Item { (cell: RightAlignedCell) in
+                        cell.textLabel?.text = "Switch"
+                        cell.detailTextLabel?.text = "Switch it up"
 
-                            let `switch` = UISwitch(
-                                frame: CGRect(
-                                    origin: CGPoint.zero,
-                                    size: CGSize(
-                                        width: 75,
-                                        height: 30
-                                    )
+                        let `switch` = UISwitch(
+                            frame: CGRect(
+                                origin: CGPoint.zero,
+                                size: CGSize(
+                                    width: 75,
+                                    height: 30
                                 )
                             )
-                            cell.accessoryView = `switch`
-                        }
-                    ]
-                )
-            ],
-            middleware: [
-                ListMiddleware { (cell: SubtitleCell) in cell.detailTextLabel?.font = .italicSystemFont(ofSize: 12) },
-                ListMiddleware { (cell: ImageCell) in cell.bigImageView.contentMode = .scaleAspectFill }
-            ]
-        )
+                        )
+                        cell.accessoryView = `switch`
+                    }
+                ]
+            )
+        ]
+        dataSource.middleware = [
+            Middleware { (cell: SubtitleCell) in cell.detailTextLabel?.font = .italicSystemFont(ofSize: 12) },
+            Middleware { (cell: ImageCell) in cell.bigImageView.contentMode = .scaleAspectFill }
+        ]
     }
 }

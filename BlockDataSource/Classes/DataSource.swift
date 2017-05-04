@@ -95,26 +95,24 @@ public class DataSource: NSObject {
 
 // MARK: - Reusable
 
-extension DataSource {
-    public class Reusable {
-        public var configure: ConfigureBlock
-        public var viewClass: UIView.Type
+public class Reusable {
+    public var configure: ConfigureBlock
+    public var viewClass: UIView.Type
 
-        public var customReuseIdentifier: String?
-        public var reuseIdentifier: String {
-            if let customReuseIdentifier = customReuseIdentifier {
-                return customReuseIdentifier
-            } else {
-                return String(describing: viewClass)
-            }
+    public var customReuseIdentifier: String?
+    public var reuseIdentifier: String {
+        if let customReuseIdentifier = customReuseIdentifier {
+            return customReuseIdentifier
+        } else {
+            return String(describing: viewClass)
         }
+    }
 
-        public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
-            self.configure = { view in
-                configure(view as! View)
-            }
-            self.viewClass = View.self
+    public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+        self.configure = { view in
+            configure(view as! View)
         }
+        self.viewClass = View.self
     }
 }
 
@@ -124,84 +122,79 @@ extension DataSource {
 /// Helper abstract base class which defines the variables that will allow subclasses easy
 /// protocol conformance to DataSourceItemProtocol.
 /// NOTE: This class does not conform to DataSourceItemProtocol and should not be directly instantiated.
-extension DataSource {
-    public class Item: Reusable {
-        public var onSelect: IndexPathBlock?
-        public var onDelete: IndexPathBlock?
-        public var reorderable: Bool = false
+public class Item: Reusable {
+    public var onSelect: IndexPathBlock?
+    public var onDelete: IndexPathBlock?
+    public var reorderable: Bool = false
 
-        /**
-         Initialize a item
+    /**
+     Initialize a item
 
-         - parameters:
-         - configure: The configuration block.
-         - onSelect: The closure to execute when the item is tapped
-         - onDelete: The closure to execute when the item is deleted
-         - reorderable: Flag to indicate if this item can be reordered
-         - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
-         */
-        public init<T: UIView>(configure: @escaping (T) -> Void, onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil) where T : UIView {
-            super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
-            self.onSelect = onSelect
-            self.onDelete = onDelete
-            self.reorderable = reorderable
-        }
+     - parameters:
+     - configure: The configuration block.
+     - onSelect: The closure to execute when the item is tapped
+     - onDelete: The closure to execute when the item is deleted
+     - reorderable: Flag to indicate if this item can be reordered
+     - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+     */
+    public init<T: UIView>(onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil, configure: @escaping (T) -> Void) where T : UIView {
+        super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
+        self.onSelect = onSelect
+        self.onDelete = onDelete
+        self.reorderable = reorderable
     }
 }
 
+
 // MARK: - Section
 
-extension DataSource {
-    /// Data structure representing the sections in the tableView
-    public struct Section {
-        /// The header data for this section
-        public var header: Reusable?
+/// Data structure representing the sections in the tableView
+public struct Section {
+    /// The header data for this section
+    public var header: Reusable?
 
-        /// The item data for this section
-        public var items: [Item]
+    /// The item data for this section
+    public var items: [Item]
 
-        /// The footer data for this section
-        public var footer: Reusable?
+    /// The footer data for this section
+    public var footer: Reusable?
 
-        /**
-         Initializer for a DataSource Section
+    /**
+     Initializer for a DataSource Section
 
-         - parameters:
-         - header: The DataSource header data for this section
-         - items: The items data for this section
-         - footer: The DataSource footer data for this section
-         */
-        public init(header: Reusable? = nil, items: [Item], footer: Reusable? = nil) {
-            self.header = header
-            self.items = items
-            self.footer = footer
-        }
+     - parameters:
+     - header: The DataSource header data for this section
+     - items: The items data for this section
+     - footer: The DataSource footer data for this section
+     */
+    public init(header: Reusable? = nil, items: [Item], footer: Reusable? = nil) {
+        self.header = header
+        self.items = items
+        self.footer = footer
+    }
 
-        /// Convenience init for a section with a single item
-        public init(header: Reusable? = nil, item: Item, footer: Reusable? = nil) {
-            self.header = header
-            self.items = [item]
-            self.footer = footer
-        }
-        
-        // Reference items with `section[index]`
-        public subscript(index: Int) -> Item {
-            return items[index]
-        }
+    /// Convenience init for a section with a single item
+    public init(header: Reusable? = nil, item: Item, footer: Reusable? = nil) {
+        self.header = header
+        self.items = [item]
+        self.footer = footer
+    }
+
+    // Reference items with `section[index]`
+    public subscript(index: Int) -> Item {
+        return items[index]
     }
 }
 
 
 // MARK: - Middleware
 
-extension DataSource {
-    public struct Middleware {
-        public var apply: (UIView) -> Void
-        public init<View: UIView>(apply: @escaping (View) -> Void) {
-            self.apply = { view in
-                if let view = view as? View {
-                    apply(view)
-                }
+public struct Middleware {
+    public var apply: (UIView) -> Void
+    public init<View: UIView>(apply: @escaping (View) -> Void) {
+        self.apply = { view in
+            if let view = view as? View {
+                apply(view)
             }
         }
     }
@@ -211,7 +204,6 @@ extension DataSource {
 // MARK: - UITableViewDataSource
 
 extension DataSource: UITableViewDataSource {
-
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -232,7 +224,6 @@ extension DataSource: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension DataSource: UITableViewDelegate {
-
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         for middleware in middleware {
             middleware.apply(cell)
@@ -320,7 +311,6 @@ extension DataSource: UITableViewDelegate {
 // MARK: - UICollectionViewDataSource
 
 extension DataSource: UICollectionViewDataSource {
-
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection sectionIndex: Int) -> Int {
         return self[sectionIndex].items.count
     }

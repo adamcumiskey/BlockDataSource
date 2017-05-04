@@ -9,22 +9,8 @@
 import UIKit
 import BlockDataSource
 
-let CollectionExampleDataSource: DataSource = DataSource(
-    sections: [
-        DataSouce.Section(
-            header: GridHeader { (view: ImageReusableView) in
-                view.imageView.image = UIImage(named: "double_burger")
-            },
-            items: images.map { image in
-                return GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
-                    cell.imageView.image = image
-                }
-            }
-        )
-    ]
-)
 
-class CollectionExampleViewController: DataSourceCollectionViewController {
+class CollectionExampleViewController: BlockCollectionViewController {
     var images = [UIImage]()
     
     override func viewDidLoad() {
@@ -44,25 +30,26 @@ class CollectionExampleViewController: DataSourceCollectionViewController {
             layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         }
     }
-    
-    override func createDataSource() -> GridDataSource {
-        return GridDataSource(
-            sections: [
-                Section(
-                    header: GridHeader { (view: ImageReusableView) in
-                        view.imageView.image = UIImage(named: "double_burger")
-                    },
-                    items: images.map { image in
-                        return GridItem(reorderable: true) { (cell: ImageCollectionViewCell) in
+
+    override func configure(dataSource: DataSource) {
+        dataSource.sections = [
+            Section(
+                header: Reusable { (view: ImageReusableView) in
+                    view.imageView.image = UIImage(named: "double_burger")
+                },
+                items: images.map { image in
+                    return Item(
+                        reorderable: true,
+                        configure: { (cell: ImageCollectionViewCell) in
                             cell.imageView.image = image
                         }
-                    }
-                )
-            ],
-            onReorder: { [unowned self] source, destination in
-                self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
-            }
-        )
+                    )
+                }
+            )
+        ]
+        dataSource.onReorder = { [unowned self] source, destination in
+            self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
+        }
     }
-    
+
 }

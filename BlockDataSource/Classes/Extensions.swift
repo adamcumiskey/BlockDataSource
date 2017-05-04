@@ -40,7 +40,7 @@ public extension UITableView {
         }
     }
 
-    private func register(sectionDecoration: DataSource.Reusable) {
+    private func register(sectionDecoration: Reusable) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
             register(nib, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
@@ -68,7 +68,7 @@ public extension UICollectionView {
         }
     }
 
-    private func register(sectionDecoration: DataSource.Reusable, kind: String) {
+    private func register(sectionDecoration: Reusable, kind: String) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
             register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
@@ -77,7 +77,7 @@ public extension UICollectionView {
         }
     }
 
-    private func register(item: DataSource.Item) {
+    private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
             register(nib, forCellWithReuseIdentifier: item.reuseIdentifier)
