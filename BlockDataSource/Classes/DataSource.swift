@@ -239,14 +239,6 @@ extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = self[section].header else { return nil }
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
-        header.configure(view)
-        return view
-    }
-
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footer = self[section].footer else { return nil }
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
-        footer.configure(view)
         return view
     }
 
@@ -258,12 +250,29 @@ extension DataSource: UITableViewDelegate {
         }
     }
 
+    public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = self[section].header else { return }
+        header.configure(view)
+    }
+
+    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let footer = self[section].footer else { return nil }
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
+        footer.configure(view)
+        return view
+    }
+
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if let footer = self.tableView(tableView, viewForFooterInSection: section) {
             return footer.frame.height
         } else {
             return UITableViewAutomaticDimension
         }
+    }
+
+    public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        guard let footer = self[section].footer else { return }
+        footer.configure(view)
     }
 
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
