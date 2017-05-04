@@ -1,6 +1,0 @@
-framework module Pods_BlockDataSource_ExampleTests {
-  umbrella header "Pods-BlockDataSource_ExampleTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
