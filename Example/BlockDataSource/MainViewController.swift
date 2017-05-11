@@ -50,8 +50,8 @@ class MainViewController: BlockTableViewController {
             )
         ]
         dataSource.middleware = [
-            Middleware { (cell: UITableViewCell) in cell.textLabel?.font = .boldSystemFont(ofSize: 15) },
-            Middleware { (cell: UITableViewCell) in cell.accessoryType = .disclosureIndicator }
+            Middleware { (cell: UITableViewCell, _, _) in cell.textLabel?.font = .boldSystemFont(ofSize: 15) },
+            Middleware { (cell: UITableViewCell, _, _) in cell.accessoryType = .disclosureIndicator }
         ]
     }
 }

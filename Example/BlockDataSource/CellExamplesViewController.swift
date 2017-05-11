@@ -45,8 +45,8 @@ class CellExamplesViewController: BlockTableViewController {
             )
         ]
         dataSource.middleware = [
-            Middleware { (cell: SubtitleCell) in cell.detailTextLabel?.font = .italicSystemFont(ofSize: 12) },
-            Middleware { (cell: ImageCell) in cell.bigImageView.contentMode = .scaleAspectFill }
+            Middleware { (cell: SubtitleCell, _, _) in cell.detailTextLabel?.font = .italicSystemFont(ofSize: 12) },
+            Middleware { (cell: ImageCell, _, _) in cell.bigImageView.contentMode = .scaleAspectFill }
         ]
     }
 }

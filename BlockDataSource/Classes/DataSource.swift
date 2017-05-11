@@ -196,15 +196,16 @@ public struct Section {
 ///
 /// The datasource will apply its middleware to any views matching the type passed into the `apply` closure.
 /// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
-/// all items.
+/// all items. The indexPath of the item that the middleware is being applied to as well as the dataSource structure are also
+/// passed in to allow the middleware to be aware of context.
 ///
 /// NOTE: This is probably not production ready as applying all the middleware to each cell is O(n) 
 public struct Middleware {
-    public var apply: (UIView) -> Void
-    public init<View: UIView>(apply: @escaping (View) -> Void) {
-        self.apply = { view in
+    public var apply: (UIView, IndexPath, [Section]) -> Void
+    public init<View: UIView>(apply: @escaping (View, IndexPath, [Section]) -> Void) {
+        self.apply = { view, indexPath, sections in
             if let view = view as? View {
-                apply(view)
+                apply(view, indexPath, sections)
             }
         }
     }
@@ -236,7 +237,7 @@ extension DataSource: UITableViewDataSource {
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         for middleware in middleware {
-            middleware.apply(cell)
+            middleware.apply(cell, indexPath, self.sections)
         }
     }
 
@@ -387,7 +388,7 @@ extension DataSource: UICollectionViewDataSource {
 extension DataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         for middleware in middleware {
-            middleware.apply(cell)
+            middleware.apply(cell, indexPath, self.sections)
         }
     }
 
