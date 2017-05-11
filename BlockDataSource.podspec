@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BlockDataSource'
-  s.version          = '0.2.3'
+  s.version          = '0.3.0'
   s.summary          = 'A block configurable datasource for static table views'
 
 # This description is used to generate tags and improve search results.
