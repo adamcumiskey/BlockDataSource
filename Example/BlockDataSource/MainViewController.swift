@@ -11,47 +11,47 @@ import BlockDataSource
 
 
 class MainViewController: BlockTableViewController {
-    override func configureDataSource(dataSource: List) {
+    override func configure(dataSource: DataSource) {
         dataSource.sections = [
-            List.Section(
-                rows: [
-                    List.Row(
-                        configure: { cell in
-                            cell.textLabel?.text = "Cell Types"
-                        },
+            Section(
+                items: [
+                    Item(
                         onSelect: { [unowned self] indexPath in
                             let testVC = CellExamplesViewController(style: .grouped)
                             testVC.title = "Cell Types"
                             self.navigationController?.pushViewController(testVC, animated: true)
+                        },
+                        configure: { (cell: UITableViewCell) in
+                            cell.textLabel?.text = "Cell Types"
                         }
                     ),
-                    List.Row(
-                        configure: { cell in
-                            cell.textLabel?.text = "Editing"
-                        },
+                    Item(
                         onSelect: { [unowned self] indexPath in
                             let reorderVC = EditingViewController()
                             reorderVC.title = "Editing"
                             self.navigationController?.pushViewController(reorderVC, animated: true)
+                        },
+                        configure: { (cell: UITableViewCell) in
+                            cell.textLabel?.text = "Editing"
                         }
                     ),
-                    List.Row(
-                        configure: { cell in
-                            cell.textLabel?.text = "Collection View"
-                        },
+                    Item(
                         onSelect: { [unowned self] indexPath in
                             let collectionVC = CollectionExampleViewController(collectionViewLayout: UICollectionViewFlowLayout())
                             collectionVC.collectionView?.backgroundColor = .groupTableViewBackground
                             collectionVC.title = "Collection View"
                             self.navigationController?.pushViewController(collectionVC, animated: true)
+                        },
+                        configure: { (cell: UITableViewCell) in
+                            cell.textLabel?.text = "Collection View"
                         }
                     )
                 ]
             )
         ]
-        
-        let boldTitles = Middleware { $0.textLabel?.font = .boldSystemFont(ofSize: 15) }
-        let disclosureIndicator = Middleware { $0.accessoryType = .disclosureIndicator }
-        dataSource.middlewareStack = [boldTitles, disclosureIndicator]
+        dataSource.middleware = [
+            Middleware { (cell: UITableViewCell) in cell.textLabel?.font = .boldSystemFont(ofSize: 15) },
+            Middleware { (cell: UITableViewCell) in cell.accessoryType = .disclosureIndicator }
+        ]
     }
 }

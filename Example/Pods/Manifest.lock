@@ -1,5 +1,5 @@
 PODS:
-  - BlockDataSource (0.2.2)
+  - BlockDataSource (0.2.3)
 
 DEPENDENCIES:
   - BlockDataSource (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BlockDataSource: f71dad0d60a2de71c599c158681bba63c4776240
+  BlockDataSource: a1a0471d14da61317cba7dc5a3ab3d4817a1a062
 
-PODFILE CHECKSUM: 59e4333fe73ef008598a6847d269f1403c473896
+PODFILE CHECKSUM: 5eaa3412b270950d61d8c20dff117e0034fc44df
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.1

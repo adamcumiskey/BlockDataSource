@@ -10,49 +10,27 @@ import Foundation
 import BlockDataSource
 
 
-struct Item: Equatable {
-    var title: String
-}
-
-extension Item {
-    func configureCell(cell: Cell) -> Void {
-        cell.textLabel?.text = title
-    }
-}
-
-func ==(lhs: Item, rhs: Item) -> Bool {
-    return lhs.title == rhs.title
-}
-
-
-
 class EditingViewController: BlockTableViewController {
+    var data: [String] = (0..<5).map { "\($0)" }
 
-    var data: [Item]
-    init() {
-        data = (0..<5).map { Item(title: "\($0)") }
-        super.init(style: .grouped)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = editButtonItem
     }
-    
-    override func configureDataSource(dataSource: List) {
+
+    override func configure(dataSource: DataSource) {
         dataSource.sections = [
-            List.Section(
-                rows: data.map { item in
-                    return List.Row(
-                        configure: item.configureCell,
+            Section(
+                items: data.map { dataItem in
+                    return Item(
                         onDelete: { [unowned self] indexPath in
-                            if let index = self.data.index(of: item) {
+                            if let index = self.data.index(of: dataItem) {
                                 self.data.remove(at: index)
                             }
+                        },
+                        reorderable: true,
+                        configure: { (cell: Cell) in
+                            cell.textLabel?.text = dataItem
                         }
                     )
                 }

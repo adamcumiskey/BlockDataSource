@@ -30,23 +30,26 @@ class CollectionExampleViewController: BlockCollectionViewController {
             layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         }
     }
-    
-    override func configureDataSource(dataSource: Grid) {
+
+    override func configure(dataSource: DataSource) {
         dataSource.sections = [
-            Grid.Section(
-                header: Grid.Section.HeaderFooter { (view: ImageReusableView) in
+            Section(
+                header: Reusable { (view: ImageReusableView) in
                     view.imageView.image = UIImage(named: "double_burger")
                 },
                 items: images.map { image in
-                    return Grid.Item(reorderable: true) { (cell: ImageCollectionViewCell) in
-                        cell.imageView.image = image
-                    }
+                    return Item(
+                        reorderable: true,
+                        configure: { (cell: ImageCollectionViewCell) in
+                            cell.imageView.image = image
+                        }
+                    )
                 }
             )
         ]
-        
         dataSource.onReorder = { [unowned self] source, destination in
             self.images.moveObjectAtIndex(source.row, toIndex: destination.row)
         }
     }
+
 }
