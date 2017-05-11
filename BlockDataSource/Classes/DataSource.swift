@@ -38,6 +38,8 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 // MARK: - DataSource
 
+/// Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
+/// The block based initialization allows tables and collections to be created with a DSL-like syntax.
 public class DataSource: NSObject {
     public var sections: [Section]
     public var onReorder: ReorderBlock?
@@ -95,6 +97,9 @@ public class DataSource: NSObject {
 
 // MARK: - Reusable
 
+/// Represents the data for configuring a reusable view
+/// You must specify the View class that a Reusable will represent in the `configure` closure.
+/// View must be a subtype of UITableViewCell, UITableViewHeaderFooterView, UICollectionViewCell, UICollectionReusableView
 public class Reusable {
     public var configure: ConfigureBlock
     public var viewClass: UIView.Type
@@ -119,9 +124,7 @@ public class Reusable {
 
 // MARK: - Item
 
-/// Helper abstract base class which defines the variables that will allow subclasses easy
-/// protocol conformance to DataSourceItemProtocol.
-/// NOTE: This class does not conform to DataSourceItemProtocol and should not be directly instantiated.
+/// Object used to configure UITableViewCell or UICollectionViewCells
 public class Item: Reusable {
     public var onSelect: IndexPathBlock?
     public var onDelete: IndexPathBlock?
@@ -148,7 +151,7 @@ public class Item: Reusable {
 
 // MARK: - Section
 
-/// Data structure representing the sections in the tableView
+/// Data structure that wraps an array of items to represent a tableView/collectionView section.
 public struct Section {
     /// The header data for this section
     public var header: Reusable?
@@ -163,7 +166,7 @@ public struct Section {
      Initializer for a DataSource Section
 
      - parameters:
-     - header: The DataSource header data for this section
+     - header: The header item for this section
      - items: The items data for this section
      - footer: The DataSource footer data for this section
      */
@@ -189,6 +192,13 @@ public struct Section {
 
 // MARK: - Middleware
 
+/// Middleware allows you to customize for specific table/collection view cells in a generic way.
+///
+/// The datasource will apply its middleware to any views matching the type passed into the `apply` closure.
+/// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
+/// all items.
+///
+/// NOTE: This is probably not production ready as applying all the middleware to each cell is O(n) 
 public struct Middleware {
     public var apply: (UIView) -> Void
     public init<View: UIView>(apply: @escaping (View) -> Void) {
