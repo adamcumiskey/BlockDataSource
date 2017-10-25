@@ -257,7 +257,7 @@ extension DataSource: UITableViewDelegate {
         if let header = self.tableView(tableView, viewForHeaderInSection: section) {
             return header.frame.height
         } else {
-            return UITableViewAutomaticDimension
+            return 0
         }
     }
 
@@ -277,7 +277,7 @@ extension DataSource: UITableViewDelegate {
         if let footer = self.tableView(tableView, viewForFooterInSection: section) {
             return footer.frame.height
         } else {
-            return UITableViewAutomaticDimension
+            return 0
         }
     }
 
