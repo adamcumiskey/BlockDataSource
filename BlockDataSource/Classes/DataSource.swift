@@ -255,7 +255,7 @@ extension DataSource: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if let header = self.tableView(tableView, viewForHeaderInSection: section) {
-            return header.frame.height
+            return UITableViewAutomaticDimension
         } else {
             return 0
         }
@@ -275,7 +275,7 @@ extension DataSource: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if let footer = self.tableView(tableView, viewForFooterInSection: section) {
-            return footer.frame.height
+            return UITableViewAutomaticDimension
         } else {
             return 0
         }
