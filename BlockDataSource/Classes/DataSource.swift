@@ -198,8 +198,6 @@ public struct Section {
 /// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
 /// all items. The indexPath of the item that the middleware is being applied to as well as the dataSource structure are also
 /// passed in to allow the middleware to be aware of context.
-///
-/// NOTE: This is probably not production ready as applying all the middleware to each cell is O(n) 
 public struct Middleware {
     public var apply: (UIView, IndexPath, [Section]) -> Void
     public init<View: UIView>(apply: @escaping (View, IndexPath, [Section]) -> Void) {
