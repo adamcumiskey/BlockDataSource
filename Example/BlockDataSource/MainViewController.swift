@@ -10,7 +10,7 @@ import Foundation
 import BlockDataSource
 
 
-class MainViewController: BlockTableViewController {
+class MainViewController: ConfigureableTableViewController {
     override func configure(dataSource: DataSource) {
         dataSource.sections = [
             Section(

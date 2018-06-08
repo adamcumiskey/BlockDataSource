@@ -10,7 +10,7 @@ import Foundation
 import BlockDataSource
 
 
-class EditingViewController: BlockTableViewController {
+class EditingViewController: ConfigureableTableViewController {
     var data: [String] = (0..<5).map { "\($0)" }
 
     override func viewDidLoad() {
