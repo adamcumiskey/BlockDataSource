@@ -32,6 +32,18 @@ import UIKit
 import BlockDataSource
 
 
+let noCellSelectionStyle = Middleware { (view: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
+    view.selectionStyle = .none
+}
+let cellGradient = Middleware { (view: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
+    let normalized = CGFloat(Double(indexPath.row) / Double(sections[indexPath.section].items.count))
+    let backgroundColor = UIColor(white: 1-normalized, alpha: 1.0)
+    let textColor = UIColor(white: normalized, alpha: 1.0)
+    view.contentView.backgroundColor = backgroundColor
+    view.textLabel?.textColor = textColor
+    view.detailTextLabel?.textColor = textColor
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -43,11 +55,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
             
-            let mainVC = MainViewController(dataSource: DataSource(), style: .grouped)
-            mainVC.title = "Menu"
+            let greetingItem = Item { (cell: UITableViewCell) in
+                cell.textLabel?.text = "Hi"
+            }
+            let mainMenuDataSource = DataSource(items: (0..<50).map { _ in return greetingItem })
+            mainMenuDataSource.middleware = [noCellSelectionStyle, cellGradient]
             
+            let mainVC = BlockTableViewController(
+                dataSource: mainMenuDataSource,
+                configureTableView: { tableView in
+                    tableView.separatorStyle = .none
+               }
+            )
             let navVC = UINavigationController(rootViewController: mainVC)
-            navVC.view.frame = window!.bounds
             
             window!.rootViewController = navVC
             window!.makeKeyAndVisible()

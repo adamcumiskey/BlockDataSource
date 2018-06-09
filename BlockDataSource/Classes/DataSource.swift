@@ -51,18 +51,15 @@ open class DataSource: NSObject {
      - sections: The array of sections in this DataSource
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
      - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
-     - middleware: Array of middleware functions to apply to the DataSource items
      */
     public init(
         sections: [Section],
         onReorder: ReorderBlock? = nil,
-        onScroll: ScrollBlock? = nil,
-        middleware: [Middleware]? = nil
+        onScroll: ScrollBlock? = nil
     ) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
-        self.middleware = middleware
     }
 
     public convenience override init() {
@@ -76,9 +73,9 @@ open class DataSource: NSObject {
 
     /// Convenience init for a DataSource with a single section with no headers/footers
     public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(sections: [Section(items: items)])
+        self.init(sections: [Section(items: items)], onReorder: onReorder, onScroll: onScroll)
     }
-
+    
     // Reference section with `DataSource[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
@@ -156,13 +153,22 @@ public class Item: Reusable {
         configure: @escaping (T) -> Void,
         onSelect: IndexPathBlock? = nil,
         onDelete: IndexPathBlock? = nil,
-        options: Options = .default
+        options: Options
     ) {
         self.onSelect = onSelect
         self.onDelete = onDelete
         self.options = options
         super.init(reuseIdentifier: options.reuseIdentifier, configure: configure)
     }
+    
+//    // Enable trailing closure initialization
+    public convenience init<T: UIView>(
+        options: Options = .default,
+        configure: @escaping (T) -> Void
+    ) {
+        self.init(configure: configure, onSelect: nil, onDelete: nil, options: options)
+    }
+
 }
 
 

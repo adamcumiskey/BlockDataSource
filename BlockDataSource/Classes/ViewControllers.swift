@@ -51,18 +51,30 @@ public extension TableViewReloadable {
 }
 
 open class BlockTableViewController: UITableViewController, TableViewReloadable {
-    var dataSource: DataSource
-    init(style: UITableViewStyle, dataSource: DataSource) {
+    
+    private let configureTableView: ((UITableView) -> Void)?
+
+    public var dataSource: DataSource {
+        didSet {
+            reload()
+        }
+    }
+    
+    public init(style: UITableViewStyle = .plain, dataSource: DataSource, configureTableView: ((UITableView) -> Void)? = nil) {
         self.dataSource = dataSource
+        self.configureTableView = configureTableView
         super.init(style: style)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     open override func viewDidLoad() {
         super.viewDidLoad()
+        if let tableView = tableView {
+            configureTableView?(tableView)
+        }
         reload()
     }
 }
@@ -84,18 +96,29 @@ public extension CollectionViewReloadable {
 }
 
 open class BlockCollectionViewController: UICollectionViewController, CollectionViewReloadable {
-    var dataSource: DataSource
-    init(layout: UICollectionViewLayout, dataSource: DataSource) {
+    private let configureCollectionView: ((UICollectionView) -> Void)?
+    
+    public var dataSource: DataSource {
+        didSet {
+            reload()
+        }
+    }
+    
+    init(layout: UICollectionViewLayout, dataSource: DataSource, configureCollectionView: ((UICollectionView) -> Void)? = nil) {
         self.dataSource = dataSource
+        self.configureCollectionView = configureCollectionView
         super.init(collectionViewLayout: layout)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     open override func viewDidLoad() {
         super.viewDidLoad()
+        if let collectionView = collectionView {
+            configureCollectionView?(collectionView)
+        }
         reload()
     }
 }
