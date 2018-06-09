@@ -30,11 +30,9 @@
 
 import Foundation
 
-
 public protocol DataSourceProvidable: class {
     var dataSource: DataSource { get set }
 }
-
 
 // MARK: - Table View Controller
 
@@ -52,37 +50,22 @@ public extension TableViewReloadable {
     }
 }
 
-public protocol TableViewConfigurable: DataSourceProvidable {
-    var tableView: UITableView! { get }
-    func configure(dataSource: DataSource)
-}
-
-public extension TableViewConfigurable {
-    func reload() {
-        guard let tableView = tableView else { return }
-        let dataSource = DataSource()
-        configure(dataSource: dataSource)
-        tableView.registerReuseIdentifiers(forDataSource: dataSource)
-        tableView.dataSource = dataSource
-        tableView.delegate = dataSource
+open class BlockTableViewController: UITableViewController, TableViewReloadable {
+    var dataSource: DataSource
+    init(style: UITableViewStyle, dataSource: DataSource) {
         self.dataSource = dataSource
-        tableView.reloadData()
+        super.init(style: style)
     }
-}
-
-open class ConfigureableTableViewController: UITableViewController, TableViewConfigurable {
-    public var dataSource: DataSource = DataSource()
-
-    override open func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
         reload()
     }
-
-    open func configure(dataSource: DataSource) {
-        // Subclass
-    }
 }
-
 
 // MARK: - Collection View Controller
 
@@ -100,33 +83,19 @@ public extension CollectionViewReloadable {
     }
 }
 
-public protocol CollectionViewConfigurable: DataSourceProvidable {
-    var collectionView: UICollectionView? { get }
-    func configure(dataSource: DataSource)
-}
-
-public extension CollectionViewConfigurable {
-    func reload() {
-        guard let collectionView = collectionView else { return }
-        let dataSource = DataSource()
-        configure(dataSource: dataSource)
-        collectionView.registerReuseIdentifiers(forDataSource: dataSource)
-        collectionView.dataSource = dataSource
-        collectionView.delegate = dataSource
+open class BlockCollectionViewController: UICollectionViewController, CollectionViewReloadable {
+    var dataSource: DataSource
+    init(layout: UICollectionViewLayout, dataSource: DataSource) {
         self.dataSource = dataSource
-        collectionView.reloadData()
+        super.init(collectionViewLayout: layout)
     }
-}
-
-open class ConfigurableCollectionViewController: UICollectionViewController, CollectionViewConfigurable {
-    public var dataSource: DataSource = DataSource()
-
-    override open func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
         reload()
-    }
-
-    open func configure(dataSource: DataSource) {
-        // Subclass
     }
 }

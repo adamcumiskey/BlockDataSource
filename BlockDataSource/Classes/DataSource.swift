@@ -29,7 +29,6 @@
 
 import Foundation
 
-
 public typealias ConfigureBlock = (UIView) -> Void
 public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
@@ -40,22 +39,10 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 /// Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
 /// The block based initialization allows tables and collections to be created with a DSL-like syntax.
 open class DataSource: NSObject {
-    public struct Options {
-        let onReorder: ReorderBlock?
-        let onScroll: ScrollBlock?
-        let middleware: [Middleware]?
-        
-        static var `default`: Options {
-            return Options(
-                onReorder: nil,
-                onScroll: nil,
-                middleware: []
-            )
-        }
-    }
-    
     public var sections: [Section]
-    public var options: Options
+    public var onReorder: ReorderBlock?
+    public var onScroll: ScrollBlock?
+    public var middleware: [Middleware]?
 
     /**
      Initialize a DataSource
@@ -68,10 +55,14 @@ open class DataSource: NSObject {
      */
     public init(
         sections: [Section],
-        options: Options = .default
+        onReorder: ReorderBlock? = nil,
+        onScroll: ScrollBlock? = nil,
+        middleware: [Middleware]? = nil
     ) {
         self.sections = sections
-        self.options = options
+        self.onReorder = onReorder
+        self.onScroll = onScroll
+        self.middleware = middleware
     }
 
     public convenience override init() {
@@ -79,19 +70,13 @@ open class DataSource: NSObject {
     }
 
     /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [section],
-            options: Options(onReorder: onReorder, onScroll: onScroll, middleware: nil)
-        )
+    public convenience init(section: Section) {
+        self.init(sections: [section])
     }
 
     /// Convenience init for a DataSource with a single section with no headers/footers
     public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [Section(items: items)],
-            options: Options(onReorder: onReorder, onScroll: onScroll, middleware: nil)
-        )
+        self.init(sections: [Section(items: items)])
     }
 
     // Reference section with `DataSource[index]`
@@ -142,7 +127,6 @@ public class Reusable {
 
 /// Object used to configure a UITableViewCell or UICollectionViewCell
 public class Item: Reusable {
-    
     public struct Options {
         let reorderable: Bool
         let reuseIdentifier: String?
@@ -301,7 +285,7 @@ extension DataSource: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if let reorder = options.onReorder {
+        if let reorder = onReorder {
             if sourceIndexPath.section == destinationIndexPath.section {
                 sections[sourceIndexPath.section].items.moveObjectAtIndex(sourceIndexPath.item, toIndex: destinationIndexPath.item)
             } else {
@@ -319,7 +303,7 @@ extension DataSource: UITableViewDataSource {
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let middleware = options.middleware else { return }
+        guard let middleware = middleware else { return }
         for middleware in middleware {
             middleware.apply(cell, indexPath, self.sections)
         }
@@ -399,12 +383,12 @@ extension DataSource: UICollectionViewDataSource {
     }
 
     public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        guard options.onReorder != nil else { return false }
+        guard onReorder != nil else { return false }
         return self[indexPath].options.reorderable
     }
 
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if let reorder = options.onReorder {
+        if let reorder = onReorder {
             // Reorder the items
             if sourceIndexPath.section == destinationIndexPath.section {
                 sections[sourceIndexPath.section].items.moveObjectAtIndex(sourceIndexPath.item, toIndex: destinationIndexPath.item)
@@ -439,7 +423,7 @@ extension DataSource: UICollectionViewDataSource {
 
 extension DataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let middleware = options.middleware else { return }
+        guard let middleware = middleware else { return }
         for middleware in middleware {
             middleware.apply(cell, indexPath, self.sections)
         }
@@ -461,7 +445,7 @@ extension DataSource: UICollectionViewDelegate {
 
 extension DataSource: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let onScroll = options.onScroll {
+        if let onScroll = onScroll {
             onScroll(scrollView)
         }
     }
