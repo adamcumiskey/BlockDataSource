@@ -133,7 +133,7 @@ public class Item: Reusable {
         /// Override for the cell's `reuseIdentifier`. If nil this is nil, the default will be
         let reuseIdentifier: String?
         
-        static var `default`: Options {
+        public class var `default`: Options {
             return Options(
                 reorderable: false,
                 reuseIdentifier: nil
@@ -158,7 +158,7 @@ public class Item: Reusable {
         configure: @escaping (T) -> Void,
         onSelect: IndexPathBlock? = nil,
         onDelete: IndexPathBlock? = nil,
-        options: Options
+        options: Options = .default,
     ) {
         self.onSelect = onSelect
         self.onDelete = onDelete
