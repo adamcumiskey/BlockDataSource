@@ -140,7 +140,7 @@ public class Item: Reusable {
      - reorderable: Flag to indicate if this item can be reordered
      - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
      */
-    public init<T: UIView>(onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil, configure: @escaping (T) -> Void) where T : UIView {
+    public init<T: UIView>(onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil, configure: @escaping (T) -> Void) {
         super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
         self.onSelect = onSelect
         self.onDelete = onDelete
@@ -252,7 +252,7 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if let header = self.tableView(tableView, viewForHeaderInSection: section) {
+        if self.tableView(tableView, viewForHeaderInSection: section) != nil {
             return UITableViewAutomaticDimension
         } else {
             return 0
@@ -272,7 +272,7 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if let footer = self.tableView(tableView, viewForFooterInSection: section) {
+        if self.tableView(tableView, viewForFooterInSection: section) != nil {
             return UITableViewAutomaticDimension
         } else {
             return 0
