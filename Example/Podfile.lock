@@ -1,16 +1,25 @@
 PODS:
-  - BlockDataSource (0.3.0)
+  - BlockDataSource (0.3.0):
+    - BlockDataSource/ViewControllers (= 0.3.0)
+  - BlockDataSource/ViewControllers (0.3.0)
+  - Vine (1.0.1)
 
 DEPENDENCIES:
   - BlockDataSource (from `../`)
+  - Vine
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Vine
 
 EXTERNAL SOURCES:
   BlockDataSource:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BlockDataSource: 85c9cea1119646f2241bedfbfbb436cf2478d1f5
+  BlockDataSource: dd74304a30c03e60a221e878cf34b99d928e3cdf
+  Vine: ad00bea79c5f03a316b5c0a630d2cf264dec5d1b
 
-PODFILE CHECKSUM: 5eaa3412b270950d61d8c20dff117e0034fc44df
+PODFILE CHECKSUM: a43b3207ba85308835d21825502cd4cfbdcfe274
 
 COCOAPODS: 1.5.2
