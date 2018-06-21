@@ -76,6 +76,10 @@ open class DataSource: NSObject {
         self.init(sections: [Section(items: items)], onReorder: onReorder, onScroll: onScroll)
     }
     
+    public class func `static`(sections: [Section]) -> DataSource {
+        return DataSource(sections: sections)
+    }
+    
     // Reference section with `DataSource[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
@@ -126,6 +130,7 @@ public class Reusable {
 public class Item: Reusable {
     public struct Options {
         let reorderable: Bool
+        /// Override for the cell's `reuseIdentifier`. If nil this is nil, the default will be
         let reuseIdentifier: String?
         
         static var `default`: Options {
@@ -161,14 +166,13 @@ public class Item: Reusable {
         super.init(reuseIdentifier: options.reuseIdentifier, configure: configure)
     }
     
-//    // Enable trailing closure initialization
+    // Enable trailing closure initialization
     public convenience init<T: UIView>(
         options: Options = .default,
         configure: @escaping (T) -> Void
     ) {
         self.init(configure: configure, onSelect: nil, onDelete: nil, options: options)
     }
-
 }
 
 
@@ -230,6 +234,9 @@ public struct Section {
 /// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
 /// all items. The indexPath of the item that the middleware is being applied to as well as the dataSource structure are also
 /// passed in to allow the middleware to be aware of context.
+///
+/// CAUTION: Middleware is currently very inefficient. Every time a cell is about to be reconfigured it reapplies the midleware in O(n) time.
+/// I haven't experinced performance issues but YMMV.
 public struct Middleware {
     public typealias ApplyFunction = (UIView, IndexPath, [Section]) -> Void
     public var apply: ApplyFunction
@@ -241,7 +248,6 @@ public struct Middleware {
             }
         }
     }
-    
 }
 
 
@@ -280,6 +286,7 @@ extension DataSource: UITableViewDataSource {
         if editingStyle == .delete {
             if let onDelete = self[indexPath].onDelete {
                 sections[indexPath.section].items.remove(at: indexPath.item)
+                // TODO: make configurable
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
                 onDelete(indexPath)
             }
@@ -301,7 +308,6 @@ extension DataSource: UITableViewDataSource {
             reorder(sourceIndexPath, destinationIndexPath)
         }
     }
-
 }
 
 
@@ -309,10 +315,7 @@ extension DataSource: UITableViewDataSource {
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let middleware = middleware else { return }
-        for middleware in middleware {
-            middleware.apply(cell, indexPath, self.sections)
-        }
+        middleware?.forEach { $0.apply(cell, indexPath, self.sections) }
     }
     
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {

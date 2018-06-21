@@ -62,7 +62,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             mainMenuDataSource.middleware = [noCellSelectionStyle, cellGradient]
             
             let mainVC = BlockTableViewController(
-                dataSource: mainMenuDataSource,
+                dataSource: .static(
+                    sections: [
+                        Section(
+                            items: [
+                                Item { (cell: UITableViewCell) in
+                                    cell.textLabel?.text = "Hi"
+                                }
+                            ]
+                        ),
+                        Section(
+                            title: "Sectiom 2",
+                            items: [
+                                Item { (cell: UITableViewCell) in
+                                    cell.textLabel?.text = "Section dos"
+                                }
+                            ]
+                        )
+                    ]
+                ),
                 configureTableView: { tableView in
                     tableView.separatorStyle = .none
                }

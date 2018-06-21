@@ -18,5 +18,11 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "BlockDataSource/Classes/**/*"
+  "source_files": "BlockDataSource/Classes/DataSource.swift",
+  "subspecs": [
+    {
+      "name": "ViewControllers",
+      "source_files": "BlockDataSource/Classes/ViewControllers.swift"
+    }
+  ]
 }
