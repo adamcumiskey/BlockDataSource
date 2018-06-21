@@ -42,7 +42,7 @@ open class DataSource: NSObject {
     public var sections: [Section]
     public var onReorder: ReorderBlock?
     public var onScroll: ScrollBlock?
-    public var middleware: [Middleware]?
+    public var middleware: [Middleware]
 
     /**
      Initialize a DataSource
@@ -55,29 +55,17 @@ open class DataSource: NSObject {
     public init(
         sections: [Section],
         onReorder: ReorderBlock? = nil,
-        onScroll: ScrollBlock? = nil
+        onScroll: ScrollBlock? = nil,
+        middleware: [Middleware] = []
     ) {
         self.sections = sections
         self.onReorder = onReorder
         self.onScroll = onScroll
-    }
-
-    public convenience override init() {
-        self.init(items: [])
-    }
-
-    /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section) {
-        self.init(sections: [section])
-    }
-
-    /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(sections: [Section(items: items)], onReorder: onReorder, onScroll: onScroll)
+        self.middleware = middleware
     }
     
-    public class func `static`(sections: [Section]) -> DataSource {
-        return DataSource(sections: sections)
+    public class func `static`(sections: [Section], middleware: [Middleware] = []) -> DataSource {
+        return DataSource(sections: sections, middleware: middleware)
     }
     
     // Reference section with `DataSource[index]`
@@ -315,7 +303,7 @@ extension DataSource: UITableViewDataSource {
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        middleware?.forEach { $0.apply(cell, indexPath, self.sections) }
+        middleware.forEach { $0.apply(cell, indexPath, self.sections) }
     }
     
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -432,10 +420,7 @@ extension DataSource: UICollectionViewDataSource {
 
 extension DataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let middleware = middleware else { return }
-        for middleware in middleware {
-            middleware.apply(cell, indexPath, self.sections)
-        }
+        middleware.forEach { $0.apply(cell, indexPath, self.sections) }
     }
 
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

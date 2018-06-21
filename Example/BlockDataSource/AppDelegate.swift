@@ -35,6 +35,7 @@ import BlockDataSource
 let noCellSelectionStyle = Middleware { (view: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
     view.selectionStyle = .none
 }
+
 let cellGradient = Middleware { (view: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
     let normalized = CGFloat(Double(indexPath.row) / Double(sections[indexPath.section].items.count))
     let backgroundColor = UIColor(white: 1-normalized, alpha: 1.0)
@@ -42,6 +43,10 @@ let cellGradient = Middleware { (view: UITableViewCell, indexPath: IndexPath, se
     view.contentView.backgroundColor = backgroundColor
     view.textLabel?.textColor = textColor
     view.detailTextLabel?.textColor = textColor
+}
+
+let noTableSeparator = Middleware { (view: UITableView, _, _) in
+    view.separatorStyle = .none
 }
 
 @UIApplicationMain
@@ -55,17 +60,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
             
-            let greetingItem = Item { (cell: UITableViewCell) in
-                cell.textLabel?.text = "Hi"
-            }
-            let mainMenuDataSource = DataSource(items: (0..<50).map { _ in return greetingItem })
-            mainMenuDataSource.middleware = [noCellSelectionStyle, cellGradient]
+            let mainMenuDataSource = DataSource(
+                sections: [
+                    Section(
+                        items: (0..<50).map { _ in
+                            return Item { (cell: UITableViewCell) in
+                                cell.textLabel?.text = "Hi"
+                            }
+                        }
+                    )
+                ],
+                middleware: [noCellSelectionStyle, cellGradient, noTableSeparator]
+            )
             
             let mainVC = BlockTableViewController(
-                dataSource: mainMenuDataSource,
-                configureTableView: { tableView in
-                    tableView.separatorStyle = .none
-               }
+                dataSource: mainMenuDataSource
             )
             let navVC = UINavigationController(rootViewController: mainVC)
             

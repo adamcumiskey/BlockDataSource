@@ -31,7 +31,7 @@
 import Foundation
 
 public protocol DataSourceProvidable: class {
-    var dataSource: DataSource { get set }
+    var dataSource: DataSource? { get set }
 }
 
 // MARK: - Table View Controller
@@ -42,7 +42,7 @@ public protocol TableViewReloadable: DataSourceProvidable {
 
 public extension TableViewReloadable {
     func reload() {
-        guard let tableView = tableView else { return }
+        guard let tableView = tableView, let dataSource = dataSource else { return }
         tableView.registerReuseIdentifiers(forDataSource: dataSource)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
@@ -51,18 +51,14 @@ public extension TableViewReloadable {
 }
 
 open class BlockTableViewController: UITableViewController, TableViewReloadable {
-    
-    private let configureTableView: ((UITableView) -> Void)?
-
-    public var dataSource: DataSource {
+    public var dataSource: DataSource? {
         didSet {
             reload()
         }
     }
     
-    public init(style: UITableViewStyle = .plain, dataSource: DataSource, configureTableView: ((UITableView) -> Void)? = nil) {
+    public init(style: UITableViewStyle = .plain, dataSource: DataSource) {
         self.dataSource = dataSource
-        self.configureTableView = configureTableView
         super.init(style: style)
     }
     
@@ -73,7 +69,7 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
     open override func viewDidLoad() {
         super.viewDidLoad()
         if let tableView = tableView {
-            configureTableView?(tableView)
+            dataSource?.middleware.forEach { $0.apply(tableView, IndexPath(item: -1, section: -1), []) }
         }
         reload()
     }
@@ -87,7 +83,7 @@ public protocol CollectionViewReloadable: DataSourceProvidable {
 
 public extension CollectionViewReloadable {
     func reload() {
-        guard let collectionView = collectionView else { return }
+        guard let collectionView = collectionView, let dataSource = dataSource else { return }
         collectionView.registerReuseIdentifiers(forDataSource: dataSource)
         collectionView.dataSource = dataSource
         collectionView.delegate = dataSource
@@ -96,17 +92,14 @@ public extension CollectionViewReloadable {
 }
 
 open class BlockCollectionViewController: UICollectionViewController, CollectionViewReloadable {
-    private let configureCollectionView: ((UICollectionView) -> Void)?
-    
-    public var dataSource: DataSource {
+    public var dataSource: DataSource? {
         didSet {
             reload()
         }
     }
     
-    init(layout: UICollectionViewLayout, dataSource: DataSource, configureCollectionView: ((UICollectionView) -> Void)? = nil) {
+    init(layout: UICollectionViewLayout, dataSource: DataSource) {
         self.dataSource = dataSource
-        self.configureCollectionView = configureCollectionView
         super.init(collectionViewLayout: layout)
     }
     
@@ -117,7 +110,7 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
     open override func viewDidLoad() {
         super.viewDidLoad()
         if let collectionView = collectionView {
-            configureCollectionView?(collectionView)
+            dataSource?.middleware.forEach { $0.apply(collectionView, IndexPath(item: -1, section: -1), []) }
         }
         reload()
     }
