@@ -2,6 +2,4 @@ use_frameworks!
 
 target 'BlockDataSource_Example' do
   pod 'BlockDataSource', :path => '../'
-
-  pod 'Vine'
 end
