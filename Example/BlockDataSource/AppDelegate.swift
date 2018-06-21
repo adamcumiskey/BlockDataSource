@@ -74,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             )
             
             let mainVC = BlockTableViewController(
+                style: .plain,
                 dataSource: mainMenuDataSource
             )
             let navVC = UINavigationController(rootViewController: mainVC)

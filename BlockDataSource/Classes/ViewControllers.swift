@@ -57,9 +57,13 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
         }
     }
     
-    public init(style: UITableViewStyle = .plain, dataSource: DataSource) {
-        self.dataSource = dataSource
+    public override init(style: UITableViewStyle) {
         super.init(style: style)
+    }
+    
+    public convenience init(style: UITableViewStyle, dataSource: DataSource) {
+        self.init(style: style)
+        self.dataSource = dataSource
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -98,9 +102,13 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
         }
     }
     
-    init(layout: UICollectionViewLayout, dataSource: DataSource) {
-        self.dataSource = dataSource
+    public override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
+    }
+    
+    public convenience init(collectionViewLayout layout: UICollectionViewLayout, dataSource: DataSource) {
+        self.init(collectionViewLayout: layout)
+        self.dataSource = dataSource
     }
     
     public required init?(coder aDecoder: NSCoder) {
