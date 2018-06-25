@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
-            
+
             let mainMenuDataSource = DataSource(
                 sections: [
                     Section(

@@ -41,7 +41,7 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 open class DataSource: NSObject {
     public var sections: [Section]
     public var onReorder: ReorderBlock?
-    public var onScroll: ScrollBlock?
+    public var scrollConfig: ScrollConfig?
     public var middleware: [Middleware]
 
     /**
@@ -55,12 +55,12 @@ open class DataSource: NSObject {
     public init(
         sections: [Section],
         onReorder: ReorderBlock? = nil,
-        onScroll: ScrollBlock? = nil,
+        scrollConfig: ScrollConfig? = nil,
         middleware: [Middleware] = []
     ) {
         self.sections = sections
         self.onReorder = onReorder
-        self.onScroll = onScroll
+        self.scrollConfig = scrollConfig
         self.middleware = middleware
     }
     
@@ -76,6 +76,34 @@ open class DataSource: NSObject {
     // Reference item with `DataSource[indexPath]`
     public subscript(indexPath: IndexPath) -> Item {
         return sections[indexPath.section].items[indexPath.item]
+    }
+}
+
+extension DataSource {
+    /// Stores blocks that allow the user to configure the UIScrollViewDelegate methods
+    public struct ScrollConfig {
+        public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
+        public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
+        
+        var onScroll: ScrollBlock?
+        var willBeginDragging: ScrollBlock?
+        var willEndDragging: WillEndDraggingBlock?
+        var didEndDragging: DidEndDraggingBlock?
+        var didEndDecelerating: ScrollBlock?
+        
+        init(
+            onScroll: ScrollBlock? = nil,
+            willBeginDragging: ScrollBlock? = nil,
+            willEndDragging: WillEndDraggingBlock? = nil,
+            didEndDragging: DidEndDraggingBlock? = nil,
+            didEndDecelerating: ScrollBlock? = nil
+            ) {
+            self.onScroll = onScroll
+            self.willBeginDragging = willBeginDragging
+            self.willEndDragging = willEndDragging
+            self.didEndDragging = didEndDragging
+            self.didEndDecelerating = didEndDecelerating
+        }
     }
 }
 
@@ -439,8 +467,32 @@ extension DataSource: UICollectionViewDelegate {
 
 extension DataSource: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let onScroll = onScroll {
+        if let onScroll = scrollConfig?.onScroll {
             onScroll(scrollView)
+        }
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if let willBeginDragging = scrollConfig?.willBeginDragging {
+            willBeginDragging(scrollView)
+        }
+    }
+    
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if let willEndDragging = scrollConfig?.willEndDragging {
+            willEndDragging(scrollView, velocity, targetContentOffset)
+        }
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if let didEndDragging = scrollConfig?.didEndDragging {
+            didEndDragging(scrollView, decelerate)
+        }
+    }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let didEndDecelerating = scrollConfig?.didEndDecelerating {
+            didEndDecelerating(scrollView)
         }
     }
 }
