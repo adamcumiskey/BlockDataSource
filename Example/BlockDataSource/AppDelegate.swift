@@ -31,8 +31,7 @@
 import UIKit
 import BlockDataSource
 
-
-let noCellSelectionStyle = Middleware { (view: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
+let noCellSelectionStyle = Middleware { (view: UITableViewCell, _: IndexPath, _: [Section]) in
     view.selectionStyle = .none
 }
 
@@ -56,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
 
@@ -72,17 +71,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 ],
                 middleware: [noCellSelectionStyle, cellGradient, noTableSeparator]
             )
-            
+
             let mainVC = BlockTableViewController(
                 style: .plain,
                 dataSource: mainMenuDataSource
             )
             let navVC = UINavigationController(rootViewController: mainVC)
-            
+
             window!.rootViewController = navVC
             window!.makeKeyAndVisible()
         }
-        
+
         return true
     }
 
@@ -107,6 +106,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
 
 }

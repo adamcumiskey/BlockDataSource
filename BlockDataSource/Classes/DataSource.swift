@@ -26,7 +26,6 @@
 //  Created by Adam Cumiskey on 6/16/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
 
-
 import Foundation
 
 public typealias ConfigureBlock = (UIView) -> Void
@@ -63,11 +62,11 @@ open class DataSource: NSObject {
         self.scrollConfig = scrollConfig
         self.middleware = middleware
     }
-    
+
     public class func `static`(sections: [Section], middleware: [Middleware] = []) -> DataSource {
         return DataSource(sections: sections, middleware: middleware)
     }
-    
+
     // Reference section with `DataSource[index]`
     public subscript(index: Int) -> Section {
         return sections[index]
@@ -84,14 +83,14 @@ extension DataSource {
     public struct ScrollConfig {
         public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
         public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
-        
+
         var onScroll: ScrollBlock?
         var willBeginDragging: ScrollBlock?
         var willEndDragging: WillEndDraggingBlock?
         var didEndDragging: DidEndDraggingBlock?
         var didEndDecelerating: ScrollBlock?
-        
-        init(
+
+        public init(
             onScroll: ScrollBlock? = nil,
             willBeginDragging: ScrollBlock? = nil,
             willEndDragging: WillEndDraggingBlock? = nil,
@@ -107,7 +106,6 @@ extension DataSource {
     }
 }
 
-
 // MARK: - Reusable
 
 /// Represents the data for configuring a reusable view
@@ -116,9 +114,9 @@ extension DataSource {
 public class Reusable {
     public let viewClass: UIView.Type
     private let _reuseIdentifier: String?
-    
+
     public let configure: ConfigureBlock
-    
+
     public var reuseIdentifier: String {
         if let customReuseIdentifier = _reuseIdentifier {
             return customReuseIdentifier
@@ -139,7 +137,6 @@ public class Reusable {
     }
 }
 
-
 // MARK: - Item
 
 /// Object used to configure a UITableViewCell or UICollectionViewCell
@@ -148,7 +145,7 @@ public class Item: Reusable {
         let reorderable: Bool
         /// Override for the cell's `reuseIdentifier`. If nil this is nil, the default will be
         let reuseIdentifier: String?
-        
+
         public static var `default`: Options {
             return Options(
                 reorderable: false,
@@ -156,7 +153,7 @@ public class Item: Reusable {
             )
         }
     }
-    
+
     public let onSelect: IndexPathBlock?
     public let onDelete: IndexPathBlock?
     public let options: Options
@@ -181,7 +178,7 @@ public class Item: Reusable {
         self.options = options
         super.init(reuseIdentifier: options.reuseIdentifier, configure: configure)
     }
-    
+
     // Enable trailing closure initialization
     public convenience init<T: UIView>(
         options: Options = .default,
@@ -190,7 +187,6 @@ public class Item: Reusable {
         self.init(configure: configure, onSelect: nil, onDelete: nil, options: options)
     }
 }
-
 
 // MARK: - Section
 
@@ -201,7 +197,7 @@ public struct Section {
 
     /// The header reusable for this section
     public var header: Reusable?
-    
+
     /// The item data for this section
     public var items: [Item]
 
@@ -241,7 +237,6 @@ public struct Section {
     }
 }
 
-
 // MARK: - Middleware
 
 /// Middleware allows you to customize for specific table/collection view cells in a generic way.
@@ -256,7 +251,7 @@ public struct Section {
 public struct Middleware {
     public typealias ApplyFunction = (UIView, IndexPath, [Section]) -> Void
     public var apply: ApplyFunction
-    
+
     public init<View: UIView>(apply: @escaping (View, IndexPath, [Section]) -> Void) {
         self.apply = { view, indexPath, sections in
             if let view = view as? View {
@@ -265,7 +260,6 @@ public struct Middleware {
         }
     }
 }
-
 
 // MARK: - UITableViewDataSource
 
@@ -284,20 +278,20 @@ extension DataSource: UITableViewDataSource {
         item.configure(cell)
         return cell
     }
-    
+
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self[section].title
     }
-    
+
     public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return self[section].title
     }
-    
+
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = self[indexPath]
         return item.onDelete != nil || item.options.reorderable == true
     }
-    
+
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if let onDelete = self[indexPath].onDelete {
@@ -308,11 +302,11 @@ extension DataSource: UITableViewDataSource {
             }
         }
     }
-    
+
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return self[indexPath].options.reorderable
     }
-    
+
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let reorder = onReorder {
             if sourceIndexPath.section == destinationIndexPath.section {
@@ -326,19 +320,18 @@ extension DataSource: UITableViewDataSource {
     }
 }
 
-
 // MARK: - UITableViewDelegate
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         middleware.forEach { $0.apply(cell, indexPath, self.sections) }
     }
-    
+
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let header = self[section].header else { return }
         header.configure(view)
     }
-    
+
     public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         guard let footer = self[section].footer else { return }
         footer.configure(view)
@@ -364,7 +357,7 @@ extension DataSource: UITableViewDelegate {
             return 0
         }
     }
-    
+
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = self[section].header else { return nil }
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
@@ -387,7 +380,6 @@ extension DataSource: UITableViewDelegate {
         return self[proposedDestinationIndexPath].options.reorderable ? proposedDestinationIndexPath : sourceIndexPath
     }
 }
-
 
 // MARK: - UICollectionViewDataSource
 
@@ -443,7 +435,6 @@ extension DataSource: UICollectionViewDataSource {
     }
 }
 
-
 // MARK: - UICollectionViewDelegate
 
 extension DataSource: UICollectionViewDelegate {
@@ -462,7 +453,6 @@ extension DataSource: UICollectionViewDelegate {
     }
 }
 
-
 // MARK: - UIScrollViewDelegate
 
 extension DataSource: UIScrollViewDelegate {
@@ -471,25 +461,25 @@ extension DataSource: UIScrollViewDelegate {
             onScroll(scrollView)
         }
     }
-    
+
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if let willBeginDragging = scrollConfig?.willBeginDragging {
             willBeginDragging(scrollView)
         }
     }
-    
+
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if let willEndDragging = scrollConfig?.willEndDragging {
             willEndDragging(scrollView, velocity, targetContentOffset)
         }
     }
-    
+
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if let didEndDragging = scrollConfig?.didEndDragging {
             didEndDragging(scrollView, decelerate)
         }
     }
-    
+
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if let didEndDecelerating = scrollConfig?.didEndDecelerating {
             didEndDecelerating(scrollView)
@@ -518,7 +508,7 @@ public extension UITableView {
             }
         }
     }
-    
+
     private func register(sectionDecoration: Reusable) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
@@ -543,7 +533,7 @@ public extension UICollectionView {
             }
         }
     }
-    
+
     private func register(sectionDecoration: Reusable, kind: String) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
@@ -552,7 +542,7 @@ public extension UICollectionView {
             register(sectionDecoration.viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
         }
     }
-    
+
     private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
