@@ -13,26 +13,27 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="U6b-Vx-4bR" customClass="InformationCollectionReusableView" customModule="BlockDataSource_Example" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VYh-Aa-ee9">
-                    <rect key="frame" x="10" y="0.0" width="300" height="50"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ik-et-KeN">
+                    <rect key="frame" x="16" y="16" width="288" height="53"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <constraints>
-                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="VYh-Aa-ee9" secondAttribute="trailing" constant="10" id="0U4-4S-LZ9"/>
-                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="VYh-Aa-ee9" secondAttribute="bottom" id="ETb-x2-Mps"/>
-                <constraint firstItem="VYh-Aa-ee9" firstAttribute="top" secondItem="VXr-Tz-HHm" secondAttribute="top" id="pBj-q9-Hq2"/>
-                <constraint firstItem="VYh-Aa-ee9" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="10" id="ywL-WA-PRT"/>
+                <constraint firstItem="3ik-et-KeN" firstAttribute="top" secondItem="VXr-Tz-HHm" secondAttribute="top" constant="16" id="ptd-XM-Qrb"/>
+                <constraint firstItem="3ik-et-KeN" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="16" id="uoy-lq-FBb"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="3ik-et-KeN" secondAttribute="trailing" constant="16" id="weU-2d-mbJ"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="3ik-et-KeN" secondAttribute="bottom" constant="16" id="yps-TJ-Bpd"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
             <connections>
-                <outlet property="textLabel" destination="VYh-Aa-ee9" id="Nof-IX-yGc"/>
+                <outlet property="textLabel" destination="3ik-et-KeN" id="6sX-xu-NBj"/>
             </connections>
+            <point key="canvasLocation" x="25" y="69.5"/>
         </collectionReusableView>
     </objects>
 </document>

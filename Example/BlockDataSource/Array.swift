@@ -1,5 +1,5 @@
 //
-//  Extentions.swift
+//  Array.swift
 //  Pods
 //
 //  Created by Adam Cumiskey on 12/15/16.

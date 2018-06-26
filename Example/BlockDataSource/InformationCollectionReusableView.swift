@@ -10,9 +10,4 @@ import UIKit
 
 class InformationCollectionReusableView: UICollectionReusableView {
     @IBOutlet weak var textLabel: UILabel!
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        textLabel.text = nil
-    }
 }
