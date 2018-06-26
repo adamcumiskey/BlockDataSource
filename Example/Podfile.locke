@@ -1,0 +1,18 @@
+PODS:
+  - Sorcery (0.3.0):
+    - Sorcery/ViewControllers (= 0.3.0)
+  - Sorcery/ViewControllers (0.3.0)
+
+DEPENDENCIES:
+  - Sorcery (from `../`)
+
+EXTERNAL SOURCES:
+  Sorcery:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Sorcery: dd74304a30c03e60a221e878cf34b99d928e3cdf
+
+PODFILE CHECKSUM: 5eaa3412b270950d61d8c20dff117e0034fc44df
+
+COCOAPODS: 1.5.2

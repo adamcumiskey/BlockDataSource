@@ -112,13 +112,16 @@ extension DataSource {
 /// You must specify the View class that a Reusable will represent in the `configure` closure.
 /// View must be a subtype of UITableViewCell, UITableViewHeaderFooterView, UICollectionViewCell, UICollectionReusableView
 public class Reusable {
+    /// Store the generic view's type. (might be useful)
     public let viewClass: UIView.Type
-    private let _reuseIdentifier: String?
-
+    /// A block which takes a UIView and configures it
     public let configure: ConfigureBlock
-
+    
+    private let customReuseIdentifier: String?
+    
+    /// The reuse identifier to use when recycling the view element
     public var reuseIdentifier: String {
-        if let customReuseIdentifier = _reuseIdentifier {
+        if let customReuseIdentifier = customReuseIdentifier {
             return customReuseIdentifier
         } else {
             return String(describing: viewClass)
@@ -133,7 +136,7 @@ public class Reusable {
             configure(view as! View)
         }
         self.viewClass = View.self
-        self._reuseIdentifier = reuseIdentifier
+        self.customReuseIdentifier = reuseIdentifier
     }
 }
 
@@ -141,22 +144,9 @@ public class Reusable {
 
 /// Object used to configure a UITableViewCell or UICollectionViewCell
 public class Item: Reusable {
-    public struct Options {
-        let reorderable: Bool
-        /// Override for the cell's `reuseIdentifier`. If nil this is nil, the default will be
-        let reuseIdentifier: String?
-
-        public static var `default`: Options {
-            return Options(
-                reorderable: false,
-                reuseIdentifier: nil
-            )
-        }
-    }
-
     public let onSelect: IndexPathBlock?
     public let onDelete: IndexPathBlock?
-    public let options: Options
+    public let reorderable: Bool
 
     /**
      Initialize an item
@@ -165,26 +155,29 @@ public class Item: Reusable {
      - configure: The configuration block.
      - onSelect: The closure to execute when the item is tapped
      - onDelete: The closure to execute when the item is deleted
-     - options: Additional configuration parameters
+     - reuseIdentifier: Custom reuseIdentifier to use for this Item
+     - reorderable: Allows this cell to be reordered when editing when true
      */
     public init<T: UIView>(
         configure: @escaping (T) -> Void,
         onSelect: IndexPathBlock? = nil,
         onDelete: IndexPathBlock? = nil,
-        options: Options = .default
+        reuseIdentifier: String? = nil,
+        reorderable: Bool = false
     ) {
         self.onSelect = onSelect
         self.onDelete = onDelete
-        self.options = options
-        super.init(reuseIdentifier: options.reuseIdentifier, configure: configure)
+        self.reorderable = reorderable
+        super.init(reuseIdentifier: reuseIdentifier, configure: configure)
     }
 
     // Enable trailing closure initialization
     public convenience init<T: UIView>(
-        options: Options = .default,
+        reuseIdentifier: String? = nil,
+        reorderable: Bool = false,
         configure: @escaping (T) -> Void
     ) {
-        self.init(configure: configure, onSelect: nil, onDelete: nil, options: options)
+        self.init(configure: configure, reuseIdentifier: reuseIdentifier, reorderable: reorderable)
     }
 }
 
@@ -289,7 +282,7 @@ extension DataSource: UITableViewDataSource {
 
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = self[indexPath]
-        return item.onDelete != nil || item.options.reorderable == true
+        return item.onDelete != nil || item.reorderable == true
     }
 
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -304,7 +297,7 @@ extension DataSource: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return self[indexPath].options.reorderable
+        return self[indexPath].reorderable
     }
 
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -377,7 +370,7 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        return self[proposedDestinationIndexPath].options.reorderable ? proposedDestinationIndexPath : sourceIndexPath
+        return self[proposedDestinationIndexPath].reorderable ? proposedDestinationIndexPath : sourceIndexPath
     }
 }
 
@@ -401,7 +394,7 @@ extension DataSource: UICollectionViewDataSource {
 
     public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         guard onReorder != nil else { return false }
-        return self[indexPath].options.reorderable
+        return self[indexPath].reorderable
     }
 
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {

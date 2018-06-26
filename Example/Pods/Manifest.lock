@@ -1,18 +1,29 @@
 PODS:
-  - BlockDataSource (0.3.0):
-    - BlockDataSource/ViewControllers (= 0.3.0)
-  - BlockDataSource/ViewControllers (0.3.0)
+  - BlockDataSource (0.3.1):
+    - BlockDataSource/ViewControllers (= 0.3.1)
+  - BlockDataSource/ViewControllers (0.3.1)
+  - Nimble (7.1.2)
+  - Quick (1.3.0)
 
 DEPENDENCIES:
   - BlockDataSource (from `../`)
+  - Nimble
+  - Quick
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nimble
+    - Quick
 
 EXTERNAL SOURCES:
   BlockDataSource:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BlockDataSource: dd74304a30c03e60a221e878cf34b99d928e3cdf
+  BlockDataSource: 8c722aebaa1b2dc7f23ac0547c9c3a4565ec46ab
+  Nimble: 3835ba9f459daa6b347f8a8e110aaae8ca1920a8
+  Quick: 03278013f71aa05fe9ecabc94fbcc6835f1ee76f
 
-PODFILE CHECKSUM: 5eaa3412b270950d61d8c20dff117e0034fc44df
+PODFILE CHECKSUM: d628ed2540a216d86dbe820f2e416db9ca465ea6
 
 COCOAPODS: 1.5.2

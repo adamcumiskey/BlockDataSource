@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 extension Array {
     mutating func moveObjectAtIndex(_ index: Int, toIndex: Int) {
         let element = self[index]
