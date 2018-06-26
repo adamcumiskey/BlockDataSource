@@ -26,7 +26,7 @@ class MenuViewController: BlockTableViewController {
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Cell Types"
                         }, onSelect: { [unowned self] _ in
-                            self.navigationController?.pushViewController(CellTypesTableViewController(), animated: true)
+                            self.navigationController?.pushViewController(cellTypesViewController, animated: true)
                         }),
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Middleware"

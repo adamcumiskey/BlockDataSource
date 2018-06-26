@@ -35,12 +35,18 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 // MARK: - DataSource
 
-/// Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
-/// The block based initialization allows tables and collections to be created with a DSL-like syntax.
+/** Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
+ 
+  The block-based initialization provides an embedded DSL for creating `UITableViewController` and `UICollectionViewController`s.
+*/
 open class DataSource: NSObject {
+    /// Array of Sections in the view
     public var sections: [Section]
+    /// Block called when an Item is reordered. You must update the data backing the view inside this block.
     public var onReorder: ReorderBlock?
+    /// Collection of callbacks used for handling `UIScrollViewDelegate` events
     public var scrollConfig: ScrollConfig?
+    /// All the Middleware for this DataSourcez
     public var middleware: [Middleware]
 
     /**
@@ -62,17 +68,23 @@ open class DataSource: NSObject {
         self.scrollConfig = scrollConfig
         self.middleware = middleware
     }
-
-    public class func `static`(sections: [Section], middleware: [Middleware] = []) -> DataSource {
-        return DataSource(sections: sections, middleware: middleware)
+    
+    /// Convenience initializer to construct a DataSource with a single section
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: [Middleware] = []) {
+        self.init(sections: [section], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
+    }
+    
+    /// Convenience initializer to construct a DataSource with an array of items
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: [Middleware] = []) {
+        self.init(sections: [Section(items: items)], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
     }
 
-    // Reference section with `DataSource[index]`
-    public subscript(index: Int) -> Section {
-        return sections[index]
+    /// Reference section with `DataSource[sectionIndex]`
+    public subscript(sectionIndex: Int) -> Section {
+        return sections[sectionIndex]
     }
 
-    // Reference item with `DataSource[indexPath]`
+    /// Reference item with `DataSource[indexPath]`
     public subscript(indexPath: IndexPath) -> Item {
         return sections[indexPath.section].items[indexPath.item]
     }
