@@ -29,4 +29,10 @@ extension Middleware {
     static var disclosureIndicators = Middleware { (cell: UITableViewCell, _, _) in
         cell.accessoryType = .disclosureIndicator
     }
+    
+    static var separatorInset: (UIEdgeInsets) -> Middleware = { insets in
+        return Middleware { (tableView: UITableView, _, _) in
+            tableView.separatorInset = insets
+        }
+    }
 }
