@@ -337,7 +337,7 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.tableView(tableView, viewForHeaderInSection: section) != nil {
+        if self.tableView(tableView, viewForHeaderInSection: section) != nil || self[section].title != nil {
             return UITableViewAutomaticDimension
         } else {
             return 0

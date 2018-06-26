@@ -42,11 +42,15 @@ public protocol TableViewReloadable: DataSourceProvidable {
 
 public extension TableViewReloadable {
     func reload() {
-        guard let tableView = tableView, let dataSource = dataSource else { return }
+        guard let dataSource = dataSource else { return }
         tableView.registerReuseIdentifiers(forDataSource: dataSource)
         tableView.dataSource = dataSource
         tableView.delegate = dataSource
         tableView.reloadData()
+    }
+    
+    func applyTableViewMiddleware() {
+        dataSource?.middleware.forEach { $0.apply(tableView, IndexPath(row: -1, section: -1), []) }
     }
 }
 
@@ -61,9 +65,9 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
         super.init(style: style)
     }
     
-    public convenience init(style: UITableViewStyle, dataSource: DataSource) {
-        self.init(style: style)
+    public init(style: UITableViewStyle, dataSource: DataSource?) {
         self.dataSource = dataSource
+        super.init(style: style)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -72,9 +76,7 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        if let tableView = tableView {
-            dataSource?.middleware.forEach { $0.apply(tableView, IndexPath(item: -1, section: -1), []) }
-        }
+        applyTableViewMiddleware()
         reload()
     }
 }
@@ -93,6 +95,12 @@ public extension CollectionViewReloadable {
         collectionView.delegate = dataSource
         collectionView.reloadData()
     }
+    
+    func applyCollectionViewMiddlware() {
+        if let collectionView = collectionView {
+            dataSource?.middleware.forEach { $0.apply(collectionView, IndexPath(item: -1, section: -1), []) }
+        }
+    }
 }
 
 open class BlockCollectionViewController: UICollectionViewController, CollectionViewReloadable {
@@ -106,9 +114,9 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
         super.init(collectionViewLayout: layout)
     }
     
-    public convenience init(collectionViewLayout layout: UICollectionViewLayout, dataSource: DataSource) {
-        self.init(collectionViewLayout: layout)
+    public init(collectionViewLayout layout: UICollectionViewLayout, dataSource: DataSource?) {
         self.dataSource = dataSource
+        super.init(collectionViewLayout: layout)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -117,9 +125,7 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        if let collectionView = collectionView {
-            dataSource?.middleware.forEach { $0.apply(collectionView, IndexPath(item: -1, section: -1), []) }
-        }
+        applyCollectionViewMiddlware()
         reload()
     }
 }
