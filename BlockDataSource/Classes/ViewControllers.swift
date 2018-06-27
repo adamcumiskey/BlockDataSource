@@ -54,7 +54,7 @@ public extension TableViewReloadable {
     
     /// Applies the middleware functions to the tableView
     func applyTableViewMiddleware() {
-        dataSource?.middleware.forEach { $0.apply(tableView, IndexPath(row: -1, section: -1), []) }
+        dataSource?.middleware.forEach { $0.apply(tableView) }
     }
 }
 
@@ -107,7 +107,7 @@ public extension CollectionViewReloadable {
     /// Applies the middleware functions to the collectionView
     func applyCollectionViewMiddlware() {
         if let collectionView = collectionView {
-            dataSource?.middleware.forEach { $0.apply(collectionView, IndexPath(item: -1, section: -1), []) }
+            dataSource?.middleware.forEach { $0.apply(collectionView) }
         }
     }
 }

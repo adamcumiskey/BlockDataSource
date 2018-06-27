@@ -47,7 +47,7 @@ open class DataSource: NSObject {
     /// Collection of callbacks used for handling `UIScrollViewDelegate` events
     public var scrollConfig: ScrollConfig?
     /// All the `Middleware` for this `DataSource`
-    public var middleware: [Middleware]
+    public var middleware: MiddlwareConfig?
 
     /**
      Initialize a `DataSource`
@@ -62,7 +62,7 @@ open class DataSource: NSObject {
         sections: [Section],
         onReorder: ReorderBlock? = nil,
         scrollConfig: ScrollConfig? = nil,
-        middleware: [Middleware] = []
+        middleware: MiddlwareConfig? = nil
     ) {
         self.sections = sections
         self.onReorder = onReorder
@@ -71,12 +71,12 @@ open class DataSource: NSObject {
     }
     
     /// Convenience initializer to construct a DataSource with a single section
-    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: [Middleware] = []) {
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlwareConfig? = nil) {
         self.init(sections: [section], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
     }
     
     /// Convenience initializer to construct a DataSource with an array of items
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: [Middleware] = []) {
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlwareConfig? = nil) {
         self.init(sections: [Section(items: items)], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
     }
 
@@ -121,6 +121,36 @@ extension DataSource {
             self.didEndDragging = didEndDragging
             self.didEndDecelerating = didEndDecelerating
         }
+    }
+}
+
+extension DataSource {
+    /// Stores Middleware blocks
+    public struct MiddlwareConfig {
+        let tableViewCellMiddlware: [TableViewCellMiddleware]?
+        let tableViewMiddlware: [TableViewMiddleware]?
+        let tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]?
+        
+        let collectionViewCellMiddleware: [CollectionViewCellMiddleware]?
+        let collectionViewMiddleware: [CollectionViewMiddleware]?
+        let collectionReusableViewMiddlware: [CollectionReusableViewMiddlware]?
+        
+        init(
+            tableViewCellMiddlware: [TableViewCellMiddleware]? = nil,
+            tableViewMiddlware: [TableViewMiddleware]? = nil,
+            tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]? = nil,
+            collectionViewCellMiddleware: [CollectionViewCellMiddleware]? = nil,
+            collectionViewMiddleware: [CollectionViewMiddleware]? = nil,
+            collectionReusableViewMiddlware: [CollectionReusableViewMiddlware]? = nil
+        ) {
+            self.tableViewCellMiddlware = tableViewCellMiddlware
+            self.tableViewMiddlware = tableViewMiddlware
+            self.tableViewHeaderFooterViewMiddleware = tableViewHeaderFooterViewMiddleware
+            self.collectionViewCellMiddleware = collectionViewCellMiddleware
+            self.collectionViewMiddleware = collectionViewMiddleware
+            self.collectionReusableViewMiddlware = collectionReusableViewMiddlware
+        }
+        
     }
 }
 
@@ -242,29 +272,6 @@ public struct Section {
     }
 }
 
-// MARK: - Middleware
-
-/** Middleware allows you to customize views in a generic way.
- 
-    The datasource will apply its middleware to any views who have a supertype matching the type passed into the `apply` closure.
-    
- 
-    CAUTION: Middleware is currently very inefficient. Every time a cell is about to be reconfigured it reapplies the midleware in O(n) time.
-    I haven't experinced performance issues but YMMV.
- */
-public struct Middleware {
-    public typealias ApplyFunction = (UIView, IndexPath, [Section]) -> Void
-    public var apply: ApplyFunction
-
-    public init<View: UIView>(apply: @escaping (View, IndexPath, [Section]) -> Void) {
-        self.apply = { view, indexPath, sections in
-            if let view = view as? View {
-                apply(view, indexPath, sections)
-            }
-        }
-    }
-}
-
 // MARK: - UITableViewDataSource
 
 extension DataSource: UITableViewDataSource {
@@ -328,7 +335,7 @@ extension DataSource: UITableViewDataSource {
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        middleware.forEach { $0.apply(cell, indexPath, self.sections) }
+        middleware?.tableViewCellMiddlware?.forEach { $0.apply(cell, indexPath, self) }
     }
 
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -355,7 +362,7 @@ extension DataSource: UITableViewDelegate {
         }
     }
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if self.tableView(tableView, viewForFooterInSection: section) != nil {
+        if self.tableView(tableView, viewForFooterInSection: section) != nil || self[section].footerText != nil {
             return UITableViewAutomaticDimension
         } else {
             return 0
@@ -365,12 +372,15 @@ extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = self[section].header else { return nil }
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
+        middleware?.tableViewHeaderFooterViewMiddleware?.forEach { $0.apply(view, section, self) }
+        header.configure(view)
         return view
     }
 
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let footer = self[section].footer else { return nil }
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
+        middleware?.tableViewHeaderFooterViewMiddleware?.forEach { $0.apply(view, section, self) }
         footer.configure(view)
         return view
     }
@@ -427,11 +437,13 @@ extension DataSource: UICollectionViewDataSource {
         if kind == UICollectionElementKindSectionHeader {
             guard let header = section.header else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.reuseIdentifier, for: indexPath)
+            middleware?.collectionReusableViewMiddlware?.forEach { $0.apply(view, indexPath, self) }
             header.configure(view)
             return view
         } else if kind == UICollectionElementKindSectionFooter {
             guard let footer = section.footer else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footer.reuseIdentifier, for: indexPath)
+            middleware?.collectionReusableViewMiddlware?.forEach { $0.apply(view, indexPath, self) }
             footer.configure(view)
             return view
         }
@@ -443,7 +455,7 @@ extension DataSource: UICollectionViewDataSource {
 
 extension DataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        middleware.forEach { $0.apply(cell, indexPath, self.sections) }
+        middleware?.collectionViewCellMiddleware?.forEach { $0.apply(cell, indexPath, self) }
     }
 
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
