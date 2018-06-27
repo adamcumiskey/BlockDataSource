@@ -28,9 +28,12 @@ class ExampleCollectionViewController: BlockCollectionViewController {
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         layout.headerReferenceSize = .init(width: UIScreen.main.bounds.width, height: 100)
+        
         super.init(collectionViewLayout: layout)
+        
         self.title = "Reordering"
         self.collectionView?.backgroundColor = .white
+        
         self.dataSource = DataSource(
             sections: [
                 Section(

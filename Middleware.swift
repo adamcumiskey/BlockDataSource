@@ -100,7 +100,7 @@ public struct CollectionViewMiddleware {
     }
 }
 
-public struct CollectionReusableViewMiddlware {
+public struct CollectionReusableViewMiddleware {
     public var apply: (_ reusableView: UICollectionReusableView, _ indexPath: IndexPath, _ context: DataSource) -> Void
 
     public init<View: UICollectionReusableView>(apply: @escaping (View, IndexPath, DataSource) -> Void) {
