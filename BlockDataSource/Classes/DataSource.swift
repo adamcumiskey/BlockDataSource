@@ -35,27 +35,28 @@ public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 // MARK: - DataSource
 
-/** Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
+/** Object that can act as the delegate and datasource for `UITableView`s and `UICollectionView`s.
  
   The block-based initialization provides an embedded DSL for creating `UITableViewController` and `UICollectionViewController`s.
 */
 open class DataSource: NSObject {
-    /// Array of Sections in the view
+    /// Array of `Section`s in the view
     public var sections: [Section]
-    /// Block called when an Item is reordered. You must update the data backing the view inside this block.
+    /// Block called when an `Item` is reordered. You must update the data backing the view inside this block.
     public var onReorder: ReorderBlock?
     /// Collection of callbacks used for handling `UIScrollViewDelegate` events
     public var scrollConfig: ScrollConfig?
-    /// All the Middleware for this DataSourcez
+    /// All the `Middleware` for this `DataSource`
     public var middleware: [Middleware]
 
     /**
-     Initialize a DataSource
+     Initialize a `DataSource`
 
      - parameters:
-     - sections: The array of sections in this DataSource
+     - sections: The array of sections in this `DataSource`
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
-     - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
+     - onScroll: Optional callback for recieving scroll events from `UIScrollViewDelegate`
+     - middleware: The `Middleware` for this `DataSource` to apply
      */
     public init(
         sections: [Section],
@@ -91,16 +92,21 @@ open class DataSource: NSObject {
 }
 
 extension DataSource {
-    /// Stores blocks that allow the user to configure the UIScrollViewDelegate methods
+    /// Stores blocks that allow the user to configure the `UIScrollViewDelegate` methods
     public struct ScrollConfig {
         public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
         public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
 
-        var onScroll: ScrollBlock?
-        var willBeginDragging: ScrollBlock?
-        var willEndDragging: WillEndDraggingBlock?
-        var didEndDragging: DidEndDraggingBlock?
-        var didEndDecelerating: ScrollBlock?
+        /// Callback for when the scrollView is being dragged
+        public let onScroll: ScrollBlock?
+        /// Callback for when the scrollView is about to begin scrolling
+        public let willBeginDragging: ScrollBlock?
+        /// Callback for when the scrollView is about to stop dragging
+        public let willEndDragging: WillEndDraggingBlock?
+        /// Callback for when the scrollView dragging ends
+        public let didEndDragging: DidEndDraggingBlock?
+        /// Callback for when the scrollView stops scrolling
+        public let didEndDecelerating: ScrollBlock?
 
         public init(
             onScroll: ScrollBlock? = nil,
@@ -121,16 +127,13 @@ extension DataSource {
 // MARK: - Reusable
 
 /// Represents the data for configuring a reusable view
-/// You must specify the View class that a Reusable will represent in the `configure` closure.
-/// View must be a subtype of UITableViewCell, UITableViewHeaderFooterView, UICollectionViewCell, UICollectionReusableView
+/// You must specify the View class that a `Reusable` will represent in the `configure` closure.
+/// View must be a subtype of `UITableViewCell`, `UITableViewHeaderFooterView`, `UICollectionViewCell`, `UICollectionReusableView`
 public class Reusable {
-    /// Store the generic view's type. (might be useful)
+    /// Store the generic view's type.
     public let viewClass: UIView.Type
-    /// A block which takes a UIView and configures it
+    /// A block which takes a `UIView` and configures it
     public let configure: ConfigureBlock
-    
-    private let customReuseIdentifier: String?
-    
     /// The reuse identifier to use when recycling the view element
     public var reuseIdentifier: String {
         if let customReuseIdentifier = customReuseIdentifier {
@@ -139,7 +142,15 @@ public class Reusable {
             return String(describing: viewClass)
         }
     }
+    
+    private let customReuseIdentifier: String?
 
+    /** Create a new reusable
+     
+     - parameters:
+     - reuseIdentifier: Custom reuseIdentifier to use for this `Reusable`. Default is the view's classname.
+     - configure
+     */
     public init<View: UIView>(
         reuseIdentifier: String? = nil,
         configure: @escaping (View) -> Void
@@ -170,8 +181,8 @@ public class Item: Reusable {
      - reuseIdentifier: Custom reuseIdentifier to use for this Item
      - reorderable: Allows this cell to be reordered when editing when true
      */
-    public init<T: UIView>(
-        configure: @escaping (T) -> Void,
+    public init<View: UIView>(
+        configure: @escaping (View) -> Void,
         onSelect: IndexPathBlock? = nil,
         onDelete: IndexPathBlock? = nil,
         reuseIdentifier: String? = nil,
@@ -183,11 +194,11 @@ public class Item: Reusable {
         super.init(reuseIdentifier: reuseIdentifier, configure: configure)
     }
 
-    // Enable trailing closure initialization
-    public convenience init<T: UIView>(
+    /// Convenience initializer for trailing closure initialization
+    public convenience init<View: UIView>(
         reuseIdentifier: String? = nil,
         reorderable: Bool = false,
-        configure: @escaping (T) -> Void
+        configure: @escaping (View) -> Void
     ) {
         self.init(configure: configure, reuseIdentifier: reuseIdentifier, reorderable: reorderable)
     }
@@ -197,43 +208,30 @@ public class Item: Reusable {
 
 /// Data structure that wraps an array of items to represent a tableView/collectionView section.
 public struct Section {
-    /// Title text for this section
-    public var title: String?
-
-    /// The header reusable for this section
+    /// A Reusable for this section's header
     public var header: Reusable?
-
     /// The item data for this section
     public var items: [Item]
-
-    /// The footer data for this section
+    /// A Reusable for this section's footer
     public var footer: Reusable?
-
-    /**
-     Initializer for a DataSource Section
-
-     - parameters:
-     - header: The header item for this section
-     - items: The items data for this section
-     - footer: The DataSource footer data for this section
-     */
+    
+    /// Header text for UITableView section
+    public var headerText: String?
+    /// Footer text for UITableView section
+    public var footerText: String?
+    
     public init(
-        title: String? = nil,
         header: Reusable? = nil,
+        headerText: String? = nil,
         items: [Item],
-        footer: Reusable? = nil
+        footer: Reusable? = nil,
+        footerText: String? = nil
     ) {
-        self.title = title
         self.header = header
+        self.headerText = headerText
         self.items = items
         self.footer = footer
-    }
-
-    /// Convenience init for a section with a single item
-    public init(header: Reusable? = nil, item: Item, footer: Reusable? = nil) {
-        self.header = header
-        self.items = [item]
-        self.footer = footer
+        self.footerText = footerText
     }
 
     // Reference items with `section[index]`
@@ -285,11 +283,11 @@ extension DataSource: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self[section].title
+        return self[section].headerText
     }
 
     public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return self[section].title
+        return self[section].footerText
     }
 
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -349,7 +347,7 @@ extension DataSource: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.tableView(tableView, viewForHeaderInSection: section) != nil || self[section].title != nil {
+        if self.tableView(tableView, viewForHeaderInSection: section) != nil || self[section].headerText != nil {
             return UITableViewAutomaticDimension
         } else {
             return 0

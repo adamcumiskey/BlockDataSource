@@ -16,18 +16,18 @@ class MenuViewController: BlockTableViewController {
         self.dataSource = DataSource(
             sections: [
                 Section(
-                    title: "Table Views",
+                    headerText: "Table Views",
                     items: [
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Editing"
                         }, onSelect: { [unowned self] _ in
                             self.navigationController?.pushViewController(EditingViewController(), animated: true)
                         }),
-                        Item(configure: { (cell: UITableViewCell) in
-                            cell.textLabel?.text = "Cell Types"
-                        }, onSelect: { [unowned self] _ in
-                            self.navigationController?.pushViewController(cellTypesViewController, animated: true)
-                        }),
+//                        Item(configure: { (cell: UITableViewCell) in
+//                            cell.textLabel?.text = "Cell Types"
+//                        }, onSelect: { [unowned self] _ in
+//                            self.navigationController?.pushViewController(cellTypesViewController, animated: true)
+//                        }),
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Middleware"
                         }, onSelect: { [unowned self] _ in
@@ -36,7 +36,7 @@ class MenuViewController: BlockTableViewController {
                     ]
                 ),
                 Section(
-                    title: "Collection Views",
+                    headerText: "Collection Views",
                     items: [
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Reordering"
