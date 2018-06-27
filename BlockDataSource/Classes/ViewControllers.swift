@@ -36,11 +36,14 @@ public protocol DataSourceProvidable: class {
 
 // MARK: - Table View Controller
 
+/// Conforming to this protocol provides useful methods for connecting a DataSource to a UITableView
 public protocol TableViewReloadable: DataSourceProvidable {
+    /// Reference to the UITableView
     var tableView: UITableView! { get }
 }
 
 public extension TableViewReloadable {
+    /// Reloads the tableView with the current dataSource
     func reload() {
         guard let dataSource = dataSource else { return }
         tableView.registerReuseIdentifiers(forDataSource: dataSource)
@@ -49,11 +52,13 @@ public extension TableViewReloadable {
         tableView.reloadData()
     }
     
+    /// Applies the middleware functions to the tableView
     func applyTableViewMiddleware() {
         dataSource?.middleware.forEach { $0.apply(tableView, IndexPath(row: -1, section: -1), []) }
     }
 }
 
+/// UITableViewController subclass powered by a DataSource
 open class BlockTableViewController: UITableViewController, TableViewReloadable {
     public var dataSource: DataSource? {
         didSet {
@@ -83,11 +88,14 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
 
 // MARK: - Collection View Controller
 
+/// Conforming to this protocol provides useful methods for connecting a DataSource to a UICollectionView
 public protocol CollectionViewReloadable: DataSourceProvidable {
+    /// Reference to the UICollectionView
     var collectionView: UICollectionView? { get }
 }
 
 public extension CollectionViewReloadable {
+    /// Reloads the collection view with the current dataSource
     func reload() {
         guard let collectionView = collectionView, let dataSource = dataSource else { return }
         collectionView.registerReuseIdentifiers(forDataSource: dataSource)
@@ -96,6 +104,7 @@ public extension CollectionViewReloadable {
         collectionView.reloadData()
     }
     
+    /// Applies the middleware functions to the collectionView
     func applyCollectionViewMiddlware() {
         if let collectionView = collectionView {
             dataSource?.middleware.forEach { $0.apply(collectionView, IndexPath(item: -1, section: -1), []) }
@@ -103,6 +112,7 @@ public extension CollectionViewReloadable {
     }
 }
 
+/// UICollectionViewController subclass powered by a DataSource
 open class BlockCollectionViewController: UICollectionViewController, CollectionViewReloadable {
     public var dataSource: DataSource? {
         didSet {
