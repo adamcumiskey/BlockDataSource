@@ -220,6 +220,8 @@ public struct Section {
     /// Footer text for UITableView section
     public var footerText: String?
     
+    /**
+     */
     public init(
         header: Reusable? = nil,
         headerText: String? = nil,
@@ -242,15 +244,14 @@ public struct Section {
 
 // MARK: - Middleware
 
-/// Middleware allows you to customize for specific table/collection view cells in a generic way.
-///
-/// The datasource will apply its middleware to any views matching the type passed into the `apply` closure.
-/// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
-/// all items. The indexPath of the item that the middleware is being applied to as well as the dataSource structure are also
-/// passed in to allow the middleware to be aware of context.
-///
-/// CAUTION: Middleware is currently very inefficient. Every time a cell is about to be reconfigured it reapplies the midleware in O(n) time.
-/// I haven't experinced performance issues but YMMV.
+/** Middleware allows you to customize views in a generic way.
+ 
+    The datasource will apply its middleware to any views who have a supertype matching the type passed into the `apply` closure.
+    
+ 
+    CAUTION: Middleware is currently very inefficient. Every time a cell is about to be reconfigured it reapplies the midleware in O(n) time.
+    I haven't experinced performance issues but YMMV.
+ */
 public struct Middleware {
     public typealias ApplyFunction = (UIView, IndexPath, [Section]) -> Void
     public var apply: ApplyFunction
