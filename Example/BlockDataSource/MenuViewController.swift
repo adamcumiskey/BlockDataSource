@@ -12,7 +12,9 @@ import UIKit
 class MenuViewController: BlockTableViewController {
     init() {
         super.init(style: .grouped)
+        
         self.title = "Demo"
+        
         self.dataSource = DataSource(
             sections: [
                 Section(
@@ -23,15 +25,16 @@ class MenuViewController: BlockTableViewController {
                         }, onSelect: { [unowned self] _ in
                             self.navigationController?.pushViewController(EditingViewController(), animated: true)
                         }),
-//                        Item(configure: { (cell: UITableViewCell) in
-//                            cell.textLabel?.text = "Cell Types"
-//                        }, onSelect: { [unowned self] _ in
-//                            self.navigationController?.pushViewController(cellTypesViewController, animated: true)
-//                        }),
+                        Item(configure: { (cell: UITableViewCell) in
+                            cell.textLabel?.text = "Cell Types"
+                        }, onSelect: { [unowned self] _ in
+                            cellTypesViewController.title = "Cell Types"
+                            self.navigationController?.pushViewController(cellTypesViewController, animated: true)
+                        }),
                         Item(configure: { (cell: UITableViewCell) in
                             cell.textLabel?.text = "Middleware"
                         }, onSelect: { [unowned self] _ in
-                            self.navigationController?.pushViewController(MiddlwareViewController(), animated: true)
+                            self.navigationController?.pushViewController(MiddlewareViewController(), animated: true)
                         })
                     ]
                 ),
@@ -46,9 +49,11 @@ class MenuViewController: BlockTableViewController {
                     ]
                 )
             ],
-            middleware: [
-                Middleware.disclosureIndicators
-            ]
+            middleware: DataSource.MiddlewareConfig(
+                tableViewCellMiddleware: [
+                    TableViewCellMiddleware.disclosureIndicators
+                ]
+            )
         )
     }
     

@@ -8,13 +8,13 @@
 
 import BlockDataSource
 
-extension Middleware {
-    static var noCellSelectionStyle = Middleware { (cell: UITableViewCell, _, _) in
+extension TableViewCellMiddleware {
+    static var noCellSelectionStyle = TableViewCellMiddleware { cell, _, _ in
         cell.selectionStyle = .none
     }
     
-    static var cellGradient = Middleware { (cell: UITableViewCell, indexPath: IndexPath, sections: [Section]) in
-        let normalized = CGFloat(Double(indexPath.row) / Double(sections[indexPath.section].items.count))
+    static var cellGradient = TableViewCellMiddleware { cell, indexPath, dataSource in
+        let normalized = CGFloat(Double(indexPath.row) / Double(dataSource.sections[indexPath.section].items.count))
         let backgroundColor = UIColor(white: 1-normalized, alpha: 1.0)
         let textColor = UIColor(white: normalized, alpha: 1.0)
         cell.contentView.backgroundColor = backgroundColor
@@ -22,16 +22,20 @@ extension Middleware {
         cell.detailTextLabel?.textColor = textColor
     }
     
-    static var noTableSeparator = Middleware { (tableView: UITableView, _, _) in
-        tableView.separatorStyle = .none
-    }
-    
-    static var disclosureIndicators = Middleware { (cell: UITableViewCell, _, _) in
+    static var disclosureIndicators = TableViewCellMiddleware { cell, _, _ in
         cell.accessoryType = .disclosureIndicator
     }
     
-    static var separatorInset: (UIEdgeInsets) -> Middleware = { insets in
-        return Middleware { (tableView: UITableView, _, _) in
+
+}
+
+extension TableViewMiddleware {
+    static var noTableSeparator = TableViewMiddleware { tableView in
+        tableView.separatorStyle = .none
+    }
+    
+    static var separatorInset: (UIEdgeInsets) -> TableViewMiddleware = { insets in
+        return TableViewMiddleware { tableView in
             tableView.separatorInset = insets
         }
     }

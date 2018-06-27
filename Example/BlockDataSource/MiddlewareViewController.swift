@@ -9,7 +9,7 @@
 import BlockDataSource
 import UIKit
 
-class MiddlwareViewController: BlockTableViewController {
+class MiddlewareViewController: BlockTableViewController {
     init() {
         super.init(style: .plain)
         self.title = "Middleware"
@@ -28,11 +28,15 @@ class MiddlwareViewController: BlockTableViewController {
                     }
                 )
             ],
-            middleware: [
-                Middleware.noTableSeparator,
-                Middleware.noCellSelectionStyle,
-                Middleware.cellGradient
-            ]
+            middleware: DataSource.MiddlewareConfig(
+                tableViewCellMiddleware: [
+                    TableViewCellMiddleware.noCellSelectionStyle,
+                    TableViewCellMiddleware.cellGradient
+                ],
+                tableViewMiddleware: [
+                    TableViewMiddleware.noTableSeparator
+                ]
+            )
         )
     }
     

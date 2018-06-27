@@ -47,7 +47,7 @@ open class DataSource: NSObject {
     /// Collection of callbacks used for handling `UIScrollViewDelegate` events
     public var scrollConfig: ScrollConfig?
     /// All the `Middleware` for this `DataSource`
-    public var middleware: MiddlwareConfig?
+    public var middleware: MiddlewareConfig?
 
     /**
      Initialize a `DataSource`
@@ -62,7 +62,7 @@ open class DataSource: NSObject {
         sections: [Section],
         onReorder: ReorderBlock? = nil,
         scrollConfig: ScrollConfig? = nil,
-        middleware: MiddlwareConfig? = nil
+        middleware: MiddlewareConfig? = nil
     ) {
         self.sections = sections
         self.onReorder = onReorder
@@ -71,12 +71,12 @@ open class DataSource: NSObject {
     }
     
     /// Convenience initializer to construct a DataSource with a single section
-    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlwareConfig? = nil) {
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlewareConfig? = nil) {
         self.init(sections: [section], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
     }
     
     /// Convenience initializer to construct a DataSource with an array of items
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlwareConfig? = nil) {
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlewareConfig? = nil) {
         self.init(sections: [Section(items: items)], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
     }
 
@@ -125,30 +125,30 @@ extension DataSource {
 }
 
 extension DataSource {
-    /// Stores Middleware blocks
-    public struct MiddlwareConfig {
-        let tableViewCellMiddlware: [TableViewCellMiddleware]?
-        let tableViewMiddlware: [TableViewMiddleware]?
-        let tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]?
+    /// Store the various middleware blocks
+    public struct MiddlewareConfig {
+        public let tableViewCellMiddleware: [TableViewCellMiddleware]?
+        public let tableViewMiddleware: [TableViewMiddleware]?
+        public let tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]?
         
-        let collectionViewCellMiddleware: [CollectionViewCellMiddleware]?
-        let collectionViewMiddleware: [CollectionViewMiddleware]?
-        let collectionReusableViewMiddlware: [CollectionReusableViewMiddlware]?
+        public let collectionViewCellMiddleware: [CollectionViewCellMiddleware]?
+        public let collectionViewMiddleware: [CollectionViewMiddleware]?
+        public let collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]?
         
-        init(
-            tableViewCellMiddlware: [TableViewCellMiddleware]? = nil,
-            tableViewMiddlware: [TableViewMiddleware]? = nil,
+        public init(
+            tableViewCellMiddleware: [TableViewCellMiddleware]? = nil,
+            tableViewMiddleware: [TableViewMiddleware]? = nil,
             tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]? = nil,
             collectionViewCellMiddleware: [CollectionViewCellMiddleware]? = nil,
             collectionViewMiddleware: [CollectionViewMiddleware]? = nil,
-            collectionReusableViewMiddlware: [CollectionReusableViewMiddlware]? = nil
+            collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]? = nil
         ) {
-            self.tableViewCellMiddlware = tableViewCellMiddlware
-            self.tableViewMiddlware = tableViewMiddlware
+            self.tableViewCellMiddleware = tableViewCellMiddleware
+            self.tableViewMiddleware = tableViewMiddleware
             self.tableViewHeaderFooterViewMiddleware = tableViewHeaderFooterViewMiddleware
             self.collectionViewCellMiddleware = collectionViewCellMiddleware
             self.collectionViewMiddleware = collectionViewMiddleware
-            self.collectionReusableViewMiddlware = collectionReusableViewMiddlware
+            self.collectionReusableViewMiddleware = collectionReusableViewMiddleware
         }
         
     }
@@ -335,7 +335,7 @@ extension DataSource: UITableViewDataSource {
 
 extension DataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        middleware?.tableViewCellMiddlware?.forEach { $0.apply(cell, indexPath, self) }
+        middleware?.tableViewCellMiddleware?.forEach { $0.apply(cell, indexPath, self) }
     }
 
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -437,13 +437,13 @@ extension DataSource: UICollectionViewDataSource {
         if kind == UICollectionElementKindSectionHeader {
             guard let header = section.header else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.reuseIdentifier, for: indexPath)
-            middleware?.collectionReusableViewMiddlware?.forEach { $0.apply(view, indexPath, self) }
+            middleware?.collectionReusableViewMiddleware?.forEach { $0.apply(view, indexPath, self) }
             header.configure(view)
             return view
         } else if kind == UICollectionElementKindSectionFooter {
             guard let footer = section.footer else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footer.reuseIdentifier, for: indexPath)
-            middleware?.collectionReusableViewMiddlware?.forEach { $0.apply(view, indexPath, self) }
+            middleware?.collectionReusableViewMiddleware?.forEach { $0.apply(view, indexPath, self) }
             footer.configure(view)
             return view
         }
@@ -506,6 +506,7 @@ extension DataSource: UIScrollViewDelegate {
 // MARK: - Cell Registration
 
 public extension UITableView {
+    /// Register the reuse identifiers to the table view
     public func registerReuseIdentifiers(forDataSource dataSource: DataSource) {
         for section in dataSource.sections {
             if let header = section.header {
@@ -524,7 +525,18 @@ public extension UITableView {
             }
         }
     }
+    
+    /// Register a cell for the tableView view
+    private func register(item: Item) {
+        if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+            register(nib, forCellReuseIdentifier: item.reuseIdentifier)
+        } else {
+            register(item.viewClass, forCellReuseIdentifier: item.reuseIdentifier)
+        }
+    }
 
+    /// Register a HeaderFooterView for the tableView
     private func register(sectionDecoration: Reusable) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
@@ -536,6 +548,7 @@ public extension UITableView {
 }
 
 public extension UICollectionView {
+    /// Register reuse identifiers to the collection view
     public func registerReuseIdentifiers(forDataSource dataSource: DataSource) {
         for section in dataSource.sections {
             if let header = section.header {
@@ -550,21 +563,23 @@ public extension UICollectionView {
         }
     }
 
-    private func register(sectionDecoration: Reusable, kind: String) {
-        if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
-            let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
-            register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
-        } else {
-            register(sectionDecoration.viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
-        }
-    }
-
+    /// Register a cell for the collection view
     private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
             register(nib, forCellWithReuseIdentifier: item.reuseIdentifier)
         } else {
             register(item.viewClass, forCellWithReuseIdentifier: item.reuseIdentifier)
+        }
+    }
+    
+    /// Register a supplimentary view for the collectionView
+    private func register(sectionDecoration: Reusable, kind: String) {
+        if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
+        } else {
+            register(sectionDecoration.viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
         }
     }
 }

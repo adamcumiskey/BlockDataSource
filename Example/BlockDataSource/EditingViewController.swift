@@ -14,10 +14,13 @@ class EditingViewController: BlockTableViewController {
     
     init() {
         super.init(style: .plain)
+        
         self.title = "Editing"
         self.navigationItem.rightBarButtonItem = editButtonItem
+        
         self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        
         self.dataSource = DataSource(
             sections: [
                 Section(
@@ -36,9 +39,11 @@ class EditingViewController: BlockTableViewController {
             onReorder: { [unowned self] origin, destination in
                 self.items.moveObjectAtIndex(origin.row, toIndex: destination.row)
             },
-            middleware: [
-                Middleware.noCellSelectionStyle
-            ]
+            middleware: DataSource.MiddlewareConfig(
+                tableViewCellMiddleware: [
+                    TableViewCellMiddleware.noCellSelectionStyle
+                ]
+            )
         )
     }
     

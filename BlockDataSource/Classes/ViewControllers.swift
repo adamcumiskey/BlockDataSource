@@ -54,7 +54,7 @@ public extension TableViewReloadable {
     
     /// Applies the middleware functions to the tableView
     func applyTableViewMiddleware() {
-        dataSource?.middleware.forEach { $0.apply(tableView) }
+        dataSource?.middleware?.tableViewMiddleware?.forEach { $0.apply(tableView) }
     }
 }
 
@@ -105,9 +105,9 @@ public extension CollectionViewReloadable {
     }
     
     /// Applies the middleware functions to the collectionView
-    func applyCollectionViewMiddlware() {
+    func applyCollectionViewMiddleware() {
         if let collectionView = collectionView {
-            dataSource?.middleware.forEach { $0.apply(collectionView) }
+            dataSource?.middleware?.collectionViewMiddleware?.forEach { $0.apply(collectionView) }
         }
     }
 }
@@ -135,7 +135,7 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        applyCollectionViewMiddlware()
+        applyCollectionViewMiddleware()
         reload()
     }
 }
