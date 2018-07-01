@@ -22,7 +22,7 @@ let cellTypesViewController = BlockTableViewController(
                 cell.detailTextLabel?.numberOfLines = 0
             }
         ],
-        middleware: DataSource.MiddlewareConfig(
+        middleware: Middleware(
             tableViewCellMiddleware: [
                 TableViewCellMiddleware.noCellSelectionStyle
             ],

@@ -28,10 +28,12 @@
 
 import Foundation
 
+/// Configures the UIView passed into the block
 public typealias ConfigureBlock = (UIView) -> Void
+/// Callback for an event at an IndexPath
 public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
+/// Callback for when the DataSource wants to move an Item to a new position
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
-public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
 // MARK: - DataSource
 
@@ -45,9 +47,9 @@ open class DataSource: NSObject {
     /// Block called when an `Item` is reordered. You must update the data backing the view inside this block.
     public var onReorder: ReorderBlock?
     /// Collection of callbacks used for handling `UIScrollViewDelegate` events
-    public var scrollConfig: ScrollConfig?
+    public var scroll: Scroll?
     /// All the `Middleware` for this `DataSource`
-    public var middleware: MiddlewareConfig?
+    public var middleware: Middleware?
 
     /**
      Initialize a `DataSource`
@@ -61,23 +63,23 @@ open class DataSource: NSObject {
     public init(
         sections: [Section],
         onReorder: ReorderBlock? = nil,
-        scrollConfig: ScrollConfig? = nil,
-        middleware: MiddlewareConfig? = nil
+        scroll: Scroll? = nil,
+        middleware: Middleware? = nil
     ) {
         self.sections = sections
         self.onReorder = onReorder
-        self.scrollConfig = scrollConfig
+        self.scroll = scroll
         self.middleware = middleware
     }
-    
+
     /// Convenience initializer to construct a DataSource with a single section
-    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlewareConfig? = nil) {
-        self.init(sections: [section], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scroll: Scroll? = nil, middleware: Middleware? = nil) {
+        self.init(sections: [section], onReorder: onReorder, scroll: scroll, middleware: middleware)
     }
-    
+
     /// Convenience initializer to construct a DataSource with an array of items
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scrollConfig: ScrollConfig? = nil, middleware: MiddlewareConfig? = nil) {
-        self.init(sections: [Section(items: items)], onReorder: onReorder, scrollConfig: scrollConfig, middleware: middleware)
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scroll: Scroll? = nil, middleware: Middleware? = nil) {
+        self.init(sections: [Section(items: items)], onReorder: onReorder, scroll: scroll, middleware: middleware)
     }
 
     /// Reference section with `DataSource[sectionIndex]`
@@ -91,66 +93,35 @@ open class DataSource: NSObject {
     }
 }
 
-extension DataSource {
-    /// Stores blocks that allow the user to configure the `UIScrollViewDelegate` methods
-    public struct ScrollConfig {
-        public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
-        public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
+/// Stores blocks that allow the user to configure the `UIScrollViewDelegate` methods
+public struct Scroll {
+    public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
+    public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
+    public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
 
-        /// Callback for when the scrollView is being dragged
-        public let onScroll: ScrollBlock?
-        /// Callback for when the scrollView is about to begin scrolling
-        public let willBeginDragging: ScrollBlock?
-        /// Callback for when the scrollView is about to stop dragging
-        public let willEndDragging: WillEndDraggingBlock?
-        /// Callback for when the scrollView dragging ends
-        public let didEndDragging: DidEndDraggingBlock?
-        /// Callback for when the scrollView stops scrolling
-        public let didEndDecelerating: ScrollBlock?
+    /// Callback for when the scrollView is being dragged
+    public let onScroll: ScrollBlock?
+    /// Callback for when the scrollView is about to begin scrolling
+    public let willBeginDragging: ScrollBlock?
+    /// Callback for when the scrollView is about to stop dragging
+    public let willEndDragging: WillEndDraggingBlock?
+    /// Callback for when the scrollView dragging ends
+    public let didEndDragging: DidEndDraggingBlock?
+    /// Callback for when the scrollView stops scrolling
+    public let didEndDecelerating: ScrollBlock?
 
-        public init(
-            onScroll: ScrollBlock? = nil,
-            willBeginDragging: ScrollBlock? = nil,
-            willEndDragging: WillEndDraggingBlock? = nil,
-            didEndDragging: DidEndDraggingBlock? = nil,
-            didEndDecelerating: ScrollBlock? = nil
-            ) {
-            self.onScroll = onScroll
-            self.willBeginDragging = willBeginDragging
-            self.willEndDragging = willEndDragging
-            self.didEndDragging = didEndDragging
-            self.didEndDecelerating = didEndDecelerating
-        }
-    }
-}
-
-extension DataSource {
-    /// Store the various middleware blocks
-    public struct MiddlewareConfig {
-        public let tableViewCellMiddleware: [TableViewCellMiddleware]?
-        public let tableViewMiddleware: [TableViewMiddleware]?
-        public let tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]?
-        
-        public let collectionViewCellMiddleware: [CollectionViewCellMiddleware]?
-        public let collectionViewMiddleware: [CollectionViewMiddleware]?
-        public let collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]?
-        
-        public init(
-            tableViewCellMiddleware: [TableViewCellMiddleware]? = nil,
-            tableViewMiddleware: [TableViewMiddleware]? = nil,
-            tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]? = nil,
-            collectionViewCellMiddleware: [CollectionViewCellMiddleware]? = nil,
-            collectionViewMiddleware: [CollectionViewMiddleware]? = nil,
-            collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]? = nil
-        ) {
-            self.tableViewCellMiddleware = tableViewCellMiddleware
-            self.tableViewMiddleware = tableViewMiddleware
-            self.tableViewHeaderFooterViewMiddleware = tableViewHeaderFooterViewMiddleware
-            self.collectionViewCellMiddleware = collectionViewCellMiddleware
-            self.collectionViewMiddleware = collectionViewMiddleware
-            self.collectionReusableViewMiddleware = collectionReusableViewMiddleware
-        }
-        
+    public init(
+        onScroll: ScrollBlock? = nil,
+        willBeginDragging: ScrollBlock? = nil,
+        willEndDragging: WillEndDraggingBlock? = nil,
+        didEndDragging: DidEndDraggingBlock? = nil,
+        didEndDecelerating: ScrollBlock? = nil
+    ) {
+        self.onScroll = onScroll
+        self.willBeginDragging = willBeginDragging
+        self.willEndDragging = willEndDragging
+        self.didEndDragging = didEndDragging
+        self.didEndDecelerating = didEndDecelerating
     }
 }
 
@@ -172,7 +143,7 @@ public class Reusable {
             return String(describing: viewClass)
         }
     }
-    
+
     private let customReuseIdentifier: String?
 
     /** Create a new reusable
@@ -244,12 +215,12 @@ public struct Section {
     public var items: [Item]
     /// A Reusable for this section's footer
     public var footer: Reusable?
-    
+
     /// Header text for UITableView section
     public var headerText: String?
     /// Footer text for UITableView section
     public var footerText: String?
-    
+
     /**
      */
     public init(
@@ -473,31 +444,31 @@ extension DataSource: UICollectionViewDelegate {
 
 extension DataSource: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let onScroll = scrollConfig?.onScroll {
+        if let onScroll = scroll?.onScroll {
             onScroll(scrollView)
         }
     }
 
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if let willBeginDragging = scrollConfig?.willBeginDragging {
+        if let willBeginDragging = scroll?.willBeginDragging {
             willBeginDragging(scrollView)
         }
     }
 
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if let willEndDragging = scrollConfig?.willEndDragging {
+        if let willEndDragging = scroll?.willEndDragging {
             willEndDragging(scrollView, velocity, targetContentOffset)
         }
     }
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if let didEndDragging = scrollConfig?.didEndDragging {
+        if let didEndDragging = scroll?.didEndDragging {
             didEndDragging(scrollView, decelerate)
         }
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if let didEndDecelerating = scrollConfig?.didEndDecelerating {
+        if let didEndDecelerating = scroll?.didEndDecelerating {
             didEndDecelerating(scrollView)
         }
     }
@@ -525,7 +496,7 @@ public extension UITableView {
             }
         }
     }
-    
+
     /// Register a cell for the tableView view
     private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
@@ -572,7 +543,7 @@ public extension UICollectionView {
             register(item.viewClass, forCellWithReuseIdentifier: item.reuseIdentifier)
         }
     }
-    
+
     /// Register a supplimentary view for the collectionView
     private func register(sectionDecoration: Reusable, kind: String) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
