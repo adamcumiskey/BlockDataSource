@@ -306,7 +306,7 @@
 		EE6E98E71E571422479DFADC1D2AF121 /* NimbleXCTestHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NimbleXCTestHandler.swift; path = Sources/Nimble/Adapters/NimbleXCTestHandler.swift; sourceTree = "<group>"; };
 		EEBCF9B57684FD89791D983A4733101F /* Quick-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Quick-dummy.m"; sourceTree = "<group>"; };
 		EFC9C90BFEA614504FAC14297CA2DD63 /* BeginWith.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeginWith.swift; path = Sources/Nimble/Matchers/BeginWith.swift; sourceTree = "<group>"; };
-		F0FCED6D2C91056C2F72DF666524E6F2 /* ViewControllers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ViewControllers.swift; path = BlockDataSource/Classes/ViewControllers.swift; sourceTree = "<group>"; };
+		F0FCED6D2C91056C2F72DF666524E6F2 /* ViewControllers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ViewControllers.swift; sourceTree = "<group>"; };
 		F23E84E6B069FAB9A5028AC83F83B4CF /* Pods-BlockDataSource_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlockDataSource_Example-resources.sh"; sourceTree = "<group>"; };
 		F4C7D6328493B73EF741AC61F4CEF01E /* QuickSelectedTestSuiteBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickSelectedTestSuiteBuilder.swift; path = Sources/Quick/QuickSelectedTestSuiteBuilder.swift; sourceTree = "<group>"; };
 		F4FA8C3770E4755F5878235C0EB70E7F /* PostNotification.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PostNotification.swift; path = Sources/Nimble/Matchers/PostNotification.swift; sourceTree = "<group>"; };
@@ -361,14 +361,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0979DB35DE61B77BD36AD10E2BD7B524 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				F0FCED6D2C91056C2F72DF666524E6F2 /* ViewControllers.swift */,
-			);
-			name = ViewControllers;
-			sourceTree = "<group>";
-		};
 		0D13088DAC81ED64F3132A6422CFD744 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -645,10 +637,10 @@
 			isa = PBXGroup;
 			children = (
 				102AAFD9CE3B2901559178D58635CBEB /* DataSource.swift */,
+				F0FCED6D2C91056C2F72DF666524E6F2 /* ViewControllers.swift */,
 				66493F8620E336CC003EE232 /* Middleware.swift */,
 				827E70C2469520CFD10DD640B176923B /* Pod */,
 				0D13088DAC81ED64F3132A6422CFD744 /* Support Files */,
-				0979DB35DE61B77BD36AD10E2BD7B524 /* ViewControllers */,
 			);
 			name = BlockDataSource;
 			path = ../..;

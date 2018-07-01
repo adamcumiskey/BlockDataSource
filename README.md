@@ -56,8 +56,12 @@ You must provide a type for the closure parameter to allow the initializer to in
 Items are a more specific subclass of Reusables designed to be used for `UITableViewCell` and `UICollectionViewCell`s.
 If an item is `reorderable`, it will become interactive while editing if the `DataSource` has an `onReorder` block.
 
+### Sections
+
+Groups Items together with an optional Header and/or Footer.
 
 ### Middleware
+
 
 
 ## Installation
