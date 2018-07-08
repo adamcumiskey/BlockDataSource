@@ -29,7 +29,7 @@ class MiddlewareViewController: BlockTableViewController {
                     footerText: "Middleware can be created for items, section headers/footers, and table/collection views"
                 )
             ],
-            middleware: DataSource.MiddlewareConfig(
+            middleware: Middleware(
                 tableViewCellMiddleware: [
                     TableViewCellMiddleware.noCellSelectionStyle,
                     TableViewCellMiddleware.cellGradient
@@ -40,7 +40,7 @@ class MiddlewareViewController: BlockTableViewController {
             )
         )
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -11,16 +11,16 @@ import UIKit
 
 class EditingViewController: BlockTableViewController {
     var items = (0..<100).map { $0 }
-    
+
     init() {
         super.init(style: .plain)
-        
+
         self.title = "Editing"
         self.navigationItem.rightBarButtonItem = editButtonItem
-        
+
         self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        
+
         self.dataSource = DataSource(
             sections: [
                 Section(
@@ -43,16 +43,15 @@ class EditingViewController: BlockTableViewController {
             onReorder: { [unowned self] origin, destination in
                 self.items.moveObjectAtIndex(origin.row, toIndex: destination.row)
             },
-            middleware: DataSource.MiddlewareConfig(
+            middleware: Middleware(
                 tableViewCellMiddleware: [
                     TableViewCellMiddleware.noCellSelectionStyle
                 ]
             )
         )
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
