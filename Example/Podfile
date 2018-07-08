@@ -2,4 +2,9 @@ use_frameworks!
 
 target 'BlockDataSource_Example' do
   pod 'BlockDataSource', :path => '../'
+
+  target 'BlockDataSourceTests' do
+    pod 'Quick'
+    pod 'Nimble'
+  end
 end

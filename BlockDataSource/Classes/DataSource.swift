@@ -26,85 +26,116 @@
 //  Created by Adam Cumiskey on 6/16/15.
 //  Copyright (c) 2015 adamcumiskey. All rights reserved.
 
-
 import Foundation
 
-
+/// Configures the UIView passed into the block
 public typealias ConfigureBlock = (UIView) -> Void
+/// Callback for an event at an IndexPath
 public typealias IndexPathBlock = (_ indexPath: IndexPath) -> Void
+/// Callback for when the DataSource wants to move an Item to a new position
 public typealias ReorderBlock = (_ sourceIndex: IndexPath, _ destinationIndex: IndexPath) -> Void
-public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
-
 
 // MARK: - DataSource
 
-/// Object that can act as the delegate and datasource for UITableViews and UICollectionViews.
-/// The block based initialization allows tables and collections to be created with a DSL-like syntax.
-public class DataSource: NSObject {
+/** Object that can act as the delegate and datasource for `UITableView`s and `UICollectionView`s.
+ 
+  The block-based initialization provides an embedded DSL for creating `UITableViewController` and `UICollectionViewController`s.
+*/
+open class DataSource: NSObject {
+    /// Array of `Section`s in the view
     public var sections: [Section]
+    /// Block called when an `Item` is reordered. You must update the data backing the view inside this block.
     public var onReorder: ReorderBlock?
-    public var onScroll: ScrollBlock?
-    public var middleware: [Middleware]
+    /// Collection of callbacks used for handling `UIScrollViewDelegate` events
+    public var scroll: Scroll?
+    /// All the `Middleware` for this `DataSource`
+    public var middleware: Middleware?
 
     /**
-     Initialize a DataSource
+     Initialize a `DataSource`
 
      - parameters:
-     - sections: The array of sections in this DataSource
+     - sections: The array of sections in this `DataSource`
      - onReorder: Optional callback for when items are moved. You should update the order your underlying data in this callback. If this property is `nil`, reordering will be disabled for this TableView
-     - onScroll: Optional callback for recieving scroll events from UIScrollViewDelegate
+     - onScroll: Optional callback for recieving scroll events from `UIScrollViewDelegate`
+     - middleware: The `Middleware` for this `DataSource` to apply
      */
-    public init(sections: [Section], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil, middleware: [Middleware] = []) {
+    public init(
+        sections: [Section],
+        onReorder: ReorderBlock? = nil,
+        scroll: Scroll? = nil,
+        middleware: Middleware? = nil
+    ) {
         self.sections = sections
         self.onReorder = onReorder
-        self.onScroll = onScroll
+        self.scroll = scroll
         self.middleware = middleware
     }
 
-    public convenience override init() {
-        self.init(items: [])
+    /// Convenience initializer to construct a DataSource with a single section
+    public convenience init(section: Section, onReorder: ReorderBlock? = nil, scroll: Scroll? = nil, middleware: Middleware? = nil) {
+        self.init(sections: [section], onReorder: onReorder, scroll: scroll, middleware: middleware)
     }
 
-    /// Convenience init for a DataSource with a single section
-    public convenience init(section: Section, onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [section],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
+    /// Convenience initializer to construct a DataSource with an array of items
+    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, scroll: Scroll? = nil, middleware: Middleware? = nil) {
+        self.init(sections: [Section(items: items)], onReorder: onReorder, scroll: scroll, middleware: middleware)
     }
 
-    /// Convenience init for a DataSource with a single section with no headers/footers
-    public convenience init(items: [Item], onReorder: ReorderBlock? = nil, onScroll: ScrollBlock? = nil) {
-        self.init(
-            sections: [Section(items: items)],
-            onReorder: onReorder,
-            onScroll: onScroll
-        )
+    /// Reference section with `DataSource[sectionIndex]`
+    public subscript(sectionIndex: Int) -> Section {
+        return sections[sectionIndex]
     }
 
-    // Reference section with `DataSource[index]`
-    public subscript(index: Int) -> Section {
-        return sections[index]
-    }
-
-    // Reference item with `DataSource[indexPath]`
+    /// Reference item with `DataSource[indexPath]`
     public subscript(indexPath: IndexPath) -> Item {
         return sections[indexPath.section].items[indexPath.item]
     }
 }
 
+/// Stores blocks that allow the user to configure the `UIScrollViewDelegate` methods
+public struct Scroll {
+    public typealias WillEndDraggingBlock = ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)
+    public typealias DidEndDraggingBlock = ((UIScrollView, Bool) -> Void)
+    public typealias ScrollBlock = (_ scrollView: UIScrollView) -> Void
+
+    /// Callback for when the scrollView is being dragged
+    public let onScroll: ScrollBlock?
+    /// Callback for when the scrollView is about to begin scrolling
+    public let willBeginDragging: ScrollBlock?
+    /// Callback for when the scrollView is about to stop dragging
+    public let willEndDragging: WillEndDraggingBlock?
+    /// Callback for when the scrollView dragging ends
+    public let didEndDragging: DidEndDraggingBlock?
+    /// Callback for when the scrollView stops scrolling
+    public let didEndDecelerating: ScrollBlock?
+
+    public init(
+        onScroll: ScrollBlock? = nil,
+        willBeginDragging: ScrollBlock? = nil,
+        willEndDragging: WillEndDraggingBlock? = nil,
+        didEndDragging: DidEndDraggingBlock? = nil,
+        didEndDecelerating: ScrollBlock? = nil
+    ) {
+        self.onScroll = onScroll
+        self.willBeginDragging = willBeginDragging
+        self.willEndDragging = willEndDragging
+        self.didEndDragging = didEndDragging
+        self.didEndDecelerating = didEndDecelerating
+    }
+}
 
 // MARK: - Reusable
 
 /// Represents the data for configuring a reusable view
-/// You must specify the View class that a Reusable will represent in the `configure` closure.
-/// View must be a subtype of UITableViewCell, UITableViewHeaderFooterView, UICollectionViewCell, UICollectionReusableView
+/// You must specify the View class that a `Reusable` will represent in the `configure` closure.
+/// View must be a subtype of `UITableViewCell`, `UITableViewHeaderFooterView`, `UICollectionViewCell`, `UICollectionReusableView`
 public class Reusable {
-    public var configure: ConfigureBlock
-    public var viewClass: UIView.Type
-
-    public var customReuseIdentifier: String?
+    /// Store the generic view's type.
+    public let viewClass: UIView.Type
+    /// A block which takes a `UIView` and configures it
+    public let configure: ConfigureBlock
+    /// The reuse identifier to use when recycling the view element
     public var reuseIdentifier: String {
         if let customReuseIdentifier = customReuseIdentifier {
             return customReuseIdentifier
@@ -113,74 +144,97 @@ public class Reusable {
         }
     }
 
-    public init<View: UIView>(customReuseIdentifier: String? = nil, configure: @escaping (View) -> Void) {
+    private let customReuseIdentifier: String?
+
+    /** Create a new reusable
+     
+     - parameters:
+     - reuseIdentifier: Custom reuseIdentifier to use for this `Reusable`. Default is the view's classname.
+     - configure
+     */
+    public init<View: UIView>(
+        reuseIdentifier: String? = nil,
+        configure: @escaping (View) -> Void
+    ) {
         self.configure = { view in
             configure(view as! View)
         }
         self.viewClass = View.self
+        self.customReuseIdentifier = reuseIdentifier
     }
 }
 
-
 // MARK: - Item
 
-/// Object used to configure UITableViewCell or UICollectionViewCells
+/// Object used to configure a UITableViewCell or UICollectionViewCell
 public class Item: Reusable {
-    public var onSelect: IndexPathBlock?
-    public var onDelete: IndexPathBlock?
-    public var reorderable: Bool = false
+    public let onSelect: IndexPathBlock?
+    public let onDelete: IndexPathBlock?
+    public let reorderable: Bool
 
     /**
-     Initialize a item
+     Initialize an item
 
      - parameters:
      - configure: The configuration block.
      - onSelect: The closure to execute when the item is tapped
      - onDelete: The closure to execute when the item is deleted
-     - reorderable: Flag to indicate if this item can be reordered
-     - customReuseIdentifier: Set to override the default reuseIdentifier. Default is nil.
+     - reuseIdentifier: Custom reuseIdentifier to use for this Item
+     - reorderable: Allows this cell to be reordered when editing when true
      */
-    public init<T: UIView>(onSelect: IndexPathBlock? = nil, onDelete: IndexPathBlock? = nil, reorderable: Bool = false, customReuseIdentifier: String? = nil, configure: @escaping (T) -> Void) {
-        super.init(customReuseIdentifier: customReuseIdentifier, configure: configure)
+    public init<View: UIView>(
+        configure: @escaping (View) -> Void,
+        onSelect: IndexPathBlock? = nil,
+        onDelete: IndexPathBlock? = nil,
+        reuseIdentifier: String? = nil,
+        reorderable: Bool = false
+    ) {
         self.onSelect = onSelect
         self.onDelete = onDelete
         self.reorderable = reorderable
+        super.init(reuseIdentifier: reuseIdentifier, configure: configure)
+    }
+
+    /// Convenience initializer for trailing closure initialization
+    public convenience init<View: UIView>(
+        reuseIdentifier: String? = nil,
+        reorderable: Bool = false,
+        configure: @escaping (View) -> Void
+    ) {
+        self.init(configure: configure, reuseIdentifier: reuseIdentifier, reorderable: reorderable)
     }
 }
-
 
 // MARK: - Section
 
 /// Data structure that wraps an array of items to represent a tableView/collectionView section.
 public struct Section {
-    /// The header data for this section
+    /// A Reusable for this section's header
     public var header: Reusable?
-
     /// The item data for this section
     public var items: [Item]
-
-    /// The footer data for this section
+    /// A Reusable for this section's footer
     public var footer: Reusable?
 
-    /**
-     Initializer for a DataSource Section
+    /// Header text for UITableView section
+    public var headerText: String?
+    /// Footer text for UITableView section
+    public var footerText: String?
 
-     - parameters:
-     - header: The header item for this section
-     - items: The items data for this section
-     - footer: The DataSource footer data for this section
+    /**
      */
-    public init(header: Reusable? = nil, items: [Item], footer: Reusable? = nil) {
+    public init(
+        header: Reusable? = nil,
+        headerText: String? = nil,
+        items: [Item],
+        footer: Reusable? = nil,
+        footerText: String? = nil
+    ) {
         self.header = header
+        self.headerText = headerText
         self.items = items
         self.footer = footer
-    }
-
-    /// Convenience init for a section with a single item
-    public init(header: Reusable? = nil, item: Item, footer: Reusable? = nil) {
-        self.header = header
-        self.items = [item]
-        self.footer = footer
+        self.footerText = footerText
     }
 
     // Reference items with `section[index]`
@@ -188,27 +242,6 @@ public struct Section {
         return items[index]
     }
 }
-
-
-// MARK: - Middleware
-
-/// Middleware allows you to customize for specific table/collection view cells in a generic way.
-///
-/// The datasource will apply its middleware to any views matching the type passed into the `apply` closure.
-/// Passing in a type of UICollectionViewCell or UITableViewCell will cause the middleware to be applied to
-/// all items. The indexPath of the item that the middleware is being applied to as well as the dataSource structure are also
-/// passed in to allow the middleware to be aware of context.
-public struct Middleware {
-    public var apply: (UIView, IndexPath, [Section]) -> Void
-    public init<View: UIView>(apply: @escaping (View, IndexPath, [Section]) -> Void) {
-        self.apply = { view, indexPath, sections in
-            if let view = view as? View {
-                apply(view, indexPath, sections)
-            }
-        }
-    }
-}
-
 
 // MARK: - UITableViewDataSource
 
@@ -227,61 +260,13 @@ extension DataSource: UITableViewDataSource {
         item.configure(cell)
         return cell
     }
-}
 
-
-// MARK: - UITableViewDelegate
-
-extension DataSource: UITableViewDelegate {
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        for middleware in middleware {
-            middleware.apply(cell, indexPath, self.sections)
-        }
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self[section].headerText
     }
 
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let onSelect = self[indexPath].onSelect {
-            onSelect(indexPath)
-        }
-    }
-
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = self[section].header else { return nil }
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
-        return view
-    }
-
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.tableView(tableView, viewForHeaderInSection: section) != nil {
-            return UITableViewAutomaticDimension
-        } else {
-            return 0
-        }
-    }
-
-    public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let header = self[section].header else { return }
-        header.configure(view)
-    }
-
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footer = self[section].footer else { return nil }
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
-        footer.configure(view)
-        return view
-    }
-
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if self.tableView(tableView, viewForFooterInSection: section) != nil {
-            return UITableViewAutomaticDimension
-        } else {
-            return 0
-        }
-    }
-
-    public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        guard let footer = self[section].footer else { return }
-        footer.configure(view)
+    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return self[section].footerText
     }
 
     @nonobjc public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -289,15 +274,11 @@ extension DataSource: UITableViewDelegate {
         return item.onDelete != nil || item.reorderable == true
     }
 
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        guard let _ = self[indexPath].onDelete else { return .none }
-        return .delete
-    }
-
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if let onDelete = self[indexPath].onDelete {
                 sections[indexPath.section].items.remove(at: indexPath.item)
+                // TODO: make configurable
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
                 onDelete(indexPath)
             }
@@ -306,10 +287,6 @@ extension DataSource: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return self[indexPath].reorderable
-    }
-
-    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        return self[proposedDestinationIndexPath].reorderable ? proposedDestinationIndexPath : sourceIndexPath
     }
 
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -325,6 +302,70 @@ extension DataSource: UITableViewDelegate {
     }
 }
 
+// MARK: - UITableViewDelegate
+
+extension DataSource: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        middleware?.tableViewCellMiddleware?.forEach { $0.apply(cell, indexPath, self) }
+    }
+
+    public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = self[section].header else { return }
+        header.configure(view)
+    }
+
+    public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        guard let footer = self[section].footer else { return }
+        footer.configure(view)
+    }
+
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let onSelect = self[indexPath].onSelect {
+            onSelect(indexPath)
+        }
+    }
+
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.tableView(tableView, viewForHeaderInSection: section) != nil || self[section].headerText != nil {
+            return UITableViewAutomaticDimension
+        } else {
+            return 0
+        }
+    }
+
+    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if self.tableView(tableView, viewForFooterInSection: section) != nil || self[section].footerText != nil {
+            return UITableViewAutomaticDimension
+        } else {
+            return 0
+        }
+    }
+
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = self[section].header else { return nil }
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: header.reuseIdentifier) else { return nil }
+        middleware?.tableViewHeaderFooterViewMiddleware?.forEach { $0.apply(view, section, self) }
+        header.configure(view)
+        return view
+    }
+
+    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let footer = self[section].footer else { return nil }
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: footer.reuseIdentifier) else { return nil }
+        middleware?.tableViewHeaderFooterViewMiddleware?.forEach { $0.apply(view, section, self) }
+        footer.configure(view)
+        return view
+    }
+
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        guard let _ = self[indexPath].onDelete else { return .none }
+        return .delete
+    }
+
+    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        return self[proposedDestinationIndexPath].reorderable ? proposedDestinationIndexPath : sourceIndexPath
+    }
+}
 
 // MARK: - UICollectionViewDataSource
 
@@ -368,11 +409,13 @@ extension DataSource: UICollectionViewDataSource {
         if kind == UICollectionElementKindSectionHeader {
             guard let header = section.header else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.reuseIdentifier, for: indexPath)
+            middleware?.collectionReusableViewMiddleware?.forEach { $0.apply(view, indexPath, self) }
             header.configure(view)
             return view
         } else if kind == UICollectionElementKindSectionFooter {
             guard let footer = section.footer else { return UICollectionReusableView() }
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footer.reuseIdentifier, for: indexPath)
+            middleware?.collectionReusableViewMiddleware?.forEach { $0.apply(view, indexPath, self) }
             footer.configure(view)
             return view
         }
@@ -380,14 +423,11 @@ extension DataSource: UICollectionViewDataSource {
     }
 }
 
-
 // MARK: - UICollectionViewDelegate
 
 extension DataSource: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        for middleware in middleware {
-            middleware.apply(cell, indexPath, self.sections)
-        }
+        middleware?.collectionViewCellMiddleware?.forEach { $0.apply(cell, indexPath, self) }
     }
 
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -401,13 +441,151 @@ extension DataSource: UICollectionViewDelegate {
     }
 }
 
-
 // MARK: - UIScrollViewDelegate
 
 extension DataSource: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let onScroll = onScroll {
+        if let onScroll = scroll?.onScroll {
             onScroll(scrollView)
         }
+    }
+
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if let willBeginDragging = scroll?.willBeginDragging {
+            willBeginDragging(scrollView)
+        }
+    }
+
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if let willEndDragging = scroll?.willEndDragging {
+            willEndDragging(scrollView, velocity, targetContentOffset)
+        }
+    }
+
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if let didEndDragging = scroll?.didEndDragging {
+            didEndDragging(scrollView, decelerate)
+        }
+    }
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let didEndDecelerating = scroll?.didEndDecelerating {
+            didEndDecelerating(scrollView)
+        }
+    }
+}
+
+// MARK: - Cell Registration
+
+public extension UITableView {
+    /// Register the reuse identifiers to the table view
+    public func registerReuseIdentifiers(forDataSource dataSource: DataSource) {
+        for section in dataSource.sections {
+            if let header = section.header {
+                register(sectionDecoration: header)
+            }
+            for item in section.items {
+                if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
+                    let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+                    register(nib, forCellReuseIdentifier: item.reuseIdentifier)
+                } else {
+                    register(item.viewClass, forCellReuseIdentifier: item.reuseIdentifier)
+                }
+            }
+            if let footer = section.footer {
+                register(sectionDecoration: footer)
+            }
+        }
+    }
+
+    /// Register a cell for the tableView view
+    private func register(item: Item) {
+        if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UITableViewCell == nil {
+                assertionFailure("Item viewClass must be a subclass of UITableViewCell")
+            }
+            register(nib, forCellReuseIdentifier: item.reuseIdentifier)
+        } else {
+            if !item.viewClass.isSubclass(of: UITableViewCell.self) {
+                assertionFailure("Item viewClass must be a subclass of UITableViewCell")
+            }
+            register(item.viewClass, forCellReuseIdentifier: item.reuseIdentifier)
+        }
+    }
+
+    /// Register a HeaderFooterView for the tableView
+    private func register(sectionDecoration: Reusable) {
+        if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UITableViewHeaderFooterView == nil {
+                assertionFailure("Reusable viewClass must be a subclass of UITableViewHeaderFooterView")
+            }
+            register(nib, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
+        } else {
+            if !sectionDecoration.viewClass.isSubclass(of: UITableViewHeaderFooterView.self) {
+                assertionFailure("Reusable viewClass must be a subclass of UITableViewHeaderFooterView")
+            }
+            register(sectionDecoration.viewClass, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
+        }
+    }
+}
+
+public extension UICollectionView {
+    /// Register reuse identifiers to the collection view
+    public func registerReuseIdentifiers(forDataSource dataSource: DataSource) {
+        for section in dataSource.sections {
+            if let header = section.header {
+                register(sectionDecoration: header, kind: UICollectionElementKindSectionHeader)
+            }
+            for item in section.items {
+                register(item: item)
+            }
+            if let footer = section.footer {
+                register(sectionDecoration: footer, kind: UICollectionElementKindSectionFooter)
+            }
+        }
+    }
+
+    /// Register a cell for the collection view
+    private func register(item: Item) {
+        if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UICollectionViewCell == nil {
+                assertionFailure("Item viewClass must be a subclass of UICollectioonViewCell")
+            }
+            register(nib, forCellWithReuseIdentifier: item.reuseIdentifier)
+        } else {
+            if !item.viewClass.isSubclass(of: UICollectionViewCell.self) {
+                assertionFailure("Item viewClass must be a subclass of UICollectioonViewCell")
+            }
+            register(item.viewClass, forCellWithReuseIdentifier: item.reuseIdentifier)
+        }
+    }
+
+    /// Register a supplimentary view for the collectionView
+    private func register(sectionDecoration: Reusable, kind: String) {
+        if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
+            let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UICollectionReusableView == nil {
+                assertionFailure("Reusable viewClass must be a subclass of UICollectionReusableView")
+            }
+            register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
+        } else {
+            if !sectionDecoration.viewClass.isSubclass(of: UICollectionReusableView.self) {
+                assertionFailure("Reusable viewClass must be a subclass of UICollectionReusableView")
+            }
+            register(sectionDecoration.viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
+        }
+    }
+}
+
+// MARK: - Helpers
+
+extension Array {
+    mutating func moveObjectAtIndex(_ index: Int, toIndex: Int) {
+        let element = self[index]
+        remove(at: index)
+        insert(element, at: toIndex)
     }
 }

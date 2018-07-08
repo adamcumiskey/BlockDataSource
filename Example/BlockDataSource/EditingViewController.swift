@@ -1,43 +1,57 @@
 //
 //  EditingViewController.swift
-//  BlockDataSource
+//  BlockDataSource_Example
 //
-//  Created by Adam Cumiskey on 11/10/16.
-//  Copyright © 2016 CocoaPods. All rights reserved.
+//  Created by Adam on 6/25/18.
+//  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-import Foundation
 import BlockDataSource
-
+import UIKit
 
 class EditingViewController: BlockTableViewController {
-    var data: [String] = (0..<5).map { "\($0)" }
+    var items = (0..<100).map { $0 }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.rightBarButtonItem = editButtonItem
+    init() {
+        super.init(style: .plain)
+
+        self.title = "Editing"
+        self.navigationItem.rightBarButtonItem = editButtonItem
+
+        self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+
+        self.dataSource = DataSource(
+            sections: [
+                Section(
+                    header: Reusable { (view: InformationHeaderFooterView) in
+                        view.titleLabel.text = "Tap \"Edit\" to enabled deletion and reordering. Tap \"Done\" to end editing."
+                    },
+                    items: items.map { item in
+                        return Item(
+                            configure: { (cell: UITableViewCell) in
+                                cell.textLabel?.text = "\(item)"
+                            },
+                            onDelete: { [unowned self] indexPath in
+                                self.items.remove(at: indexPath.row)
+                            },
+                            reorderable: true
+                        )
+                    }
+                )
+            ],
+            onReorder: { [unowned self] origin, destination in
+                self.items.moveObjectAtIndex(origin.row, toIndex: destination.row)
+            },
+            middleware: Middleware(
+                tableViewCellMiddleware: [
+                    TableViewCellMiddleware.noCellSelectionStyle
+                ]
+            )
+        )
     }
 
-    override func configure(dataSource: DataSource) {
-        dataSource.sections = [
-            Section(
-                items: data.map { dataItem in
-                    return Item(
-                        onDelete: { [unowned self] indexPath in
-                            if let index = self.data.index(of: dataItem) {
-                                self.data.remove(at: index)
-                            }
-                        },
-                        reorderable: true,
-                        configure: { (cell: Cell) in
-                            cell.textLabel?.text = dataItem
-                        }
-                    )
-                }
-            )
-        ]
-        dataSource.onReorder = { [unowned self] (firstIndex, secondIndex) in
-            self.data.moveObjectAtIndex(firstIndex.row, toIndex: secondIndex.row)
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

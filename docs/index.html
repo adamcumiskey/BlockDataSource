@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BlockDataSource  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="BlockDataSource  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">BlockDataSource Docs</a> (29% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">BlockDataSource Reference</a>
+        <img id="carat" src="img/carat.png" />
+        BlockDataSource  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/BlockCollectionViewController.html">BlockCollectionViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/BlockTableViewController.html">BlockTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/DataSource.html">DataSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/DataSource/ScrollConfig.html">– ScrollConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Item.html">Item</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Reusable.html">Reusable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/UICollectionView.html">UICollectionView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/UITableView.html">UITableView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/CollectionViewReloadable.html">CollectionViewReloadable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/DataSourceProvidable.html">DataSourceProvidable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/TableViewReloadable.html">TableViewReloadable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Middleware.html">Middleware</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Section.html">Section</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:15BlockDataSource09ConfigureA0a">ConfigureBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:15BlockDataSource09IndexPathA0a">IndexPathBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:15BlockDataSource07ReorderA0a">ReorderBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:15BlockDataSource06ScrollA0a">ScrollBlock</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='blockdatasource' class='heading'>BlockDataSource</h1>
+
+<p><a href="https://www.bitrise.io/app/03ad9472067fd087"><img src="https://www.bitrise.io/app/03ad9472067fd087.svg?token=-uPn-_hHft3sR34teylZ-w&branch=master" alt="Build Status"></a>
+<a href="http://cocoapods.org/pods/BlockDataSource"><img src="https://img.shields.io/cocoapods/v/BlockDataSource.svg?style=flat" alt="Version"></a>
+<a href="http://cocoapods.org/pods/BlockDataSource"><img src="https://img.shields.io/cocoapods/l/BlockDataSource.svg?style=flat" alt="License"></a>
+<a href="http://cocoapods.org/pods/BlockDataSource"><img src="https://img.shields.io/cocoapods/p/BlockDataSource.svg?style=flat" alt="Platform"></a></p>
+
+<p>Conjure UITable/UICollectionViews  out of thin air.</p>
+
+<p>A DataSource is an embedded DSL for construcing UIs with UITableViews and UICollectionViews. 
+You define the structure of your list and DataSource  will automatically conform to <code>UITableViewControllerDataSource</code>, <code>UITableViewControllerDelegate</code>, <code>UICollectionViewControllerDataSource</code>, and <code>UICollectionViewControllerDelegate</code>. </p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">vc</span> <span class="o">=</span> <span class="kt">BlockTableViewController</span><span class="p">(</span>
+    <span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">grouped</span><span class="p">,</span>
+    <span class="nv">dataSource</span><span class="p">:</span> <span class="kt">DataSource</span><span class="p">(</span>
+        <span class="nv">sections</span><span class="p">:</span> <span class="p">[</span>
+            <span class="kt">Section</span><span class="p">(</span>
+                <span class="nv">items</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="kt">Item</span> <span class="p">{</span> <span class="p">(</span><span class="nv">cell</span><span class="p">:</span> <span class="kt">BedazzledTableViewCell</span><span class="p">)</span> <span class="k">in</span>
+                        <span class="n">cell</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"Custom cells"</span>
+                    <span class="p">},</span>
+                    <span class="kt">Item</span> <span class="p">{</span> <span class="p">(</span><span class="nv">cell</span><span class="p">:</span> <span class="kt">SubtitleTableViewCell</span><span class="p">)</span> <span class="k">in</span>
+                        <span class="n">cell</span><span class="o">.</span><span class="n">textLabel</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"Load any cell with ease"</span>
+                        <span class="n">cell</span><span class="o">.</span><span class="n">detailTextLabel</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"BlockDataSource automatically registers and loads the correct cell by using the class specified in the configure block."</span>
+                        <span class="n">cell</span><span class="o">.</span><span class="n">detailTextLabel</span><span class="p">?</span><span class="o">.</span><span class="n">numberOfLines</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">],</span>
+        <span class="nv">middleware</span><span class="p">:</span> <span class="p">[</span>
+            <span class="kt">Middleware</span><span class="o">.</span><span class="n">noCellSelectionStyle</span><span class="p">,</span>
+            <span class="kt">Middleware</span><span class="o">.</span><span class="nf">separatorInset</span><span class="p">(</span><span class="kt">UIEdgeInsets</span><span class="p">(</span><span class="nv">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">left</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">right</span><span class="p">:</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre>
+<h3 id='reusables' class='heading'>Reusables</h3>
+
+<p>The atomic unit of BlockDataSource is the Reusable. A Reusable is a data provider for some UI element that is recycled, like the view elements in collection UIs.
+A reusable has both a <code>reuseIdentifier</code>, and a <code>configure</code> block that is used to modify the view&rsquo;s data before it is redisplayed. The initializer takes in a generic
+configure block over a <code>UIView</code> subclass. Reusables can be used to create <code>UITableViewHeaderFooterView</code> and <code>UICollectionReusableView</code>s for sections.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">header</span> <span class="o">=</span> <span class="kt">Reusable</span> <span class="p">{</span> <span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">MyHeaderView</span><span class="p">)</span> <span class="k">in</span>
+    <span class="n">header</span><span class="o">.</span><span class="n">logoImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"logo"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>You must provide a type for the closure parameter to allow the initializer to infer the correct type.</p>
+<h3 id='items' class='heading'>Items</h3>
+
+<p>Items are a more specific subclass of Reusables designed to be used for <code>UITableViewCell</code> and <code>UICollectionViewCell</code>s.
+If an item is <code>reorderable</code>, it will become interactive while editing if the <code><a href="Classes/DataSource.html">DataSource</a></code> has an <code>onReorder</code> block.</p>
+<h3 id='middleware' class='heading'>Middleware</h3>
+<h2 id='installation' class='heading'>Installation</h2>
+
+<p>BlockDataSource is available through <a href="http://cocoapods.org">CocoaPods</a>. To install
+it, simply add the following line to your Podfile:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s2">"BlockDataSource"</span>
+</code></pre>
+<h2 id='author' class='heading'>Author</h2>
+
+<p>Adam Cumiskey, <a href="mailto:adam.cumiskey@gmail.com">adam.cumiskey@gmail.com</a></p>
+<h2 id='license' class='heading'>License</h2>
+
+<p>BlockDataSource is available under the MIT license. See the LICENSE file for more info.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://github.com/adamcumiskey/BlockDataSource" target="_blank" rel="external">Adam Cumiskey</a>. All rights reserved. (Last updated: 2018-06-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

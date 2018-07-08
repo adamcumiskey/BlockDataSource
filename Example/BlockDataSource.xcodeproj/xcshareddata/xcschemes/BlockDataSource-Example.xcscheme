@@ -62,6 +62,16 @@
                ReferencedContainer = "container:BlockDataSource.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "66CD41C520DC7E030045E2AD"
+               BuildableName = "BlockDataSourceTests.xctest"
+               BlueprintName = "BlockDataSourceTests"
+               ReferencedContainer = "container:BlockDataSource.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
