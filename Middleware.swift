@@ -41,26 +41,20 @@ import Foundation
 */
 public struct Middleware {
     public let tableViewCellMiddleware: [TableViewCellMiddleware]?
-    public let tableViewMiddleware: [TableViewMiddleware]?
     public let tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]?
 
     public let collectionViewCellMiddleware: [CollectionViewCellMiddleware]?
-    public let collectionViewMiddleware: [CollectionViewMiddleware]?
     public let collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]?
 
     public init(
         tableViewCellMiddleware: [TableViewCellMiddleware]? = nil,
-        tableViewMiddleware: [TableViewMiddleware]? = nil,
         tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]? = nil,
         collectionViewCellMiddleware: [CollectionViewCellMiddleware]? = nil,
-        collectionViewMiddleware: [CollectionViewMiddleware]? = nil,
         collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]? = nil
         ) {
         self.tableViewCellMiddleware = tableViewCellMiddleware
-        self.tableViewMiddleware = tableViewMiddleware
         self.tableViewHeaderFooterViewMiddleware = tableViewHeaderFooterViewMiddleware
         self.collectionViewCellMiddleware = collectionViewCellMiddleware
-        self.collectionViewMiddleware = collectionViewMiddleware
         self.collectionReusableViewMiddleware = collectionReusableViewMiddleware
     }
 }
@@ -70,21 +64,7 @@ public struct TableViewCellMiddleware {
 
     public init<View: UITableViewCell>(apply: @escaping (View, IndexPath, DataSource) -> Void) {
         self.apply = { view, indexPath, context in
-            if let view = view as? View {
-                apply(view, indexPath, context)
-            }
-        }
-    }
-}
-
-public struct TableViewMiddleware {
-    public var apply: (_ tableView: UITableView) -> Void
-
-    public init<View: UITableView>(apply: @escaping (View) -> Void) {
-        self.apply = { view in
-            if let view = view as? View {
-                apply(view)
-            }
+            apply(view as! View, indexPath, context)
         }
     }
 }
@@ -94,9 +74,7 @@ public struct TableViewHeaderFooterViewMiddleware {
 
     public init<View: UITableViewHeaderFooterView>(apply: @escaping (View, Int, DataSource) -> Void) {
         self.apply = { view, section, context in
-            if let view = view as? View {
-                apply(view, section, context)
-            }
+            apply(view as! View, section, context)
         }
     }
 }
@@ -106,21 +84,7 @@ public struct CollectionViewCellMiddleware {
 
     public init<View: UICollectionViewCell>(apply: @escaping (View, IndexPath, DataSource) -> Void) {
         self.apply = { view, indexPath, context in
-            if let view = view as? View {
-                apply(view, indexPath, context)
-            }
-        }
-    }
-}
-
-public struct CollectionViewMiddleware {
-    public var apply: (_ collectionView: UICollectionView) -> Void
-
-    public init<View: UICollectionView>(apply: @escaping (View) -> Void) {
-        self.apply = { view in
-            if let view = view as? View {
-                apply(view)
-            }
+            apply(view as! View, indexPath, context)
         }
     }
 }
@@ -130,9 +94,7 @@ public struct CollectionReusableViewMiddleware {
 
     public init<View: UICollectionReusableView>(apply: @escaping (View, IndexPath, DataSource) -> Void) {
         self.apply = { view, indexPath, context in
-            if let view = view as? View {
-                apply(view, indexPath, context)
-            }
+            apply(view as! View, indexPath, context)
         }
     }
 }
