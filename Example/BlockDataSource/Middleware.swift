@@ -25,18 +25,4 @@ extension TableViewCellMiddleware {
     static var disclosureIndicators = TableViewCellMiddleware { cell, _, _ in
         cell.accessoryType = .disclosureIndicator
     }
-    
-
-}
-
-extension TableViewMiddleware {
-    static var noTableSeparator = TableViewMiddleware { tableView in
-        tableView.separatorStyle = .none
-    }
-    
-    static var separatorInset: (UIEdgeInsets) -> TableViewMiddleware = { insets in
-        return TableViewMiddleware { tableView in
-            tableView.separatorInset = insets
-        }
-    }
 }
