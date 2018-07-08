@@ -51,7 +51,7 @@ public struct Middleware {
         tableViewHeaderFooterViewMiddleware: [TableViewHeaderFooterViewMiddleware]? = nil,
         collectionViewCellMiddleware: [CollectionViewCellMiddleware]? = nil,
         collectionReusableViewMiddleware: [CollectionReusableViewMiddleware]? = nil
-        ) {
+    ) {
         self.tableViewCellMiddleware = tableViewCellMiddleware
         self.tableViewHeaderFooterViewMiddleware = tableViewHeaderFooterViewMiddleware
         self.collectionViewCellMiddleware = collectionViewCellMiddleware
