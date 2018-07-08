@@ -15,10 +15,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.swift_version = '3.2'
 
-  s.source_files = 'BlockDataSource/Classes/DataSource.swift'
-  
-  s.subspec 'ViewControllers' do |ss|
-      ss.source_files = 'BlockDataSource/Classes/ViewControllers.swift'
-  end
-
+  s.source_files = 'BlockDataSource/Classes/**/*'
 end

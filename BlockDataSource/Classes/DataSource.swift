@@ -361,6 +361,7 @@ extension DataSource: UITableViewDelegate {
             return 0
         }
     }
+
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if self.tableView(tableView, viewForFooterInSection: section) != nil || self[section].footerText != nil {
             return UITableViewAutomaticDimension
