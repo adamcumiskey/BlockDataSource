@@ -12,9 +12,9 @@ import UIKit
 class MenuViewController: BlockTableViewController {
     init() {
         super.init(style: .grouped)
-        
+
         self.title = "Demo"
-        
+
         self.dataSource = DataSource(
             sections: [
                 Section(
@@ -49,14 +49,14 @@ class MenuViewController: BlockTableViewController {
                     ]
                 )
             ],
-            middleware: DataSource.MiddlewareConfig(
+            middleware: Middleware(
                 tableViewCellMiddleware: [
                     TableViewCellMiddleware.disclosureIndicators
                 ]
             )
         )
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
