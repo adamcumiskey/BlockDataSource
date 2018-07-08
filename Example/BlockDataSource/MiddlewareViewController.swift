@@ -33,9 +33,6 @@ class MiddlewareViewController: BlockTableViewController {
                 tableViewCellMiddleware: [
                     TableViewCellMiddleware.noCellSelectionStyle,
                     TableViewCellMiddleware.cellGradient
-                ],
-                tableViewMiddleware: [
-                    TableViewMiddleware.noTableSeparator
                 ]
             )
         )
