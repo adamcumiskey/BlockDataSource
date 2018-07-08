@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'BlockDataSource'
-  s.version          = '0.3.1'
+  s.version          = '0.4.0'
   s.summary          = 'A block configurable datasource for static table views'
 
   s.description      = <<-DESC
