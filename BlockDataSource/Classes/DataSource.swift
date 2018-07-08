@@ -531,8 +531,14 @@ public extension UITableView {
     private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UITableViewCell == nil {
+                assertionFailure("Item viewClass must be a subclass of UITableViewCell")
+            }
             register(nib, forCellReuseIdentifier: item.reuseIdentifier)
         } else {
+            if !item.viewClass.isSubclass(of: UITableViewCell.self) {
+                assertionFailure("Item viewClass must be a subclass of UITableViewCell")
+            }
             register(item.viewClass, forCellReuseIdentifier: item.reuseIdentifier)
         }
     }
@@ -541,8 +547,14 @@ public extension UITableView {
     private func register(sectionDecoration: Reusable) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UITableViewHeaderFooterView == nil {
+                assertionFailure("Reusable viewClass must be a subclass of UITableViewHeaderFooterView")
+            }
             register(nib, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
         } else {
+            if !sectionDecoration.viewClass.isSubclass(of: UITableViewHeaderFooterView.self) {
+                assertionFailure("Reusable viewClass must be a subclass of UITableViewHeaderFooterView")
+            }
             register(sectionDecoration.viewClass, forHeaderFooterViewReuseIdentifier: sectionDecoration.reuseIdentifier)
         }
     }
@@ -568,8 +580,14 @@ public extension UICollectionView {
     private func register(item: Item) {
         if let _ = Bundle.main.path(forResource: item.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: item.reuseIdentifier, bundle: Bundle.main)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UICollectionViewCell == nil {
+                assertionFailure("Item viewClass must be a subclass of UICollectioonViewCell")
+            }
             register(nib, forCellWithReuseIdentifier: item.reuseIdentifier)
         } else {
+            if !item.viewClass.isSubclass(of: UICollectionViewCell.self) {
+                assertionFailure("Item viewClass must be a subclass of UICollectioonViewCell")
+            }
             register(item.viewClass, forCellWithReuseIdentifier: item.reuseIdentifier)
         }
     }
@@ -578,8 +596,14 @@ public extension UICollectionView {
     private func register(sectionDecoration: Reusable, kind: String) {
         if let _ = Bundle.main.path(forResource: sectionDecoration.reuseIdentifier, ofType: "nib") {
             let nib = UINib(nibName: sectionDecoration.reuseIdentifier, bundle: nil)
+            if nib.instantiate(withOwner: nil, options: nil).first as? UICollectionReusableView == nil {
+                assertionFailure("Reusable viewClass must be a subclass of UICollectionReusableView")
+            }
             register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
         } else {
+            if !sectionDecoration.viewClass.isSubclass(of: UICollectionReusableView.self) {
+                assertionFailure("Reusable viewClass must be a subclass of UICollectionReusableView")
+            }
             register(sectionDecoration.viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: sectionDecoration.reuseIdentifier)
         }
     }
