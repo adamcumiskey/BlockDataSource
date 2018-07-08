@@ -28,11 +28,15 @@ class EditingViewController: BlockTableViewController {
                         view.titleLabel.text = "Tap \"Edit\" to enabled deletion and reordering. Tap \"Done\" to end editing."
                     },
                     items: items.map { item in
-                        return Item(configure: { (cell: UITableViewCell) in
-                            cell.textLabel?.text = "\(item)"
-                        }, onDelete: { [unowned self] indexPath in
-                            self.items.remove(at: indexPath.row)
-                            }, reorderable: true)
+                        return Item(
+                            configure: { (cell: UITableViewCell) in
+                                cell.textLabel?.text = "\(item)"
+                            },
+                            onDelete: { [unowned self] indexPath in
+                                self.items.remove(at: indexPath.row)
+                            },
+                            reorderable: true
+                        )
                     }
                 )
             ],
