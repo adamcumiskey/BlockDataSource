@@ -1,6 +1,6 @@
 {
   "name": "BlockDataSource",
-  "version": "0.2.3",
+  "version": "0.3.1",
   "summary": "A block configurable datasource for static table views",
   "description": "A block configurable datasource for table views. Useful for creating menus and displaying staic data.",
   "homepage": "https://github.com/adamcumiskey/BlockDataSource",
@@ -13,10 +13,17 @@
   },
   "source": {
     "git": "https://github.com/adamcumiskey/BlockDataSource.git",
-    "tag": "0.2.3"
+    "tag": "0.3.1"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "BlockDataSource/Classes/**/*"
+  "swift_version": "3.2",
+  "source_files": "BlockDataSource/Classes/DataSource.swift",
+  "subspecs": [
+    {
+      "name": "ViewControllers",
+      "source_files": "BlockDataSource/Classes/ViewControllers.swift"
+    }
+  ]
 }

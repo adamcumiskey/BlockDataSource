@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="InformationHeaderFooterView" customModule="BlockDataSource_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YYz-GS-fca">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7VW-6k-3Wf">
+                            <rect key="frame" x="16" y="16" width="343" height="76"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="7VW-6k-3Wf" firstAttribute="leading" secondItem="YYz-GS-fca" secondAttribute="leading" constant="16" id="Ehi-c6-ZPZ"/>
+                        <constraint firstAttribute="bottom" secondItem="7VW-6k-3Wf" secondAttribute="bottom" constant="16" id="ZQH-9s-yaT"/>
+                        <constraint firstAttribute="trailing" secondItem="7VW-6k-3Wf" secondAttribute="trailing" constant="16" id="Zdb-df-IaA"/>
+                        <constraint firstItem="7VW-6k-3Wf" firstAttribute="top" secondItem="YYz-GS-fca" secondAttribute="top" constant="16" id="a4W-S2-PE4"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="YYz-GS-fca" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="bLT-a3-038"/>
+                <constraint firstItem="YYz-GS-fca" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="nfs-T0-gnf"/>
+                <constraint firstItem="YYz-GS-fca" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="o7D-VE-PcL"/>
+                <constraint firstItem="YYz-GS-fca" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="xmv-C9-efe"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="titleLabel" destination="7VW-6k-3Wf" id="ueh-Ej-6Pb"/>
+            </connections>
+            <point key="canvasLocation" x="25.5" y="-228"/>
+        </view>
+    </objects>
+</document>
