@@ -70,6 +70,7 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
         super.init(style: style)
     }
     
+    @available(*, unavailable)
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -116,6 +117,7 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
         super.init(collectionViewLayout: layout)
     }
     
+    @available(*, unavailable)
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
