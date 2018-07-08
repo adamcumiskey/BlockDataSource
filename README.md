@@ -12,7 +12,7 @@ Conjure tables and collections out of thin air
 A `DataSource` is an embedded DSL for construcing UIs with UITableViews and UICollectionViews. 
 You define the structure of your list and DataSource  will automatically conform to `UITableViewControllerDataSource`, ` UITableViewControllerDelegate`, `UICollectionViewControllerDataSource`, and `UICollectionViewControllerDelegate`. 
 
-For example:
+For example, this is how you can create a simple UITableViewController:
 
 ```swift
 let vc = BlockTableViewController(
