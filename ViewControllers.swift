@@ -51,11 +51,6 @@ public extension TableViewReloadable {
         tableView.delegate = dataSource
         tableView.reloadData()
     }
-    
-    /// Applies the middleware functions to the tableView
-    func applyTableViewMiddleware() {
-        dataSource?.middleware?.tableViewMiddleware?.forEach { $0.apply(tableView) }
-    }
 }
 
 /// UITableViewController subclass powered by a DataSource
@@ -81,7 +76,6 @@ open class BlockTableViewController: UITableViewController, TableViewReloadable 
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        applyTableViewMiddleware()
         reload()
     }
 }
@@ -102,13 +96,6 @@ public extension CollectionViewReloadable {
         collectionView.dataSource = dataSource
         collectionView.delegate = dataSource
         collectionView.reloadData()
-    }
-    
-    /// Applies the middleware functions to the collectionView
-    func applyCollectionViewMiddleware() {
-        if let collectionView = collectionView {
-            dataSource?.middleware?.collectionViewMiddleware?.forEach { $0.apply(collectionView) }
-        }
     }
 }
 
@@ -135,7 +122,6 @@ open class BlockCollectionViewController: UICollectionViewController, Collection
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        applyCollectionViewMiddleware()
         reload()
     }
 }
