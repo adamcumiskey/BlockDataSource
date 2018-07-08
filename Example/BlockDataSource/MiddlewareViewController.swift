@@ -25,7 +25,8 @@ class MiddlewareViewController: BlockTableViewController {
                         return Item { (cell: UITableViewCell) in
                             cell.textLabel?.text = "\(item)"
                         }
-                    }
+                    },
+                    footerText: "Middleware can be created for items, section headers/footers, and table/collection views"
                 )
             ],
             middleware: DataSource.MiddlewareConfig(
